@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_1.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_2.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+<!-- Cache busting: force fresh load every time PWA opens -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <!-- iOS PWA -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -468,11 +473,11 @@
 
   <div class="tabs">
     <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
-    <button class="tab active" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
-    <button class="tab" data-mode="reference"><span class="num">iii.</span>부호표</button>
+    <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
+    <button class="tab active" data-mode="reference"><span class="num">iii.</span>부호표</button>
   </div>
 
-  <section id="mode-main" class="mode">
+  <section id="mode-main" class="mode hidden">
     <div class="grid">
 
       <div class="panel">
@@ -486,9 +491,9 @@
 
         <div class="stats-bar" id="statsBar">
           <div class="stat"><div class="v green" id="statCorrect">1</div><div class="l">맞춤</div></div>
-          <div class="stat"><div class="v red" id="statWrong">1</div><div class="l">틀림</div></div>
+          <div class="stat"><div class="v red" id="statWrong">2</div><div class="l">틀림</div></div>
           <div class="stat"><div class="v" id="statStreak">1</div><div class="l">연속</div></div>
-          <div class="stat"><div class="v" id="statAcc">50%</div><div class="l">정확도</div></div>
+          <div class="stat"><div class="v" id="statAcc">33%</div><div class="l">정확도</div></div>
         </div>
 
         <div class="display-stack" id="displayStack">
@@ -500,7 +505,7 @@
           <div class="input-row">
             <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">I A H </div>
+            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">E I </div>
           </div>
         </div>
 
@@ -579,7 +584,7 @@
     </div>
   </section>
 
-  <section id="mode-reference" class="mode hidden">
+  <section id="mode-reference" class="mode">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -602,7 +607,10 @@
 
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
-    <div>OPERATOR ONLINE</div>
+    <div>
+      <span id="versionLabel">v2026.04.26.4</span> ·
+      <a href="file:///C:/Users/cg/Downloads/morse_2.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
+    </div>
   </footer>
 </div>
 
@@ -1075,6 +1083,54 @@
   buildReference();
   buildMiniRef();
   setMode('free');
+
+  // ─────── VERSION / CACHE MANAGEMENT ───────
+  // App version — bump this whenever you update the file.
+  // The PWA will detect the change and force-reload.
+  const APP_VERSION = '2026.04.26.4';
+  document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
+
+  // On startup: check if running an outdated version (cached PWA shell).
+  // We fetch the live HTML with no-cache and look for the current APP_VERSION
+  // string. If it differs, reload to get the new shell.
+  async function checkForUpdate(silent) {
+    try {
+      const url = location.pathname + '?v=' + Date.now();
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return false;
+      const text = await res.text();
+      const m = text.match(/APP_VERSION\s*=\s*'([^']+)'/);
+      if (!m) return false;
+      const remote = m[1];
+      if (remote !== APP_VERSION) {
+        if (!silent) {
+          // hard reload, bypassing cache
+          location.reload();
+        }
+        return true;
+      }
+      return false;
+    } catch(e) { return false; }
+  }
+
+  // Auto-check on load (silent: only acts if newer)
+  setTimeout(() => { checkForUpdate(false); }, 1500);
+
+  // Manual refresh button
+  document.getElementById('reloadLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const link = e.currentTarget;
+    link.textContent = '확인 중…';
+    const updated = await checkForUpdate(true);
+    if (updated) {
+      link.textContent = '새 버전 발견 · 새로고침 중…';
+      // hard reload with cache bypass
+      setTimeout(() => location.reload(), 400);
+    } else {
+      link.textContent = '최신 버전입니다';
+      setTimeout(() => { link.textContent = '새 버전 확인'; }, 2000);
+    }
+  });
 </script>
 
 
