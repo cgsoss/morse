@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_5.html -->
+<!-- saved from url=(0040)file:///C:/Users/cg/Downloads/morse.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -21,7 +21,7 @@
 <title>Morse / 전신 연습기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="./morse_files/css2" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
   :root {
     --bg: #0e0b07;
@@ -231,25 +231,48 @@
   /* ─── TX button ─── */
   .tx-btn {
     width: 100%;
-    background: linear-gradient(180deg, #1f1810 0%, #14100a 100%);
-    border: 1px solid var(--amber-dim);
+    /* ready state: brighter, more inviting */
+    background: linear-gradient(180deg, #2a1f12 0%, #1a1208 100%);
+    border: 1px solid var(--amber);
     padding: 32px 20px; border-radius: 4px;
     cursor: pointer; touch-action: none;
     -webkit-user-select: none; user-select: none;
     text-align: center;
     box-shadow:
-      inset 0 1px 0 rgba(255,179,71,0.18),
+      inset 0 1px 0 rgba(255,179,71,0.25),
       inset 0 -2px 8px rgba(0,0,0,0.4),
+      0 0 18px rgba(255,179,71,0.18),
       0 4px 16px rgba(0,0,0,0.4);
-    transition: background 30ms linear, box-shadow 30ms linear, transform 30ms linear;
+    transition: background 30ms linear, box-shadow 30ms linear, transform 30ms linear, opacity 200ms;
     margin-bottom: 14px;
+    position: relative;
   }
-  .tx-btn:hover { border-color: var(--amber); }
+  .tx-btn:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255,179,71,0.3),
+      inset 0 -2px 8px rgba(0,0,0,0.4),
+      0 0 24px rgba(255,179,71,0.25),
+      0 4px 16px rgba(0,0,0,0.4);
+  }
   .tx-btn.pressed {
-    background: linear-gradient(180deg, rgba(255,179,71,0.28) 0%, rgba(255,179,71,0.12) 100%);
+    background: linear-gradient(180deg, rgba(255,179,71,0.32) 0%, rgba(255,179,71,0.14) 100%);
     border-color: var(--amber);
-    box-shadow: inset 0 0 30px rgba(255,179,71,0.18), 0 0 30px var(--amber-glow);
+    box-shadow: inset 0 0 30px rgba(255,179,71,0.22), 0 0 30px var(--amber-glow);
     transform: translateY(1px);
+  }
+  /* locked: dimmed, not interactive */
+  .tx-btn.locked {
+    opacity: 0.35;
+    border-color: var(--ink-faint);
+    background: linear-gradient(180deg, #1a1510 0%, #14100a 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(0,0,0,0.2),
+      0 4px 16px rgba(0,0,0,0.4);
+    cursor: not-allowed;
+  }
+  .tx-btn.locked .tx-btn-icon,
+  .tx-btn.locked .tx-btn-label {
+    text-shadow: none;
   }
   .tx-btn-icon {
     font-family: 'Cormorant Garamond', serif; font-style: italic;
@@ -453,22 +476,22 @@
         </div>
 
         <div class="stats-bar" id="statsBar">
-          <div class="stat"><div class="v green" id="statCorrect">20</div><div class="l">맞춤</div></div>
-          <div class="stat"><div class="v red" id="statWrong">13</div><div class="l">틀림</div></div>
-          <div class="stat"><div class="v" id="statStreak">1</div><div class="l">연속</div></div>
-          <div class="stat"><div class="v" id="statAcc">61%</div><div class="l">정확도</div></div>
+          <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
+          <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
+          <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="statAcc">—</div><div class="l">정확도</div></div>
         </div>
 
         <div class="display-stack" id="displayStack">
           <div class="target-row" id="targetRow">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="targetChar">N</div>
-            <div class="target-code" id="targetCode">-.</div>
+            <div class="target-char" id="targetChar">E</div>
+            <div class="target-code" id="targetCode">.</div>
           </div>
           <div class="input-row">
             <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">E EE A S </div>
+            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">EEH </div>
           </div>
         </div>
 
@@ -542,7 +565,7 @@
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
           클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson current" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson current" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
@@ -664,6 +687,7 @@
   let isPressed = false, pressStart = 0;
   let inputBuf = '', decodedBuf = '';
   let letterTimer = null, wordTimer = null, practiceTimer = null;
+  let inputLocked = false; // blocks input during feedback flash
 
   const lessons = [
     { id:'easy1', name:'기초 1 — E·T·A·N', chars:'EATN' },
@@ -697,6 +721,7 @@
 
   function pressDown() {
     if (isPressed || activeMode === 'reference') return;
+    if (inputLocked) return; // blocked during feedback animation
     isPressed = true;
     pressStart = performance.now();
     if (navigator.vibrate) navigator.vibrate(8);
@@ -767,18 +792,33 @@
     if (inputBuf === MORSE[currentTarget]) {
       stats.correct++; stats.streak++;
       flashDisplay('correct');
+      lockInput();
       updateStats();
-      setTimeout(() => { clearFlash(); nextTarget(); }, 600);
+      setTimeout(() => {
+        clearFlash();
+        nextTarget();
+        unlockInput();
+      }, 600);
     } else {
       stats.wrong++; stats.streak = 0;
       flashDisplay('wrong');
+      lockInput();
       updateStats();
       setTimeout(() => {
         clearFlash();
         inputBuf = '';
         refreshInputDisplay();
+        unlockInput();
       }, 900);
     }
+  }
+  function lockInput() {
+    inputLocked = true;
+    txButton.classList.add('locked');
+  }
+  function unlockInput() {
+    inputLocked = false;
+    txButton.classList.remove('locked');
   }
   function flashDisplay(type) {
     displayStack.classList.remove('flash-correct', 'flash-wrong');
@@ -913,6 +953,7 @@
     inputBuf = ''; decodedBuf = '';
     clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
     clearFlash();
+    unlockInput();
 
     if (mode === 'free') {
       modeTitle.textContent = '자유 송신 / Free Transmission';
@@ -997,6 +1038,7 @@
   function buildReference() {
     const fill = (id, arr) => {
       const c = $(id);
+      c.innerHTML = ''; // ensure fresh fill (defensive against double-build)
       arr.forEach(ch => {
         const item = document.createElement('div');
         item.className = 'mini-ref-item in-lesson';
