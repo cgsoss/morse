@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_5.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Morse">
+<meta name="theme-color" content="#0e0b07">
+
+<!-- App icon: amber morse glyph on dark rounded background -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 180 180&#39;&gt;&lt;defs&gt;&lt;radialGradient id=&#39;g&#39; cx=&#39;50%25&#39; cy=&#39;30%25&#39; r=&#39;80%25&#39;&gt;&lt;stop offset=&#39;0%25&#39; stop-color=&#39;%23241a10&#39;/&gt;&lt;stop offset=&#39;100%25&#39; stop-color=&#39;%230e0b07&#39;/&gt;&lt;/radialGradient&gt;&lt;/defs&gt;&lt;rect width=&#39;180&#39; height=&#39;180&#39; rx=&#39;40&#39; fill=&#39;url(%23g)&#39;/&gt;&lt;circle cx=&#39;44&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;rect x=&#39;66&#39; y=&#39;80&#39; width=&#39;50&#39; height=&#39;20&#39; rx=&#39;6&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;circle cx=&#39;136&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;text x=&#39;90&#39; y=&#39;148&#39; font-family=&#39;Georgia,serif&#39; font-style=&#39;italic&#39; font-size=&#39;28&#39; fill=&#39;%23ffb347&#39; text-anchor=&#39;middle&#39; opacity=&#39;0.9&#39;&gt;M&lt;/text&gt;&lt;/svg&gt;">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 180 180&#39;&gt;&lt;rect width=&#39;180&#39; height=&#39;180&#39; rx=&#39;40&#39; fill=&#39;%230e0b07&#39;/&gt;&lt;circle cx=&#39;44&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;rect x=&#39;66&#39; y=&#39;80&#39; width=&#39;50&#39; height=&#39;20&#39; rx=&#39;6&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;circle cx=&#39;136&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;/svg&gt;">
+
+<!-- PWA manifest (inline as data URI so it works without separate file) -->
+<link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;Morse Practice&quot;,&quot;short_name&quot;:&quot;Morse&quot;,&quot;description&quot;:&quot;Telegraph practice %E2%80%94 Morse code trainer&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;background_color&quot;:&quot;%230e0b07&quot;,&quot;theme_color&quot;:&quot;%230e0b07&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml;utf8,&lt;svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 180 180%27&gt;&lt;rect width=%27180%27 height=%27180%27 rx=%2740%27 fill=%27%230e0b07%27/&gt;&lt;circle cx=%2744%27 cy=%2790%27 r=%2710%27 fill=%27%23ffb347%27/&gt;&lt;rect x=%2766%27 y=%2780%27 width=%2750%27 height=%2720%27 rx=%276%27 fill=%27%23ffb347%27/&gt;&lt;circle cx=%27136%27 cy=%2790%27 r=%2710%27 fill=%27%23ffb347%27/&gt;&lt;/svg&gt;&quot;,&quot;sizes&quot;:&quot;any&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any&quot;}]}">
+
+<title>Morse / 전신 연습기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./morse_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0b07;
+    --bg-2: #14100a;
+    --panel: #1a1510;
+    --line: #2a2118;
+    --amber: #ffb347;
+    --amber-dim: #c08438;
+    --amber-glow: rgba(255, 179, 71, 0.45);
+    --green: #5fdc8a;
+    --green-glow: rgba(95, 220, 138, 0.4);
+    --red: #e26b5a;
+    --red-glow: rgba(226, 107, 90, 0.45);
+    --ink: #f4e4c8;
+    --ink-dim: #8a7a62;
+    --ink-faint: #4a4133;
+  }
+  * {
+    box-sizing: border-box; margin: 0; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-weight: 400;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at top, rgba(255,179,71,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(95,220,138,0.03) 0%, transparent 50%);
+    min-height: 100vh;
+    -webkit-user-select: none; user-select: none;
+    -webkit-text-size-adjust: 100%; overscroll-behavior: none;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px);
+    pointer-events: none; z-index: 100; mix-blend-mode: multiply;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: 0.04; pointer-events: none; z-index: 99; mix-blend-mode: overlay;
+  }
+
+  .wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding: calc(28px + env(safe-area-inset-top, 0px)) 24px calc(60px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(24px, env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
+    position: relative; z-index: 1;
+  }
+
+  header {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: end; border-bottom: 1px solid var(--line);
+    padding-bottom: 16px; margin-bottom: 24px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .brand h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 400;
+    font-size: clamp(38px, 6vw, 60px);
+    color: var(--amber); letter-spacing: -0.02em; line-height: 1;
+    text-shadow: 0 0 20px var(--amber-glow);
+  }
+  .brand .dotcode {
+    font-size: 11px; letter-spacing: 0.4em;
+    color: var(--ink-dim); text-transform: uppercase;
+  }
+  .brand .dotcode b { color: var(--amber); font-weight: 400; }
+  .meta {
+    text-align: right; font-size: 10px; letter-spacing: 0.25em;
+    color: var(--ink-dim); text-transform: uppercase; line-height: 1.7;
+  }
+  .meta .live { color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+  .meta .live::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 8px var(--green);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+  .tab {
+    background: none; border: none; color: var(--ink-dim);
+    font-family: inherit; font-size: 12px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 14px 22px; cursor: pointer; position: relative;
+    transition: color 0.2s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--amber); }
+  .tab.active::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px;
+    height: 2px; background: var(--amber); box-shadow: 0 0 10px var(--amber-glow);
+  }
+  .tab .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 14px; margin-right: 8px; opacity: 0.6;
+  }
+
+  .grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 2px; padding: 22px; position: relative;
+  }
+  .panel-corner {
+    position: absolute; width: 10px; height: 10px;
+    border: 1px solid var(--amber-dim);
+  }
+  .panel-corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .panel-corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .panel-corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .panel-corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+  .panel-label {
+    font-size: 10px; letter-spacing: 0.3em;
+    color: var(--ink-dim); text-transform: uppercase;
+    margin-bottom: 14px; display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .panel-label .badge {
+    color: var(--amber); font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    text-transform: none; letter-spacing: 0; font-size: 14px;
+  }
+
+  /* ─── Unified display ─── */
+  .display-stack {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 2px; padding: 28px 22px; margin-bottom: 18px;
+    text-align: center;
+    transition: border-color 200ms, box-shadow 200ms;
+  }
+  .display-stack.flash-correct {
+    border-color: var(--green);
+    box-shadow: 0 0 30px var(--green-glow), inset 0 0 20px rgba(95,220,138,0.08);
+  }
+  .display-stack.flash-wrong {
+    border-color: var(--red);
+    box-shadow: 0 0 30px var(--red-glow), inset 0 0 20px rgba(226,107,90,0.08);
+    animation: shake 0.35s;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .target-row {
+    display: flex; flex-direction: column; align-items: center;
+    margin-bottom: 18px; padding-bottom: 18px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .target-row .target-label {
+    font-size: 10px; letter-spacing: 0.3em;
+    color: var(--ink-dim); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .target-char {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 96px; line-height: 1;
+    color: var(--amber); text-shadow: 0 0 30px var(--amber-glow);
+    margin-bottom: 6px;
+    transition: color 200ms, text-shadow 200ms;
+  }
+  .display-stack.flash-correct .target-char {
+    color: var(--green); text-shadow: 0 0 30px var(--green-glow);
+  }
+  .display-stack.flash-wrong .target-char {
+    color: var(--red); text-shadow: 0 0 30px var(--red-glow);
+  }
+  .target-code { font-size: 24px; color: var(--ink-dim); letter-spacing: 0.3em; }
+  .input-row { display: flex; flex-direction: column; align-items: center; }
+  .input-row .input-label {
+    font-size: 10px; letter-spacing: 0.3em;
+    color: var(--ink-dim); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .input-display {
+    font-size: 32px; color: var(--amber);
+    letter-spacing: 0.3em; min-height: 42px;
+    line-height: 1.3; word-break: break-all; width: 100%;
+  }
+  .input-display.text {
+    color: var(--green); letter-spacing: 0.08em;
+    text-shadow: 0 0 10px rgba(95,220,138,0.4);
+  }
+  .input-display.empty { color: var(--ink-faint); }
+
+  .stats-bar {
+    display: flex; background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 2px; padding: 10px 14px; margin-bottom: 18px;
+  }
+  .stat { text-align: center; flex: 1; }
+  .stat .v {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 26px; color: var(--amber); line-height: 1;
+  }
+  .stat .v.green { color: var(--green); }
+  .stat .v.red { color: var(--red); }
+  .stat .l {
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--ink-dim); text-transform: uppercase; margin-top: 4px;
+  }
+  .stat + .stat { border-left: 1px solid var(--line); }
+
+  /* ─── TX button ─── */
+  .tx-btn {
+    width: 100%;
+    background: linear-gradient(180deg, #1f1810 0%, #14100a 100%);
+    border: 1px solid var(--amber-dim);
+    padding: 32px 20px; border-radius: 4px;
+    cursor: pointer; touch-action: none;
+    -webkit-user-select: none; user-select: none;
+    text-align: center;
+    box-shadow:
+      inset 0 1px 0 rgba(255,179,71,0.18),
+      inset 0 -2px 8px rgba(0,0,0,0.4),
+      0 4px 16px rgba(0,0,0,0.4);
+    transition: background 30ms linear, box-shadow 30ms linear, transform 30ms linear;
+    margin-bottom: 14px;
+  }
+  .tx-btn:hover { border-color: var(--amber); }
+  .tx-btn.pressed {
+    background: linear-gradient(180deg, rgba(255,179,71,0.28) 0%, rgba(255,179,71,0.12) 100%);
+    border-color: var(--amber);
+    box-shadow: inset 0 0 30px rgba(255,179,71,0.18), 0 0 30px var(--amber-glow);
+    transform: translateY(1px);
+  }
+  .tx-btn-icon {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 60px; color: var(--amber); line-height: 1;
+    margin-bottom: 10px; text-shadow: 0 0 20px var(--amber-glow);
+    transition: transform 50ms linear; pointer-events: none;
+  }
+  .tx-btn.pressed .tx-btn-icon { transform: scale(1.1); }
+  .tx-btn-label {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 20px; color: var(--amber);
+    letter-spacing: 0.05em; margin-bottom: 4px; pointer-events: none;
+  }
+  .tx-btn-hint {
+    font-size: 10px; letter-spacing: 0.3em;
+    color: var(--ink-dim); text-transform: uppercase; pointer-events: none;
+  }
+  .tx-btn-hint kbd {
+    display: inline-block; background: var(--bg);
+    border: 1px solid var(--ink-faint);
+    padding: 3px 10px; border-radius: 2px;
+    font-family: inherit; color: var(--ink);
+    margin: 0 4px; font-size: 10px;
+  }
+
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    background: transparent; border: 1px solid var(--ink-faint);
+    color: var(--ink-dim); font-family: inherit;
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 10px 16px; cursor: pointer; border-radius: 2px;
+    transition: all 0.15s; flex: 1 1 auto;
+  }
+  .btn:hover { border-color: var(--amber); color: var(--amber); }
+  .btn.primary { border-color: var(--amber-dim); color: var(--amber); }
+  .btn.primary:hover { background: rgba(255,179,71,0.1); }
+
+  .setting {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0; border-bottom: 1px dashed var(--line);
+  }
+  .setting:last-child { border-bottom: none; }
+  .setting-label { font-size: 11px; letter-spacing: 0.15em; color: var(--ink); text-transform: uppercase; }
+  .setting-label small {
+    display: block; color: var(--ink-dim); font-size: 9px;
+    margin-top: 3px; letter-spacing: 0.1em; text-transform: none;
+  }
+  .toggle {
+    position: relative; width: 44px; height: 22px;
+    background: var(--bg-2); border: 1px solid var(--ink-faint);
+    border-radius: 14px; cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+  }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; background: var(--ink-dim);
+    border-radius: 50%; transition: all 0.2s;
+  }
+  .toggle.on { background: rgba(255,179,71,0.15); border-color: var(--amber); }
+  .toggle.on::after { left: 24px; background: var(--amber); box-shadow: 0 0 8px var(--amber-glow); }
+  .slider-wrap { display: flex; align-items: center; gap: 10px; width: 55%; }
+  input[type="range"] {
+    -webkit-appearance: none; flex: 1; height: 2px;
+    background: var(--ink-faint); outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    background: var(--amber); border-radius: 50%;
+    cursor: pointer; box-shadow: 0 0 8px var(--amber-glow);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px; background: var(--amber);
+    border-radius: 50%; cursor: pointer; border: none;
+  }
+  .slider-val { font-size: 11px; color: var(--amber); min-width: 44px; text-align: right; }
+
+  .mini-ref-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    gap: 4px; margin-top: 10px;
+  }
+  .mini-ref-item {
+    background: var(--bg-2); border: 1px solid var(--line);
+    padding: 6px 4px; text-align: center; border-radius: 2px;
+    transition: all 0.15s; cursor: pointer; opacity: 0.4;
+  }
+  .mini-ref-item:hover { border-color: var(--amber); opacity: 1; }
+  .mini-ref-item.in-lesson { opacity: 1; border-color: var(--ink-faint); }
+  .mini-ref-item.current {
+    border-color: var(--amber); background: rgba(255,179,71,0.08);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+  .mini-ref-item .ch { font-size: 12px; color: var(--ink); font-weight: 500; line-height: 1.1; }
+  .mini-ref-item .code { font-size: 8px; color: var(--amber); letter-spacing: 0.08em; margin-top: 2px; line-height: 1; }
+
+  .lesson-list { display: flex; flex-direction: column; gap: 6px; }
+  .lesson-btn {
+    background: transparent; border: 1px solid var(--ink-faint);
+    color: var(--ink-dim); font-family: inherit;
+    text-align: left; padding: 11px 13px; font-size: 11px;
+    cursor: pointer; border-radius: 2px; transition: all 0.15s;
+  }
+  .lesson-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .lesson-btn.active {
+    border-color: var(--amber-dim); color: var(--amber);
+    background: rgba(255,179,71,0.05);
+  }
+  .lesson-btn .num {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    margin-right: 8px; opacity: 0.6; font-size: 13px;
+  }
+
+  footer {
+    margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+    font-size: 9px; letter-spacing: 0.3em;
+    color: var(--ink-faint); text-transform: uppercase;
+  }
+  .hidden { display: none !important; }
+
+  .wave {
+    display: inline-flex; gap: 2px; align-items: center;
+    height: 12px; margin-left: 6px;
+  }
+  .wave span {
+    width: 2px; background: var(--amber); border-radius: 1px;
+    animation: wave 1s ease-in-out infinite;
+  }
+  .wave span:nth-child(1) { height: 30%; animation-delay: 0s; }
+  .wave span:nth-child(2) { height: 70%; animation-delay: 0.15s; }
+  .wave span:nth-child(3) { height: 50%; animation-delay: 0.3s; }
+  .wave span:nth-child(4) { height: 90%; animation-delay: 0.45s; }
+  .wave span:nth-child(5) { height: 40%; animation-delay: 0.6s; }
+  @keyframes wave { 0%,100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+  .wave.muted span { background: var(--ink-faint); animation: none; }
+
+  .section-divider {
+    font-size: 9px; letter-spacing: 0.3em;
+    color: var(--ink-dim); text-transform: uppercase;
+    margin: 20px 0 8px; padding-top: 14px;
+    border-top: 1px dashed var(--line);
+  }
+
+  @media (max-width: 600px) {
+    .wrap {
+      padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+      padding-left: max(12px, env(safe-area-inset-left, 0px));
+      padding-right: max(12px, env(safe-area-inset-right, 0px));
+    }
+    header { grid-template-columns: 1fr; gap: 8px; }
+    .meta { text-align: left; }
+    .brand h1 { font-size: 42px; }
+    .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab { padding: 12px 14px; font-size: 11px; white-space: nowrap; }
+    .panel { padding: 16px 14px; }
+    .display-stack { padding: 22px 16px; }
+    .target-char { font-size: 80px; }
+    .target-code { font-size: 20px; }
+    .input-display { font-size: 26px; }
+    .tx-btn { padding: 28px 16px; }
+    .tx-btn-icon { font-size: 56px; }
+    .stat .v { font-size: 22px; }
+    .controls .btn { flex: 1 1 calc(50% - 4px); padding: 10px 6px; font-size: 9px; }
+    .mini-ref-grid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <h1>Morse</h1>
+      <div class="dotcode">
+        <b>—— —— ·—· ··· ·</b><br>
+        TELEGRAPH PRACTICE / EST. 1844
+      </div>
+    </div>
+    <div class="meta">
+      <div class="live">SIGNAL ACTIVE</div>
+      <div>FREQ <span id="freqDisplay">600</span> Hz</div>
+      <div>WPM <span id="wpmDisplay">15</span></div>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab active" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
+    <button class="tab" data-mode="reference"><span class="num">iii.</span>부호표</button>
+  </div>
+
+  <section id="mode-main" class="mode">
+    <div class="grid">
+
+      <div class="panel">
+        <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+        <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+        <div class="panel-label">
+          <span id="modeTitle">연습 모드 / Practice</span>
+          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
+        </div>
+
+        <div class="stats-bar" id="statsBar">
+          <div class="stat"><div class="v green" id="statCorrect">20</div><div class="l">맞춤</div></div>
+          <div class="stat"><div class="v red" id="statWrong">13</div><div class="l">틀림</div></div>
+          <div class="stat"><div class="v" id="statStreak">1</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="statAcc">61%</div><div class="l">정확도</div></div>
+        </div>
+
+        <div class="display-stack" id="displayStack">
+          <div class="target-row" id="targetRow">
+            <div class="target-label">다음 문자</div>
+            <div class="target-char" id="targetChar">N</div>
+            <div class="target-code" id="targetCode">-.</div>
+          </div>
+          <div class="input-row">
+            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
+            <div class="input-display empty" id="inputDisplay">—</div>
+            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">E EE A S </div>
+          </div>
+        </div>
+
+        <div class="tx-btn" id="txButton">
+          <div class="tx-btn-icon">·—</div>
+          <div class="tx-btn-label">TRANSMIT</div>
+          <div class="tx-btn-hint">
+            <kbd>SPACE</kbd> · 클릭 또는 탭 · 짧게=· 길게=—
+          </div>
+        </div>
+
+        <div class="controls hidden" id="freeControls">
+          <button class="btn" id="clearBtn">CLEAR</button>
+          <button class="btn" id="spaceBtn">단어 공백</button>
+          <button class="btn primary" id="playbackBtn">▷ 재생</button>
+        </div>
+        <div class="controls" id="practiceControls">
+          <button class="btn" id="practiceSkip">SKIP →</button>
+          <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
+          <button class="btn" id="practiceReset">RESET</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+        <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+        <div id="lessonSection" class="">
+          <div class="panel-label">
+            <span>레슨 / Lessons</span>
+            <span class="badge">curriculum</span>
+          </div>
+          <div class="lesson-list" id="lessonList"><button class="lesson-btn active"><span class="num">1.</span>기초 1 — E·T·A·N</button><button class="lesson-btn"><span class="num">2.</span>기초 2 — I·M·S·O</button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>SOS / 비상 신호</button></div>
+        </div>
+
+        <div class="panel-label" id="settingsLabel" style="margin-top:14px;">
+          <span>설정 / Settings</span>
+          <span class="badge">control room</span>
+        </div>
+
+        <div class="setting">
+          <div class="setting-label">사운드<small>oscillator output</small></div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="wave" id="waveIndicator"><span></span><span></span><span></span><span></span><span></span></span>
+            <div class="toggle on" id="soundToggle"></div>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="setting-label">속도 (WPM)<small>words per minute</small></div>
+          <div class="slider-wrap">
+            <input type="range" id="wpmSlider" min="5" max="35" value="15">
+            <span class="slider-val" id="wpmVal">15</span>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="setting-label">주파수<small>tone frequency</small></div>
+          <div class="slider-wrap">
+            <input type="range" id="freqSlider" min="400" max="900" value="600" step="10">
+            <span class="slider-val" id="freqVal">600Hz</span>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="setting-label">볼륨<small>output level</small></div>
+          <div class="slider-wrap">
+            <input type="range" id="volSlider" min="0" max="100" value="40">
+            <span class="slider-val" id="volVal">40%</span>
+          </div>
+        </div>
+
+        <div class="section-divider">— 부호표 / Code Reference —</div>
+        <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
+          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
+        </div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson current" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mode-reference" class="mode hidden">
+    <div class="panel">
+      <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+      <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+      <div class="panel-label">
+        <span>국제 모스 부호표 / International Morse Code</span>
+        <span class="badge">click to hear</span>
+      </div>
+
+      <div class="section-divider" style="margin-top:18px;">— ALPHABET —</div>
+      <div class="mini-ref-grid" id="refAlpha" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">A</div><div class="code" style="font-size:10px;">.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">B</div><div class="code" style="font-size:10px;">-...</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">C</div><div class="code" style="font-size:10px;">-.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">D</div><div class="code" style="font-size:10px;">-..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">E</div><div class="code" style="font-size:10px;">.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">F</div><div class="code" style="font-size:10px;">..-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">G</div><div class="code" style="font-size:10px;">--.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">H</div><div class="code" style="font-size:10px;">....</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">I</div><div class="code" style="font-size:10px;">..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">J</div><div class="code" style="font-size:10px;">.---</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">K</div><div class="code" style="font-size:10px;">-.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">L</div><div class="code" style="font-size:10px;">.-..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">M</div><div class="code" style="font-size:10px;">--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">N</div><div class="code" style="font-size:10px;">-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">O</div><div class="code" style="font-size:10px;">---</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">P</div><div class="code" style="font-size:10px;">.--.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">Q</div><div class="code" style="font-size:10px;">--.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">R</div><div class="code" style="font-size:10px;">.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">S</div><div class="code" style="font-size:10px;">...</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">T</div><div class="code" style="font-size:10px;">-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">U</div><div class="code" style="font-size:10px;">..-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">V</div><div class="code" style="font-size:10px;">...-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">W</div><div class="code" style="font-size:10px;">.--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">X</div><div class="code" style="font-size:10px;">-..-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">Y</div><div class="code" style="font-size:10px;">-.--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">Z</div><div class="code" style="font-size:10px;">--..</div></div></div>
+
+      <div class="section-divider">— NUMBERS —</div>
+      <div class="mini-ref-grid" id="refNum" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">0</div><div class="code" style="font-size:10px;">-----</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">1</div><div class="code" style="font-size:10px;">.----</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">2</div><div class="code" style="font-size:10px;">..---</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">3</div><div class="code" style="font-size:10px;">...--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">4</div><div class="code" style="font-size:10px;">....-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">5</div><div class="code" style="font-size:10px;">.....</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">6</div><div class="code" style="font-size:10px;">-....</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">7</div><div class="code" style="font-size:10px;">--...</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">8</div><div class="code" style="font-size:10px;">---..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">9</div><div class="code" style="font-size:10px;">----.</div></div></div>
+
+      <div class="section-divider">— PUNCTUATION —</div>
+      <div class="mini-ref-grid" id="refPunct" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">.</div><div class="code" style="font-size:10px;">.-.-.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">,</div><div class="code" style="font-size:10px;">--..--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">?</div><div class="code" style="font-size:10px;">..--..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">/</div><div class="code" style="font-size:10px;">-..-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">-</div><div class="code" style="font-size:10px;">-....-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">(</div><div class="code" style="font-size:10px;">-.--.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">)</div><div class="code" style="font-size:10px;">-.--.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">=</div><div class="code" style="font-size:10px;">-...-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">+</div><div class="code" style="font-size:10px;">.-.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">@</div><div class="code" style="font-size:10px;">.--.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">!</div><div class="code" style="font-size:10px;">-.-.--</div></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <div>· — · · / — — — / · — · / ··· / ·</div>
+    <div>OPERATOR ONLINE</div>
+  </footer>
+</div>
+
+<script>
+  const MORSE = {
+    'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.',
+    'H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.',
+    'O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-',
+    'V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
+    '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-',
+    '5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
+    '.':'.-.-.-',',':'--..--','?':'..--..','/':'-..-.','-':'-....-',
+    '(':'-.--.',')':'-.--.-','=':'-...-','+':'.-.-.','@':'.--.-.',
+    "'":'.----.','"':'.-..-.',':':'---...',';':'-.-.-.','!':'-.-.--'
+  };
+  const REVERSE_MORSE = Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
+
+  let audioCtx = null, oscNode = null, gainNode = null;
+  let soundOn = true, frequency = 600, volume = 0.4;
+
+  function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  let audioUnlocked = false;
+  function unlockAudioOnce() {
+    if (audioUnlocked) return;
+    ensureAudio();
+    try {
+      const buf = audioCtx.createBuffer(1, 1, 22050);
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf; src.connect(audioCtx.destination); src.start(0);
+      audioUnlocked = true;
+    } catch(e) {}
+  }
+  ['touchstart','pointerdown','mousedown','keydown'].forEach(ev => {
+    document.addEventListener(ev, unlockAudioOnce, { passive: true });
+  });
+
+  function startTone() {
+    if (!soundOn) return;
+    ensureAudio();
+    if (oscNode) return;
+    oscNode = audioCtx.createOscillator();
+    gainNode = audioCtx.createGain();
+    oscNode.type = 'sine';
+    oscNode.frequency.value = frequency;
+    gainNode.gain.value = 0;
+    oscNode.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    const t = audioCtx.currentTime;
+    gainNode.gain.linearRampToValueAtTime(volume, t + 0.005);
+    oscNode.start();
+  }
+  function stopTone() {
+    if (!oscNode) return;
+    const t = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(t);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, t);
+    gainNode.gain.linearRampToValueAtTime(0, t + 0.01);
+    const o = oscNode, g = gainNode;
+    setTimeout(()=>{ try { o.stop(); o.disconnect(); g.disconnect(); } catch(e){} }, 30);
+    oscNode = null; gainNode = null;
+  }
+  function playBeep(durationMs) {
+    return new Promise(res => {
+      if (!soundOn) { setTimeout(res, durationMs); return; }
+      ensureAudio();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = frequency; g.gain.value = 0;
+      o.connect(g); g.connect(audioCtx.destination);
+      const t = audioCtx.currentTime;
+      g.gain.linearRampToValueAtTime(volume, t + 0.005);
+      g.gain.setValueAtTime(volume, t + durationMs/1000 - 0.005);
+      g.gain.linearRampToValueAtTime(0, t + durationMs/1000);
+      o.start(t); o.stop(t + durationMs/1000 + 0.02);
+      setTimeout(res, durationMs);
+    });
+  }
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  let wpm = 15;
+  function ditMs() { return 1200 / wpm; }
+  function dahMs() { return ditMs() * 3; }
+  function ditDahThreshold() { return ditMs() * 2; }
+  function letterGapMs() { return ditMs() * 3; }
+  function wordGapMs() { return ditMs() * 7; }
+
+  let activeMode = 'free';
+  let isPressed = false, pressStart = 0;
+  let inputBuf = '', decodedBuf = '';
+  let letterTimer = null, wordTimer = null, practiceTimer = null;
+
+  const lessons = [
+    { id:'easy1', name:'기초 1 — E·T·A·N', chars:'EATN' },
+    { id:'easy2', name:'기초 2 — I·M·S·O', chars:'IMSO' },
+    { id:'easy3', name:'기초 통합', chars:'EATNIMSO' },
+    { id:'mid1', name:'중급 — 자주 쓰는 글자', chars:'EATNIMSORHDLU' },
+    { id:'full', name:'알파벳 전체', chars:'ABCDEFGHIJKLMNOPQRSTUVWXYZ' },
+    { id:'num', name:'숫자', chars:'0123456789' },
+    { id:'mix', name:'혼합 (영문+숫자)', chars:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' },
+    { id:'sos', name:'SOS / 비상 신호', chars:'SOSHELP' }
+  ];
+  let currentLesson = lessons[0];
+  let practiceQueue = [];
+  let currentTarget = '';
+  let stats = { correct:0, wrong:0, streak:0, total:0 };
+
+  const $ = id => document.getElementById(id);
+  const txButton = $('txButton');
+  const displayStack = $('displayStack');
+  const targetRow = $('targetRow');
+  const targetCharEl = $('targetChar');
+  const targetCodeEl = $('targetCode');
+  const inputDisplay = $('inputDisplay');
+  const decodedDisplay = $('decodedDisplay');
+  const inputLabel = $('inputLabel');
+  const modeTitle = $('modeTitle');
+  const modeSubtitle = $('modeSubtitle');
+  const statsBar = $('statsBar');
+  const lessonSection = $('lessonSection');
+  const refHintEl = $('refHint');
+
+  function pressDown() {
+    if (isPressed || activeMode === 'reference') return;
+    isPressed = true;
+    pressStart = performance.now();
+    if (navigator.vibrate) navigator.vibrate(8);
+    startTone();
+    clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
+  }
+  function pressUp() {
+    if (!isPressed) return;
+    isPressed = false;
+    stopTone();
+    const dur = performance.now() - pressStart;
+    const symbol = dur < ditDahThreshold() ? '.' : '-';
+    inputBuf += symbol;
+    refreshInputDisplay();
+
+    if (activeMode === 'free') {
+      letterTimer = setTimeout(commitFreeLetter, letterGapMs());
+      wordTimer = setTimeout(() => {
+        commitFreeLetter();
+        if (decodedBuf && !decodedBuf.endsWith(' ')) {
+          decodedBuf += ' ';
+          refreshInputDisplay();
+        }
+      }, wordGapMs());
+    } else if (activeMode === 'practice') {
+      practiceTimer = setTimeout(checkPracticeAnswer, letterGapMs());
+    }
+  }
+
+  function commitFreeLetter() {
+    if (inputBuf) {
+      const ch = REVERSE_MORSE[inputBuf];
+      decodedBuf += ch || '?';
+      inputBuf = '';
+      refreshInputDisplay();
+    }
+  }
+  function refreshInputDisplay() {
+    inputDisplay.textContent = inputBuf || '—';
+    inputDisplay.classList.toggle('empty', !inputBuf);
+    if (activeMode === 'free') {
+      decodedDisplay.textContent = decodedBuf || '—';
+      decodedDisplay.classList.toggle('empty', !decodedBuf);
+    }
+  }
+
+  function startPractice() {
+    stats = { correct:0, wrong:0, streak:0, total:0 };
+    practiceQueue = [];
+    inputBuf = '';
+    updateStats();
+    nextTarget();
+  }
+  function nextTarget() {
+    inputBuf = '';
+    refreshInputDisplay();
+    if (practiceQueue.length === 0) {
+      practiceQueue = currentLesson.chars.split('').sort(() => Math.random() - 0.5);
+    }
+    currentTarget = practiceQueue.shift();
+    targetCharEl.textContent = currentTarget;
+    targetCodeEl.textContent = MORSE[currentTarget];
+    updateMiniRefHighlight();
+  }
+  function checkPracticeAnswer() {
+    if (!inputBuf) return;
+    stats.total++;
+    if (inputBuf === MORSE[currentTarget]) {
+      stats.correct++; stats.streak++;
+      flashDisplay('correct');
+      updateStats();
+      setTimeout(() => { clearFlash(); nextTarget(); }, 600);
+    } else {
+      stats.wrong++; stats.streak = 0;
+      flashDisplay('wrong');
+      updateStats();
+      setTimeout(() => {
+        clearFlash();
+        inputBuf = '';
+        refreshInputDisplay();
+      }, 900);
+    }
+  }
+  function flashDisplay(type) {
+    displayStack.classList.remove('flash-correct', 'flash-wrong');
+    void displayStack.offsetWidth;
+    displayStack.classList.add('flash-' + type);
+  }
+  function clearFlash() {
+    displayStack.classList.remove('flash-correct', 'flash-wrong');
+  }
+  function updateStats() {
+    $('statCorrect').textContent = stats.correct;
+    $('statWrong').textContent = stats.wrong;
+    $('statStreak').textContent = stats.streak;
+    $('statAcc').textContent = stats.total === 0 ? '—' : Math.round(stats.correct / stats.total * 100) + '%';
+  }
+
+  function attachKeyEvents(el) {
+    el.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      unlockAudioOnce();
+      try { el.setPointerCapture(e.pointerId); } catch(_) {}
+      pressDown();
+      el.classList.add('pressed');
+    });
+    const release = (e) => {
+      try { el.releasePointerCapture(e.pointerId); } catch(_) {}
+      if (isPressed) pressUp();
+      el.classList.remove('pressed');
+    };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    el.addEventListener('pointerleave', e => {
+      if (isPressed) { pressUp(); el.classList.remove('pressed'); }
+    });
+    el.addEventListener('contextmenu', e => e.preventDefault());
+  }
+  attachKeyEvents(txButton);
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.repeat) {
+      if (activeMode === 'free' || activeMode === 'practice') {
+        e.preventDefault(); pressDown(); txButton.classList.add('pressed');
+      }
+    }
+  });
+  document.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+      if (activeMode === 'free' || activeMode === 'practice') {
+        e.preventDefault(); pressUp(); txButton.classList.remove('pressed');
+      }
+    }
+  });
+
+  $('clearBtn').addEventListener('click', () => {
+    inputBuf = ''; decodedBuf = '';
+    refreshInputDisplay();
+  });
+  $('spaceBtn').addEventListener('click', () => {
+    commitFreeLetter();
+    if (decodedBuf && !decodedBuf.endsWith(' ')) {
+      decodedBuf += ' ';
+      refreshInputDisplay();
+    }
+  });
+  $('playbackBtn').addEventListener('click', async () => {
+    commitFreeLetter();
+    if (!decodedBuf) return;
+    await playString(decodedBuf);
+  });
+  async function playString(text) {
+    for (const ch of text.toUpperCase()) {
+      if (ch === ' ') { await sleep(wordGapMs()); continue; }
+      const code = MORSE[ch];
+      if (!code) continue;
+      for (let i = 0; i < code.length; i++) {
+        await playBeep(code[i] === '.' ? ditMs() : dahMs());
+        if (i < code.length - 1) await sleep(ditMs());
+      }
+      await sleep(letterGapMs());
+    }
+  }
+
+  $('practiceSkip').addEventListener('click', () => { inputBuf = ''; nextTarget(); });
+  $('practiceHint').addEventListener('click', async () => {
+    const code = MORSE[currentTarget];
+    for (let i = 0; i < code.length; i++) {
+      await playBeep(code[i] === '.' ? ditMs() : dahMs());
+      if (i < code.length - 1) await sleep(ditMs());
+    }
+  });
+  $('practiceReset').addEventListener('click', startPractice);
+
+  const soundToggle = $('soundToggle');
+  const waveIndicator = $('waveIndicator');
+  soundToggle.addEventListener('click', () => {
+    soundOn = !soundOn;
+    soundToggle.classList.toggle('on', soundOn);
+    waveIndicator.classList.toggle('muted', !soundOn);
+    if (!soundOn) stopTone();
+  });
+  $('wpmSlider').addEventListener('input', e => {
+    wpm = parseInt(e.target.value);
+    $('wpmVal').textContent = wpm;
+    $('wpmDisplay').textContent = wpm;
+  });
+  $('freqSlider').addEventListener('input', e => {
+    frequency = parseInt(e.target.value);
+    $('freqVal').textContent = frequency + 'Hz';
+    $('freqDisplay').textContent = frequency;
+  });
+  $('volSlider').addEventListener('input', e => {
+    volume = parseInt(e.target.value) / 100 * 0.8;
+    $('volVal').textContent = e.target.value + '%';
+  });
+
+  function setMode(mode) {
+    activeMode = mode;
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.mode === mode);
+    });
+
+    if (mode === 'reference') {
+      $('mode-main').classList.add('hidden');
+      $('mode-reference').classList.remove('hidden');
+      return;
+    }
+    $('mode-main').classList.remove('hidden');
+    $('mode-reference').classList.add('hidden');
+
+    stopTone();
+    isPressed = false;
+    inputBuf = ''; decodedBuf = '';
+    clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
+    clearFlash();
+
+    if (mode === 'free') {
+      modeTitle.textContent = '자유 송신 / Free Transmission';
+      modeSubtitle.textContent = 'no target · just send';
+      targetRow.classList.add('hidden');
+      statsBar.classList.add('hidden');
+      lessonSection.classList.add('hidden');
+      $('freeControls').classList.remove('hidden');
+      $('practiceControls').classList.add('hidden');
+      decodedDisplay.classList.remove('hidden');
+      inputLabel.textContent = '현재 입력 / Current Signal';
+      refHintEl.textContent = '전체 글자';
+    } else if (mode === 'practice') {
+      modeTitle.textContent = '연습 모드 / Practice';
+      modeSubtitle.textContent = currentLesson.name;
+      targetRow.classList.remove('hidden');
+      statsBar.classList.remove('hidden');
+      lessonSection.classList.remove('hidden');
+      $('freeControls').classList.add('hidden');
+      $('practiceControls').classList.remove('hidden');
+      decodedDisplay.classList.add('hidden');
+      inputLabel.textContent = '입력한 부호 / Your Input';
+      refHintEl.textContent = '강조 = 현재 레슨';
+      startPractice();
+    }
+    refreshInputDisplay();
+    updateMiniRefHighlight();
+  }
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => setMode(tab.dataset.mode));
+  });
+
+  function buildLessonList() {
+    const list = $('lessonList');
+    list.innerHTML = '';
+    lessons.forEach((l, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'lesson-btn' + (l.id === currentLesson.id ? ' active' : '');
+      btn.innerHTML = `<span class="num">${i+1}.</span>${l.name}`;
+      btn.addEventListener('click', () => {
+        currentLesson = l;
+        modeSubtitle.textContent = l.name;
+        buildLessonList();
+        startPractice();
+        updateMiniRefHighlight();
+      });
+      list.appendChild(btn);
+    });
+  }
+
+  function buildMiniRef() {
+    const grid = $('miniRefGrid');
+    grid.innerHTML = '';
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('').forEach(ch => {
+      const item = document.createElement('div');
+      item.className = 'mini-ref-item';
+      item.dataset.ch = ch;
+      item.innerHTML = `<div class="ch">${ch}</div><div class="code">${MORSE[ch]}</div>`;
+      item.addEventListener('click', async () => {
+        const code = MORSE[ch];
+        for (let i = 0; i < code.length; i++) {
+          await playBeep(code[i] === '.' ? ditMs() : dahMs());
+          if (i < code.length - 1) await sleep(ditMs());
+        }
+      });
+      grid.appendChild(item);
+    });
+  }
+  function updateMiniRefHighlight() {
+    const lessonChars = activeMode === 'practice' ? new Set(currentLesson.chars.split('')) : null;
+    document.querySelectorAll('#miniRefGrid .mini-ref-item').forEach(el => {
+      if (lessonChars) {
+        el.classList.toggle('in-lesson', lessonChars.has(el.dataset.ch));
+      } else {
+        el.classList.add('in-lesson');
+      }
+      el.classList.toggle('current',
+        activeMode === 'practice' && el.dataset.ch === currentTarget);
+    });
+  }
+
+  function buildReference() {
+    const fill = (id, arr) => {
+      const c = $(id);
+      arr.forEach(ch => {
+        const item = document.createElement('div');
+        item.className = 'mini-ref-item in-lesson';
+        item.innerHTML = `<div class="ch" style="font-size:16px;">${ch}</div><div class="code" style="font-size:10px;">${MORSE[ch] || '—'}</div>`;
+        item.style.padding = '10px 6px';
+        item.addEventListener('click', async () => {
+          const code = MORSE[ch];
+          if (!code) return;
+          for (let i = 0; i < code.length; i++) {
+            await playBeep(code[i] === '.' ? ditMs() : dahMs());
+            if (i < code.length - 1) await sleep(ditMs());
+          }
+        });
+        c.appendChild(item);
+      });
+    };
+    fill('refAlpha', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
+    fill('refNum', '0123456789'.split(''));
+    fill('refPunct', ['.', ',', '?', '/', '-', '(', ')', '=', '+', '@', '!']);
+  }
+
+  buildLessonList();
+  buildReference();
+  buildMiniRef();
+  setMode('free');
+</script>
+
+
+</body></html>
