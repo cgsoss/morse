@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0040)file:///C:/Users/cg/Downloads/morse.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_1.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -358,6 +358,15 @@
     transition: all 0.15s; cursor: pointer; opacity: 0.4;
   }
   .mini-ref-item:hover { border-color: var(--amber); opacity: 1; }
+  .mini-ref-item:active,
+  .mini-ref-item.playing {
+    background: rgba(255,179,71,0.18);
+    border-color: var(--amber);
+    box-shadow: 0 0 12px var(--amber-glow), inset 0 0 8px rgba(255,179,71,0.15);
+    opacity: 1;
+  }
+  .mini-ref-item:active .ch,
+  .mini-ref-item.playing .ch { color: var(--amber); }
   .mini-ref-item.in-lesson { opacity: 1; border-color: var(--ink-faint); }
   .mini-ref-item.current {
     border-color: var(--amber); background: rgba(255,179,71,0.08);
@@ -476,10 +485,10 @@
         </div>
 
         <div class="stats-bar" id="statsBar">
-          <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
-          <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
-          <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
-          <div class="stat"><div class="v" id="statAcc">—</div><div class="l">정확도</div></div>
+          <div class="stat"><div class="v green" id="statCorrect">1</div><div class="l">맞춤</div></div>
+          <div class="stat"><div class="v red" id="statWrong">1</div><div class="l">틀림</div></div>
+          <div class="stat"><div class="v" id="statStreak">1</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="statAcc">50%</div><div class="l">정확도</div></div>
         </div>
 
         <div class="display-stack" id="displayStack">
@@ -491,7 +500,7 @@
           <div class="input-row">
             <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">EEH </div>
+            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">I A H </div>
           </div>
         </div>
 
@@ -1004,6 +1013,21 @@
     });
   }
 
+  // play one character's morse, with visual highlight on the source element
+  async function playCharWithHighlight(ch, el) {
+    const code = MORSE[ch];
+    if (!code) return;
+    if (el) el.classList.add('playing');
+    try {
+      for (let i = 0; i < code.length; i++) {
+        await playBeep(code[i] === '.' ? ditMs() : dahMs());
+        if (i < code.length - 1) await sleep(ditMs());
+      }
+    } finally {
+      if (el) el.classList.remove('playing');
+    }
+  }
+
   function buildMiniRef() {
     const grid = $('miniRefGrid');
     grid.innerHTML = '';
@@ -1012,13 +1036,7 @@
       item.className = 'mini-ref-item';
       item.dataset.ch = ch;
       item.innerHTML = `<div class="ch">${ch}</div><div class="code">${MORSE[ch]}</div>`;
-      item.addEventListener('click', async () => {
-        const code = MORSE[ch];
-        for (let i = 0; i < code.length; i++) {
-          await playBeep(code[i] === '.' ? ditMs() : dahMs());
-          if (i < code.length - 1) await sleep(ditMs());
-        }
-      });
+      item.addEventListener('click', () => playCharWithHighlight(ch, item));
       grid.appendChild(item);
     });
   }
@@ -1044,14 +1062,7 @@
         item.className = 'mini-ref-item in-lesson';
         item.innerHTML = `<div class="ch" style="font-size:16px;">${ch}</div><div class="code" style="font-size:10px;">${MORSE[ch] || '—'}</div>`;
         item.style.padding = '10px 6px';
-        item.addEventListener('click', async () => {
-          const code = MORSE[ch];
-          if (!code) return;
-          for (let i = 0; i < code.length; i++) {
-            await playBeep(code[i] === '.' ? ditMs() : dahMs());
-            if (i < code.length - 1) await sleep(ditMs());
-          }
-        });
+        item.addEventListener('click', () => playCharWithHighlight(ch, item));
         c.appendChild(item);
       });
     };
