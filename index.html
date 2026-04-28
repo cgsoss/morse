@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_2.html -->
-<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
 
 <!-- Cache busting: force fresh load every time PWA opens -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -17,16 +17,16 @@
 <meta name="theme-color" content="#0e0b07">
 
 <!-- App icon: amber morse glyph on dark rounded background -->
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 180 180&#39;&gt;&lt;defs&gt;&lt;radialGradient id=&#39;g&#39; cx=&#39;50%25&#39; cy=&#39;30%25&#39; r=&#39;80%25&#39;&gt;&lt;stop offset=&#39;0%25&#39; stop-color=&#39;%23241a10&#39;/&gt;&lt;stop offset=&#39;100%25&#39; stop-color=&#39;%230e0b07&#39;/&gt;&lt;/radialGradient&gt;&lt;/defs&gt;&lt;rect width=&#39;180&#39; height=&#39;180&#39; rx=&#39;40&#39; fill=&#39;url(%23g)&#39;/&gt;&lt;circle cx=&#39;44&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;rect x=&#39;66&#39; y=&#39;80&#39; width=&#39;50&#39; height=&#39;20&#39; rx=&#39;6&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;circle cx=&#39;136&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;text x=&#39;90&#39; y=&#39;148&#39; font-family=&#39;Georgia,serif&#39; font-style=&#39;italic&#39; font-size=&#39;28&#39; fill=&#39;%23ffb347&#39; text-anchor=&#39;middle&#39; opacity=&#39;0.9&#39;&gt;M&lt;/text&gt;&lt;/svg&gt;">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 180 180&#39;&gt;&lt;rect width=&#39;180&#39; height=&#39;180&#39; rx=&#39;40&#39; fill=&#39;%230e0b07&#39;/&gt;&lt;circle cx=&#39;44&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;rect x=&#39;66&#39; y=&#39;80&#39; width=&#39;50&#39; height=&#39;20&#39; rx=&#39;6&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;circle cx=&#39;136&#39; cy=&#39;90&#39; r=&#39;10&#39; fill=&#39;%23ffb347&#39;/&gt;&lt;/svg&gt;">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><radialGradient id='g' cx='50%25' cy='30%25' r='80%25'><stop offset='0%25' stop-color='%23241a10'/><stop offset='100%25' stop-color='%230e0b07'/></radialGradient></defs><rect width='180' height='180' rx='40' fill='url(%23g)'/><circle cx='44' cy='90' r='10' fill='%23ffb347'/><rect x='66' y='80' width='50' height='20' rx='6' fill='%23ffb347'/><circle cx='136' cy='90' r='10' fill='%23ffb347'/><text x='90' y='148' font-family='Georgia,serif' font-style='italic' font-size='28' fill='%23ffb347' text-anchor='middle' opacity='0.9'>M</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230e0b07'/><circle cx='44' cy='90' r='10' fill='%23ffb347'/><rect x='66' y='80' width='50' height='20' rx='6' fill='%23ffb347'/><circle cx='136' cy='90' r='10' fill='%23ffb347'/></svg>">
 
 <!-- PWA manifest (inline as data URI so it works without separate file) -->
-<link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;Morse Practice&quot;,&quot;short_name&quot;:&quot;Morse&quot;,&quot;description&quot;:&quot;Telegraph practice %E2%80%94 Morse code trainer&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;background_color&quot;:&quot;%230e0b07&quot;,&quot;theme_color&quot;:&quot;%230e0b07&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml;utf8,&lt;svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 180 180%27&gt;&lt;rect width=%27180%27 height=%27180%27 rx=%2740%27 fill=%27%230e0b07%27/&gt;&lt;circle cx=%2744%27 cy=%2790%27 r=%2710%27 fill=%27%23ffb347%27/&gt;&lt;rect x=%2766%27 y=%2780%27 width=%2750%27 height=%2720%27 rx=%276%27 fill=%27%23ffb347%27/&gt;&lt;circle cx=%27136%27 cy=%2790%27 r=%2710%27 fill=%27%23ffb347%27/&gt;&lt;/svg&gt;&quot;,&quot;sizes&quot;:&quot;any&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any&quot;}]}">
+<link rel="manifest" href='data:application/manifest+json,{"name":"Morse Practice","short_name":"Morse","description":"Telegraph practice — Morse code trainer","start_url":".","display":"standalone","orientation":"portrait","background_color":"%230e0b07","theme_color":"%230e0b07","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 180 180%27><rect width=%27180%27 height=%27180%27 rx=%2740%27 fill=%27%230e0b07%27/><circle cx=%2744%27 cy=%2790%27 r=%2710%27 fill=%27%23ffb347%27/><rect x=%2766%27 y=%2780%27 width=%2750%27 height=%2720%27 rx=%276%27 fill=%27%23ffb347%27/><circle cx=%27136%27 cy=%2790%27 r=%2710%27 fill=%27%23ffb347%27/></svg>","sizes":"any","type":"image/svg+xml","purpose":"any"}]}'>
 
 <title>Morse / 전신 연습기</title>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="./index_files/css2" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0e0b07;
@@ -428,6 +428,255 @@
     border-top: 1px dashed var(--line);
   }
 
+  /* ─── Modal ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(14, 11, 7, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: fade-in 220ms ease-out;
+  }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--amber-dim);
+    border-radius: 4px;
+    padding: 32px 28px;
+    max-width: 480px; width: 100%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 60px var(--amber-glow), 0 20px 40px rgba(0,0,0,0.6);
+    animation: slide-up 320ms cubic-bezier(0.2, 0.8, 0.3, 1.1);
+  }
+  @keyframes slide-up {
+    from { transform: translateY(20px) scale(0.96); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .modal-corner {
+    position: absolute; width: 12px; height: 12px;
+    border: 1px solid var(--amber);
+  }
+  .modal-corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .modal-corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .modal-corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .modal-corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+  .modal-status {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 56px; line-height: 1;
+    color: var(--green);
+    text-shadow: 0 0 30px var(--green-glow);
+    margin-bottom: 4px;
+  }
+  .modal-status.fail {
+    color: var(--red);
+    text-shadow: 0 0 30px var(--red-glow);
+  }
+  .modal-status.record {
+    color: var(--amber);
+    text-shadow: 0 0 30px var(--amber-glow);
+  }
+  .modal-title {
+    font-size: 11px; letter-spacing: 0.3em;
+    color: var(--ink-dim); text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .modal-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .m-stat {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 12px 8px;
+    border-radius: 2px;
+  }
+  .m-v {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 28px;
+    color: var(--amber); line-height: 1;
+  }
+  .m-l {
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--ink-dim); text-transform: uppercase;
+    margin-top: 5px;
+  }
+  .modal-message {
+    font-size: 12px; line-height: 1.7;
+    color: var(--ink); margin-bottom: 18px;
+    padding: 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .modal-message.success { border-color: var(--green); color: var(--green); }
+  .modal-message.fail { border-color: var(--red); color: var(--red); }
+  .modal-message.record { border-color: var(--amber); color: var(--amber); }
+  .modal-actions {
+    display: flex; gap: 8px;
+  }
+
+  /* profile input */
+  #profileNameInput {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--ink-faint);
+    border-radius: 2px;
+    color: var(--amber);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 24px;
+    text-align: center;
+    padding: 12px;
+    outline: none;
+    transition: border-color 200ms;
+    -webkit-user-select: text; user-select: text;
+  }
+  #profileNameInput:focus { border-color: var(--amber); box-shadow: 0 0 12px var(--amber-glow); }
+
+  /* ─── Lesson lock ─── */
+  .lesson-btn.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-style: dashed;
+  }
+  .lesson-btn.locked::after {
+    content: '🔒';
+    float: right;
+    font-size: 12px;
+  }
+  .lesson-btn .lesson-meta {
+    display: block;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .lesson-btn.cleared {
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .lesson-btn.cleared::after {
+    content: '✓';
+    float: right;
+    font-size: 14px;
+    color: var(--green);
+  }
+
+  /* ─── Ranking tables ─── */
+  .rank-table {
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .rank-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto auto;
+    gap: 10px;
+    padding: 10px 14px;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-row.header {
+    background: var(--bg-2);
+    color: var(--ink-dim);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+  }
+  .rank-row.empty {
+    color: var(--ink-faint);
+    text-align: center;
+    grid-template-columns: 1fr;
+    padding: 22px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+  .rank-row .rank-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--amber);
+    text-align: center;
+  }
+  .rank-row.top1 .rank-num { color: #ffd96e; text-shadow: 0 0 8px rgba(255,217,110,0.6); }
+  .rank-row.top2 .rank-num { color: #d8d8d8; }
+  .rank-row.top3 .rank-num { color: #c89466; }
+  .rank-row .rank-name {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .rank-row.me .rank-name {
+    color: var(--amber);
+    font-weight: 700;
+  }
+  .rank-row.me .rank-name::before {
+    content: '▸ ';
+    color: var(--amber);
+  }
+  .rank-row .rank-meta {
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+  }
+  .rank-row .rank-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--amber);
+    min-width: 60px;
+    text-align: right;
+  }
+  .lesson-rank-block {
+    margin-bottom: 22px;
+  }
+  .lesson-rank-block .lrb-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--line);
+    display: flex; justify-content: space-between;
+  }
+  .lesson-rank-block .lrb-title .badge {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--amber);
+    font-size: 13px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .rank-tab.active::after { background: var(--amber); }
+
+  /* ─── Score popup over button ─── */
+  .score-popup {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 32px;
+    color: var(--green);
+    text-shadow: 0 0 12px var(--green-glow);
+    animation: popup 900ms ease-out forwards;
+    z-index: 10;
+  }
+  .score-popup.miss { color: var(--red); text-shadow: 0 0 12px var(--red-glow); }
+  @keyframes popup {
+    0% { transform: translate(-50%, 0); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate(-50%, -60px); opacity: 0; }
+  }
+
   @media (max-width: 600px) {
     .wrap {
       padding-top: calc(16px + env(safe-area-inset-top, 0px));
@@ -472,12 +721,14 @@
   </header>
 
   <div class="tabs">
-    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
     <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
-    <button class="tab active" data-mode="reference"><span class="num">iii.</span>부호표</button>
+    <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
+    <button class="tab" data-mode="ranking"><span class="num">iv.</span>랭킹</button>
+    <button class="tab" data-mode="reference"><span class="num">v.</span>부호표</button>
   </div>
 
-  <section id="mode-main" class="mode hidden">
+  <section id="mode-main" class="mode">
     <div class="grid">
 
       <div class="panel">
@@ -485,27 +736,27 @@
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
         <div class="panel-label">
-          <span id="modeTitle">연습 모드 / Practice</span>
-          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
+          <span id="modeTitle">자유 송신 / Free Transmission</span>
+          <span class="badge" id="modeSubtitle">no target · just send</span>
         </div>
 
-        <div class="stats-bar" id="statsBar">
-          <div class="stat"><div class="v green" id="statCorrect">1</div><div class="l">맞춤</div></div>
-          <div class="stat"><div class="v red" id="statWrong">2</div><div class="l">틀림</div></div>
-          <div class="stat"><div class="v" id="statStreak">1</div><div class="l">연속</div></div>
-          <div class="stat"><div class="v" id="statAcc">33%</div><div class="l">정확도</div></div>
+        <div class="stats-bar hidden" id="statsBar">
+          <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
+          <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
+          <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="statAcc">—</div><div class="l">정확도</div></div>
         </div>
 
         <div class="display-stack" id="displayStack">
-          <div class="target-row" id="targetRow">
+          <div class="target-row hidden" id="targetRow">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="targetChar">E</div>
-            <div class="target-code" id="targetCode">.</div>
+            <div class="target-char" id="targetChar">A</div>
+            <div class="target-code" id="targetCode">·—</div>
           </div>
           <div class="input-row">
-            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
+            <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">E I </div>
+            <div class="input-display text empty" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
           </div>
         </div>
 
@@ -517,12 +768,12 @@
           </div>
         </div>
 
-        <div class="controls hidden" id="freeControls">
+        <div class="controls" id="freeControls">
           <button class="btn" id="clearBtn">CLEAR</button>
           <button class="btn" id="spaceBtn">단어 공백</button>
           <button class="btn primary" id="playbackBtn">▷ 재생</button>
         </div>
-        <div class="controls" id="practiceControls">
+        <div class="controls hidden" id="practiceControls">
           <button class="btn" id="practiceSkip">SKIP →</button>
           <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
           <button class="btn" id="practiceReset">RESET</button>
@@ -533,12 +784,12 @@
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
-        <div id="lessonSection" class="">
+        <div id="lessonSection" class="hidden">
           <div class="panel-label">
             <span>레슨 / Lessons</span>
             <span class="badge">curriculum</span>
           </div>
-          <div class="lesson-list" id="lessonList"><button class="lesson-btn active"><span class="num">1.</span>기초 1 — E·T·A·N</button><button class="lesson-btn"><span class="num">2.</span>기초 2 — I·M·S·O</button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>SOS / 비상 신호</button></div>
+          <div class="lesson-list" id="lessonList"></div>
         </div>
 
         <div class="panel-label" id="settingsLabel" style="margin-top:14px;">
@@ -577,14 +828,138 @@
 
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
-          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
+          클릭=소리 재생 · <span id="refHint">전체 글자</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson current" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"></div>
       </div>
     </div>
   </section>
 
-  <section id="mode-reference" class="mode">
+  <!-- ═══ CHALLENGE MODE ═══ -->
+  <section id="mode-challenge" class="mode hidden">
+    <div class="grid">
+      <div class="panel">
+        <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+        <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+        <div class="panel-label">
+          <span>도전 / Challenge Round</span>
+          <span class="badge" id="challengeLessonName">기초 1 — E·T·A·N</span>
+        </div>
+
+        <!-- progress + stats -->
+        <div class="stats-bar">
+          <div class="stat"><div class="v" id="chProgress">0/4</div><div class="l">진행</div></div>
+          <div class="stat"><div class="v" id="chScore">0</div><div class="l">점수</div></div>
+          <div class="stat"><div class="v" id="chStreak">0</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="chMult">×1.0</div><div class="l">배수</div></div>
+        </div>
+
+        <!-- progress bar -->
+        <div style="height:4px;background:var(--bg-2);border:1px solid var(--line);border-radius:2px;margin-bottom:18px;overflow:hidden;">
+          <div id="chProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--amber-dim),var(--amber));box-shadow:0 0 8px var(--amber-glow);transition:width 250ms;"></div>
+        </div>
+
+        <div class="display-stack" id="chDisplayStack">
+          <div class="target-row">
+            <div class="target-label">다음 문자</div>
+            <div class="target-char" id="chTargetChar">A</div>
+            <div class="target-code" id="chTargetCode">·—</div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">입력한 부호 / Your Input</div>
+            <div class="input-display empty" id="chInputDisplay">—</div>
+          </div>
+        </div>
+
+        <div class="tx-btn" id="chTxButton">
+          <div class="tx-btn-icon">·—</div>
+          <div class="tx-btn-label">TRANSMIT</div>
+          <div class="tx-btn-hint">
+            <kbd>SPACE</kbd> · 빠를수록 보너스 점수
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="chSkip">SKIP →</button>
+          <button class="btn" id="chHint">▷ 힌트 (-50)</button>
+          <button class="btn" id="chQuit">중단</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+        <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+        <div class="panel-label">
+          <span>플레이어 / Player</span>
+          <span class="badge" id="profileNameBadge">guest</span>
+        </div>
+        <div class="setting">
+          <div class="setting-label">이름<small>profile name</small></div>
+          <button class="btn" id="profileEditBtn" style="flex:0 0 auto;">변경</button>
+        </div>
+
+        <div class="panel-label" style="margin-top:18px;">
+          <span>레슨 선택 / Lessons</span>
+          <span class="badge">curriculum</span>
+        </div>
+        <div class="lesson-list" id="challengeLessonList"></div>
+
+        <div class="section-divider">— 점수 룰 / Scoring —</div>
+        <div style="font-size:11px; line-height:1.7; color:var(--ink-dim);">
+          <strong style="color:var(--ink);">즉답</strong> +100점<br>
+          <strong style="color:var(--ink);">재시도 정답</strong> +30점<br>
+          <strong style="color:var(--ink);">속도 보너스</strong> 1초 +30 / 2초 +15<br>
+          <strong style="color:var(--ink);">연속 배수</strong> 5연속 ×1.2 / 10 ×1.5 / 20 ×2.0<br>
+          <strong style="color:var(--red);">SKIP</strong> 0점 (연속 끊김)<br>
+          <strong style="color:var(--amber);">통과</strong> 정확도 90% 이상 → 다음 레슨 해제
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RANKING MODE ═══ -->
+  <section id="mode-ranking" class="mode hidden">
+    <div class="panel">
+      <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+      <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+      <div class="panel-label">
+        <span>랭킹 / Hall of Records</span>
+        <span class="badge" id="rankProfileBadge">guest</span>
+      </div>
+
+      <!-- sub-tabs -->
+      <div class="tabs" style="margin:12px 0 18px;font-size:11px;">
+        <button class="rank-tab tab active" data-rank="overall"><span class="num">·</span>종합</button>
+        <button class="rank-tab tab" data-rank="lessons"><span class="num">·</span>레슨별</button>
+        <button class="rank-tab tab" data-rank="hof"><span class="num">·</span>명예의 전당</button>
+      </div>
+
+      <div id="rankSection-overall" class="rank-section">
+        <div style="font-size:10px; letter-spacing:0.2em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">— 전체 기록 TOP 10 —</div>
+        <div id="rankOverall" class="rank-table"></div>
+      </div>
+
+      <div id="rankSection-lessons" class="rank-section hidden">
+        <div style="font-size:10px; letter-spacing:0.2em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">— 레슨별 최고 기록 —</div>
+        <div id="rankByLesson"></div>
+      </div>
+
+      <div id="rankSection-hof" class="rank-section hidden">
+        <div style="font-size:10px; letter-spacing:0.2em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">— 명예의 전당 (TOP 10 신기록 보존) —</div>
+        <div id="rankHof" class="rank-table"></div>
+      </div>
+
+      <div class="controls" style="margin-top:24px;">
+        <button class="btn" id="rankExport">기록 내보내기</button>
+        <button class="btn" id="rankReset" style="border-color:var(--red);color:var(--red);">전체 초기화</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="mode-reference" class="mode hidden">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -595,23 +970,68 @@
       </div>
 
       <div class="section-divider" style="margin-top:18px;">— ALPHABET —</div>
-      <div class="mini-ref-grid" id="refAlpha" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">A</div><div class="code" style="font-size:10px;">.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">B</div><div class="code" style="font-size:10px;">-...</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">C</div><div class="code" style="font-size:10px;">-.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">D</div><div class="code" style="font-size:10px;">-..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">E</div><div class="code" style="font-size:10px;">.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">F</div><div class="code" style="font-size:10px;">..-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">G</div><div class="code" style="font-size:10px;">--.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">H</div><div class="code" style="font-size:10px;">....</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">I</div><div class="code" style="font-size:10px;">..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">J</div><div class="code" style="font-size:10px;">.---</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">K</div><div class="code" style="font-size:10px;">-.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">L</div><div class="code" style="font-size:10px;">.-..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">M</div><div class="code" style="font-size:10px;">--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">N</div><div class="code" style="font-size:10px;">-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">O</div><div class="code" style="font-size:10px;">---</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">P</div><div class="code" style="font-size:10px;">.--.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">Q</div><div class="code" style="font-size:10px;">--.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">R</div><div class="code" style="font-size:10px;">.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">S</div><div class="code" style="font-size:10px;">...</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">T</div><div class="code" style="font-size:10px;">-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">U</div><div class="code" style="font-size:10px;">..-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">V</div><div class="code" style="font-size:10px;">...-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">W</div><div class="code" style="font-size:10px;">.--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">X</div><div class="code" style="font-size:10px;">-..-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">Y</div><div class="code" style="font-size:10px;">-.--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">Z</div><div class="code" style="font-size:10px;">--..</div></div></div>
+      <div class="mini-ref-grid" id="refAlpha" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"></div>
 
       <div class="section-divider">— NUMBERS —</div>
-      <div class="mini-ref-grid" id="refNum" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">0</div><div class="code" style="font-size:10px;">-----</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">1</div><div class="code" style="font-size:10px;">.----</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">2</div><div class="code" style="font-size:10px;">..---</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">3</div><div class="code" style="font-size:10px;">...--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">4</div><div class="code" style="font-size:10px;">....-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">5</div><div class="code" style="font-size:10px;">.....</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">6</div><div class="code" style="font-size:10px;">-....</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">7</div><div class="code" style="font-size:10px;">--...</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">8</div><div class="code" style="font-size:10px;">---..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">9</div><div class="code" style="font-size:10px;">----.</div></div></div>
+      <div class="mini-ref-grid" id="refNum" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"></div>
 
       <div class="section-divider">— PUNCTUATION —</div>
-      <div class="mini-ref-grid" id="refPunct" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">.</div><div class="code" style="font-size:10px;">.-.-.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">,</div><div class="code" style="font-size:10px;">--..--</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">?</div><div class="code" style="font-size:10px;">..--..</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">/</div><div class="code" style="font-size:10px;">-..-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">-</div><div class="code" style="font-size:10px;">-....-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">(</div><div class="code" style="font-size:10px;">-.--.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">)</div><div class="code" style="font-size:10px;">-.--.-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">=</div><div class="code" style="font-size:10px;">-...-</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">+</div><div class="code" style="font-size:10px;">.-.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">@</div><div class="code" style="font-size:10px;">.--.-.</div></div><div class="mini-ref-item in-lesson" style="padding: 10px 6px;"><div class="ch" style="font-size:16px;">!</div><div class="code" style="font-size:10px;">-.-.--</div></div></div>
+      <div class="mini-ref-grid" id="refPunct" style="grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));"></div>
     </div>
   </section>
 
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.04.26.4</span> ·
-      <a href="file:///C:/Users/cg/Downloads/morse_2.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
+      <span id="versionLabel">v1.0</span> ·
+      <a href="#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
+</div>
+
+<!-- ═══ Result modal (round end) ═══ -->
+<div class="modal-overlay hidden" id="resultModal">
+  <div class="modal">
+    <div class="modal-corner tl"></div><div class="modal-corner tr"></div>
+    <div class="modal-corner bl"></div><div class="modal-corner br"></div>
+
+    <div class="modal-status" id="resultStatus">통과</div>
+    <div class="modal-title" id="resultTitle">레슨 완료</div>
+
+    <div class="modal-stats">
+      <div class="m-stat"><div class="m-v" id="rmScore">0</div><div class="m-l">최종 점수</div></div>
+      <div class="m-stat"><div class="m-v" id="rmAcc">0%</div><div class="m-l">정확도</div></div>
+      <div class="m-stat"><div class="m-v" id="rmTime">0s</div><div class="m-l">소요 시간</div></div>
+      <div class="m-stat"><div class="m-v" id="rmStreak">0</div><div class="m-l">최대 연속</div></div>
+    </div>
+
+    <div class="modal-message" id="resultMessage"></div>
+
+    <div class="modal-actions">
+      <button class="btn" id="rmRetry">다시 도전</button>
+      <button class="btn primary" id="rmNext">다음 레슨 →</button>
+      <button class="btn" id="rmClose">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Profile name modal ═══ -->
+<div class="modal-overlay hidden" id="profileModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-corner tl"></div><div class="modal-corner tr"></div>
+    <div class="modal-corner bl"></div><div class="modal-corner br"></div>
+
+    <div class="modal-title" style="margin-bottom:8px;">플레이어 이름</div>
+    <div style="font-size:11px; color:var(--ink-dim); margin-bottom:14px; letter-spacing:0.05em;">
+      랭킹에 표시할 이름을 입력하세요. 나중에 변경할 수 있습니다.
+    </div>
+    <input type="text" id="profileNameInput" maxlength="12" placeholder="이름" autocomplete="off" />
+    <div style="font-size:10px; color:var(--ink-faint); margin-top:6px;">최대 12자</div>
+    <div class="modal-actions" style="margin-top:18px;">
+      <button class="btn primary" id="profileSaveBtn">저장</button>
+      <button class="btn" id="profileCancelBtn">취소</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -953,17 +1373,14 @@
 
   function setMode(mode) {
     activeMode = mode;
-    document.querySelectorAll('.tab').forEach(t => {
+    document.querySelectorAll('.tabs > .tab').forEach(t => {
       t.classList.toggle('active', t.dataset.mode === mode);
     });
 
-    if (mode === 'reference') {
-      $('mode-main').classList.add('hidden');
-      $('mode-reference').classList.remove('hidden');
-      return;
-    }
-    $('mode-main').classList.remove('hidden');
-    $('mode-reference').classList.add('hidden');
+    // hide all top-level sections, then show one
+    ['mode-main', 'mode-challenge', 'mode-ranking', 'mode-reference'].forEach(id => {
+      const el = $(id); if (el) el.classList.add('hidden');
+    });
 
     stopTone();
     isPressed = false;
@@ -971,6 +1388,24 @@
     clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
     clearFlash();
     unlockInput();
+
+    if (mode === 'reference') {
+      $('mode-reference').classList.remove('hidden');
+      return;
+    }
+    if (mode === 'challenge') {
+      $('mode-challenge').classList.remove('hidden');
+      challengeStartIfNeeded();
+      return;
+    }
+    if (mode === 'ranking') {
+      $('mode-ranking').classList.remove('hidden');
+      renderRanking();
+      return;
+    }
+
+    // free / practice share mode-main
+    $('mode-main').classList.remove('hidden');
 
     if (mode === 'free') {
       modeTitle.textContent = '자유 송신 / Free Transmission';
@@ -999,9 +1434,608 @@
     refreshInputDisplay();
     updateMiniRefHighlight();
   }
-  document.querySelectorAll('.tab').forEach(tab => {
+  document.querySelectorAll('.tabs > .tab').forEach(tab => {
     tab.addEventListener('click', () => setMode(tab.dataset.mode));
   });
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── STORAGE / PROFILE / RECORDS ───────
+  // ════════════════════════════════════════════════════════════
+  const STORE_KEY = 'morsePracticeData_v1';
+  const defaultStore = () => ({
+    profileName: '',
+    unlocked: { [lessons[0].id]: true }, // first lesson always unlocked
+    bestByLesson: {},   // lessonId -> { score, accuracy, time, date, name }
+    history: [],        // all rounds: { name, lessonId, score, accuracy, time, streak, date }
+    hof: []             // hall of fame top 10 ever
+  });
+
+  function loadStore() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return defaultStore();
+      const data = JSON.parse(raw);
+      // ensure required fields
+      const def = defaultStore();
+      return Object.assign(def, data);
+    } catch(e) { return defaultStore(); }
+  }
+  function saveStore(s) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch(e) {}
+  }
+  let store = loadStore();
+
+  function getProfileName() {
+    return (store.profileName && store.profileName.trim()) || 'guest';
+  }
+  function refreshProfileBadges() {
+    const n = getProfileName();
+    $('profileNameBadge').textContent = n;
+    $('rankProfileBadge').textContent = n;
+  }
+
+  // ─── Profile modal ───
+  const profileModal = $('profileModal');
+  const profileNameInput = $('profileNameInput');
+  function openProfileModal(onDone) {
+    profileNameInput.value = store.profileName || '';
+    profileModal.classList.remove('hidden');
+    setTimeout(() => profileNameInput.focus(), 100);
+    profileSaveCallback = onDone || null;
+  }
+  let profileSaveCallback = null;
+  $('profileSaveBtn').addEventListener('click', () => {
+    const name = (profileNameInput.value || '').trim().slice(0, 12);
+    store.profileName = name;
+    saveStore(store);
+    refreshProfileBadges();
+    profileModal.classList.add('hidden');
+    if (profileSaveCallback) { const cb = profileSaveCallback; profileSaveCallback = null; cb(); }
+  });
+  $('profileCancelBtn').addEventListener('click', () => {
+    profileModal.classList.add('hidden');
+    profileSaveCallback = null;
+  });
+  profileNameInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') $('profileSaveBtn').click();
+  });
+  $('profileEditBtn').addEventListener('click', () => openProfileModal());
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── CHALLENGE MODE ───────
+  // ════════════════════════════════════════════════════════════
+  const ch = {
+    lesson: lessons[0],
+    queue: [],
+    total: 0,
+    targetIdx: 0,
+    target: '',
+    correct: 0,    // first-try correct
+    wrong: 0,      // total wrong attempts (for accuracy)
+    score: 0,
+    streak: 0,
+    maxStreak: 0,
+    startTime: 0,
+    targetStartTime: 0,
+    inputBuf: '',
+    timer: null,
+    locked: false,
+    firstTryThisTarget: true,
+    hintUsed: false,
+    skips: 0,
+    active: false
+  };
+
+  const chTxButton = $('chTxButton');
+  const chDisplayStack = $('chDisplayStack');
+  const chTargetCharEl = $('chTargetChar');
+  const chTargetCodeEl = $('chTargetCode');
+  const chInputDisplay = $('chInputDisplay');
+
+  function challengeStartIfNeeded() {
+    refreshProfileBadges();
+    buildChallengeLessonList();
+    // First time? prompt for profile name
+    if (!store.profileName) {
+      openProfileModal(() => {
+        if (!ch.active) startChallenge(ch.lesson);
+      });
+      return;
+    }
+    if (!ch.active) startChallenge(ch.lesson);
+  }
+
+  function startChallenge(lesson) {
+    if (!store.unlocked[lesson.id]) return; // safety
+    ch.lesson = lesson;
+    ch.queue = lesson.chars.split('').sort(() => Math.random() - 0.5);
+    ch.total = ch.queue.length;
+    ch.targetIdx = 0;
+    ch.correct = 0;
+    ch.wrong = 0;
+    ch.score = 0;
+    ch.streak = 0;
+    ch.maxStreak = 0;
+    ch.skips = 0;
+    ch.startTime = performance.now();
+    ch.inputBuf = '';
+    ch.locked = false;
+    ch.active = true;
+    $('challengeLessonName').textContent = lesson.name;
+    chDisplayStack.classList.remove('flash-correct','flash-wrong');
+    nextChallengeTarget();
+    refreshChallengeUI();
+  }
+
+  function nextChallengeTarget() {
+    if (ch.queue.length === 0) {
+      finishChallenge();
+      return;
+    }
+    ch.target = ch.queue.shift();
+    ch.targetIdx++;
+    ch.firstTryThisTarget = true;
+    ch.hintUsed = false;
+    ch.inputBuf = '';
+    ch.targetStartTime = performance.now();
+    chTargetCharEl.textContent = ch.target;
+    chTargetCodeEl.textContent = MORSE[ch.target];
+    chInputDisplay.textContent = '—';
+    chInputDisplay.classList.add('empty');
+    refreshChallengeUI();
+  }
+
+  function refreshChallengeUI() {
+    $('chProgress').textContent = ch.targetIdx + '/' + ch.total;
+    $('chScore').textContent = ch.score;
+    $('chStreak').textContent = ch.streak;
+    $('chMult').textContent = '×' + streakMultiplier(ch.streak).toFixed(1);
+    const pct = ch.total > 0 ? ((ch.targetIdx - 1) / ch.total) * 100 : 0;
+    $('chProgressBar').style.width = pct + '%';
+  }
+
+  function streakMultiplier(streak) {
+    if (streak >= 20) return 2.0;
+    if (streak >= 10) return 1.5;
+    if (streak >= 5) return 1.2;
+    return 1.0;
+  }
+
+  function speedBonus(elapsedMs) {
+    if (elapsedMs < 1000) return 30;
+    if (elapsedMs < 2000) return 15;
+    return 0;
+  }
+
+  function checkChallengeAnswer() {
+    if (!ch.inputBuf) return;
+    const isCorrect = ch.inputBuf === MORSE[ch.target];
+    const elapsed = performance.now() - ch.targetStartTime;
+
+    if (isCorrect) {
+      let base = ch.firstTryThisTarget ? 100 : 30;
+      if (ch.hintUsed) base = Math.floor(base / 2);
+      const bonus = ch.firstTryThisTarget ? speedBonus(elapsed) : 0;
+      const mult = streakMultiplier(ch.streak);
+      const earned = Math.round((base + bonus) * mult);
+      ch.score += earned;
+
+      if (ch.firstTryThisTarget) {
+        ch.correct++;
+        ch.streak++;
+        if (ch.streak > ch.maxStreak) ch.maxStreak = ch.streak;
+      }
+
+      flashChallengeDisplay('correct');
+      showScorePopup('+' + earned, false);
+      ch.locked = true;
+      chTxButton.classList.add('locked');
+      refreshChallengeUI();
+      setTimeout(() => {
+        chDisplayStack.classList.remove('flash-correct','flash-wrong');
+        ch.locked = false;
+        chTxButton.classList.remove('locked');
+        nextChallengeTarget();
+      }, 600);
+    } else {
+      ch.wrong++;
+      ch.streak = 0;
+      ch.firstTryThisTarget = false;
+      flashChallengeDisplay('wrong');
+      showScorePopup('MISS', true);
+      ch.locked = true;
+      chTxButton.classList.add('locked');
+      refreshChallengeUI();
+      setTimeout(() => {
+        chDisplayStack.classList.remove('flash-correct','flash-wrong');
+        ch.inputBuf = '';
+        chInputDisplay.textContent = '—';
+        chInputDisplay.classList.add('empty');
+        ch.locked = false;
+        chTxButton.classList.remove('locked');
+      }, 900);
+    }
+  }
+
+  function flashChallengeDisplay(type) {
+    chDisplayStack.classList.remove('flash-correct','flash-wrong');
+    void chDisplayStack.offsetWidth;
+    chDisplayStack.classList.add('flash-' + type);
+  }
+
+  function showScorePopup(text, miss) {
+    const p = document.createElement('div');
+    p.className = 'score-popup' + (miss ? ' miss' : '');
+    p.textContent = text;
+    const rect = chTxButton.getBoundingClientRect();
+    p.style.left = (rect.left + rect.width / 2) + 'px';
+    p.style.top = (rect.top + 10 + window.scrollY) + 'px';
+    p.style.position = 'absolute';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+
+  function finishChallenge() {
+    ch.active = false;
+    const elapsedSec = Math.round((performance.now() - ch.startTime) / 1000);
+    // Accuracy = first-try correct / total problems
+    const accuracy = ch.total > 0 ? Math.round((ch.correct / ch.total) * 100) : 0;
+    const passed = accuracy >= 90;
+
+    // Save record
+    const record = {
+      name: getProfileName(),
+      lessonId: ch.lesson.id,
+      lessonName: ch.lesson.name,
+      score: ch.score,
+      accuracy,
+      time: elapsedSec,
+      streak: ch.maxStreak,
+      date: new Date().toISOString().slice(0, 10)
+    };
+    store.history.unshift(record);
+    if (store.history.length > 200) store.history.length = 200;
+
+    // Update best for this lesson
+    const prevBest = store.bestByLesson[ch.lesson.id];
+    const isNewBest = !prevBest || record.score > prevBest.score;
+    if (isNewBest) store.bestByLesson[ch.lesson.id] = record;
+
+    // Unlock next lesson if passed
+    let unlockedNext = null;
+    if (passed) {
+      const idx = lessons.findIndex(l => l.id === ch.lesson.id);
+      if (idx >= 0 && idx + 1 < lessons.length) {
+        const nextL = lessons[idx + 1];
+        if (!store.unlocked[nextL.id]) {
+          store.unlocked[nextL.id] = true;
+          unlockedNext = nextL;
+        }
+      }
+    }
+
+    // Hall of fame: keep top 10 by score
+    store.hof.push(record);
+    store.hof.sort((a, b) => b.score - a.score);
+    if (store.hof.length > 10) store.hof.length = 10;
+    const inHof = store.hof.some(r => r === record);
+
+    saveStore(store);
+    showResultModal(record, passed, isNewBest, inHof, unlockedNext);
+  }
+
+  function showResultModal(record, passed, isNewBest, inHof, unlockedNext) {
+    const status = $('resultStatus');
+    const title = $('resultTitle');
+    const message = $('resultMessage');
+
+    if (passed) {
+      status.textContent = '통과';
+      status.className = 'modal-status' + (isNewBest ? ' record' : '');
+      title.textContent = ch.lesson.name + ' · 클리어';
+    } else {
+      status.textContent = '실패';
+      status.className = 'modal-status fail';
+      title.textContent = '정확도 90% 미달 · 재도전 필요';
+    }
+
+    $('rmScore').textContent = record.score;
+    $('rmAcc').textContent = record.accuracy + '%';
+    $('rmTime').textContent = record.time + 's';
+    $('rmStreak').textContent = record.streak;
+
+    let msg = '';
+    let msgCls = '';
+    if (isNewBest) { msg += '🏆 이 레슨 신기록!'; msgCls = 'record'; }
+    if (inHof) {
+      msg += (msg ? ' · ' : '') + '명예의 전당 등재';
+      msgCls = 'record';
+    }
+    if (unlockedNext) {
+      msg += (msg ? '\n' : '') + '🔓 다음 레슨 해제: ' + unlockedNext.name;
+      if (!msgCls) msgCls = 'success';
+    }
+    if (!msg && passed) { msg = '훌륭합니다! 다시 도전해 점수를 높여보세요.'; msgCls = 'success'; }
+    if (!msg && !passed) { msg = '정확도 ' + record.accuracy + '% — 90% 이상이면 다음 레슨이 열립니다.'; msgCls = 'fail'; }
+    message.innerHTML = msg.replace(/\n/g, '<br>');
+    message.className = 'modal-message ' + msgCls;
+
+    // configure buttons
+    const nextBtn = $('rmNext');
+    if (unlockedNext) {
+      nextBtn.classList.remove('hidden');
+      nextBtn.dataset.nextId = unlockedNext.id;
+    } else {
+      nextBtn.classList.add('hidden');
+    }
+
+    $('resultModal').classList.remove('hidden');
+  }
+
+  $('rmRetry').addEventListener('click', () => {
+    $('resultModal').classList.add('hidden');
+    startChallenge(ch.lesson);
+  });
+  $('rmNext').addEventListener('click', (e) => {
+    const nextId = e.currentTarget.dataset.nextId;
+    const nextL = lessons.find(l => l.id === nextId);
+    $('resultModal').classList.add('hidden');
+    if (nextL) {
+      buildChallengeLessonList();
+      startChallenge(nextL);
+    }
+  });
+  $('rmClose').addEventListener('click', () => {
+    $('resultModal').classList.add('hidden');
+    buildChallengeLessonList();
+  });
+
+  // Press / release for challenge button
+  let chPressStart = 0, chIsPressed = false;
+  function chPressDown() {
+    if (chIsPressed || ch.locked || !ch.active) return;
+    chIsPressed = true;
+    chPressStart = performance.now();
+    if (navigator.vibrate) navigator.vibrate(8);
+    startTone();
+    clearTimeout(ch.timer);
+  }
+  function chPressUp() {
+    if (!chIsPressed) return;
+    chIsPressed = false;
+    stopTone();
+    const dur = performance.now() - chPressStart;
+    const symbol = dur < ditDahThreshold() ? '.' : '-';
+    ch.inputBuf += symbol;
+    chInputDisplay.textContent = ch.inputBuf;
+    chInputDisplay.classList.remove('empty');
+    ch.timer = setTimeout(checkChallengeAnswer, letterGapMs());
+  }
+
+  // attach pointer events
+  (function attachChallengeKey(el) {
+    el.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      unlockAudioOnce();
+      if (ch.locked || !ch.active) return;
+      try { el.setPointerCapture(e.pointerId); } catch(_) {}
+      chPressDown();
+      el.classList.add('pressed');
+    });
+    const release = (e) => {
+      try { el.releasePointerCapture(e.pointerId); } catch(_) {}
+      if (chIsPressed) chPressUp();
+      el.classList.remove('pressed');
+    };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    el.addEventListener('pointerleave', e => {
+      if (chIsPressed) { chPressUp(); el.classList.remove('pressed'); }
+    });
+    el.addEventListener('contextmenu', e => e.preventDefault());
+  })(chTxButton);
+
+  // spacebar for challenge
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.repeat && activeMode === 'challenge') {
+      e.preventDefault();
+      if (ch.locked || !ch.active) return;
+      chPressDown();
+      chTxButton.classList.add('pressed');
+    }
+  });
+  document.addEventListener('keyup', e => {
+    if (e.code === 'Space' && activeMode === 'challenge') {
+      e.preventDefault();
+      if (chIsPressed) {
+        chPressUp();
+        chTxButton.classList.remove('pressed');
+      }
+    }
+  });
+
+  // challenge controls
+  $('chSkip').addEventListener('click', () => {
+    if (!ch.active || ch.locked) return;
+    ch.skips++;
+    ch.streak = 0;
+    ch.firstTryThisTarget = false; // skipping doesn't count as first-try correct
+    ch.wrong++; // counts toward inaccuracy
+    refreshChallengeUI();
+    nextChallengeTarget();
+  });
+  $('chHint').addEventListener('click', async () => {
+    if (!ch.active) return;
+    ch.hintUsed = true;
+    const code = MORSE[ch.target];
+    for (let i = 0; i < code.length; i++) {
+      await playBeep(code[i] === '.' ? ditMs() : dahMs());
+      if (i < code.length - 1) await sleep(ditMs());
+    }
+  });
+  $('chQuit').addEventListener('click', () => {
+    if (!ch.active) return;
+    if (!confirm('도전을 중단하시겠어요? 현재 라운드는 기록되지 않습니다.')) return;
+    ch.active = false;
+    setMode('challenge');
+    buildChallengeLessonList();
+  });
+
+  // Lesson list for challenge mode (with locks)
+  function buildChallengeLessonList() {
+    const list = $('challengeLessonList');
+    list.innerHTML = '';
+    lessons.forEach((l, i) => {
+      const isUnlocked = !!store.unlocked[l.id];
+      const best = store.bestByLesson[l.id];
+      const isCleared = best && best.accuracy >= 90;
+      const btn = document.createElement('button');
+      btn.className = 'lesson-btn';
+      if (!isUnlocked) btn.classList.add('locked');
+      if (isCleared) btn.classList.add('cleared');
+      if (l.id === ch.lesson.id && ch.active) btn.classList.add('active');
+
+      let meta = '';
+      if (best) {
+        meta = `<span class="lesson-meta">최고 ${best.score}점 · ${best.accuracy}%</span>`;
+      } else if (!isUnlocked) {
+        meta = `<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span>`;
+      } else {
+        meta = `<span class="lesson-meta">미도전</span>`;
+      }
+      btn.innerHTML = `<span class="num">${i+1}.</span>${l.name}${meta}`;
+
+      if (isUnlocked) {
+        btn.addEventListener('click', () => {
+          if (ch.active && !confirm('현재 라운드를 중단하고 이 레슨으로 변경할까요?')) return;
+          startChallenge(l);
+          buildChallengeLessonList();
+        });
+      } else {
+        btn.disabled = true;
+      }
+      list.appendChild(btn);
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── RANKING MODE ───────
+  // ════════════════════════════════════════════════════════════
+  function renderRanking() {
+    refreshProfileBadges();
+    renderOverall();
+    renderByLesson();
+    renderHof();
+  }
+
+  function rankRow(rank, record, special) {
+    const me = record.name === getProfileName();
+    const cls = ['rank-row'];
+    if (rank === 1) cls.push('top1');
+    else if (rank === 2) cls.push('top2');
+    else if (rank === 3) cls.push('top3');
+    if (me) cls.push('me');
+    return `<div class="${cls.join(' ')}">
+      <div class="rank-num">${rank}</div>
+      <div>
+        <div class="rank-name">${escapeHtml(record.name)}</div>
+        <div class="rank-meta">${escapeHtml(record.lessonName)} · ${record.accuracy}% · ${record.date}</div>
+      </div>
+      <div></div>
+      <div class="rank-score">${record.score}</div>
+    </div>`;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  function renderOverall() {
+    const c = $('rankOverall');
+    const top = [...store.history].sort((a, b) => b.score - a.score).slice(0, 10);
+    if (top.length === 0) {
+      c.innerHTML = '<div class="rank-row empty">아직 기록이 없습니다 · 도전 모드에서 첫 라운드를 시작하세요</div>';
+      return;
+    }
+    c.innerHTML = top.map((r, i) => rankRow(i + 1, r)).join('');
+  }
+
+  function renderByLesson() {
+    const c = $('rankByLesson');
+    let html = '';
+    lessons.forEach(l => {
+      const records = store.history.filter(r => r.lessonId === l.id)
+        .sort((a, b) => b.score - a.score).slice(0, 5);
+      const cleared = !!(store.bestByLesson[l.id] && store.bestByLesson[l.id].accuracy >= 90);
+      html += `<div class="lesson-rank-block">
+        <div class="lrb-title">
+          <span>${escapeHtml(l.name)}</span>
+          <span class="badge">${cleared ? '✓ 클리어' : (store.unlocked[l.id] ? '도전 가능' : '🔒 잠김')}</span>
+        </div>
+        <div class="rank-table">
+          ${records.length === 0
+            ? '<div class="rank-row empty">기록 없음</div>'
+            : records.map((r, i) => rankRow(i + 1, r)).join('')}
+        </div>
+      </div>`;
+    });
+    c.innerHTML = html;
+  }
+
+  function renderHof() {
+    const c = $('rankHof');
+    if (!store.hof || store.hof.length === 0) {
+      c.innerHTML = '<div class="rank-row empty">명예의 전당이 비어있습니다</div>';
+      return;
+    }
+    c.innerHTML = store.hof.map((r, i) => rankRow(i + 1, r)).join('');
+  }
+
+  // ranking sub-tabs
+  document.querySelectorAll('.rank-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.rank-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const which = tab.dataset.rank;
+      ['overall','lessons','hof'].forEach(k => {
+        $('rankSection-' + k).classList.toggle('hidden', k !== which);
+      });
+    });
+  });
+
+  $('rankExport').addEventListener('click', () => {
+    const data = JSON.stringify(store, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'morse-records-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  $('rankReset').addEventListener('click', () => {
+    if (!confirm('모든 기록과 잠금 해제 정보가 삭제됩니다. 정말로 초기화하시겠어요?')) return;
+    if (!confirm('정말 정말로 모두 삭제할까요? 되돌릴 수 없습니다.')) return;
+    const name = store.profileName;
+    store = defaultStore();
+    store.profileName = name;
+    saveStore(store);
+    renderRanking();
+    buildChallengeLessonList();
+  });
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── INIT for challenge / ranking ───────
+  // ════════════════════════════════════════════════════════════
+  // Set initial lesson reference
+  const firstUnlocked = lessons.find(l => store.unlocked[l.id]) || lessons[0];
+  ch.lesson = firstUnlocked;
+  refreshProfileBadges();
+  buildChallengeLessonList();
+
 
   function buildLessonList() {
     const list = $('lessonList');
@@ -1087,7 +2121,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.04.26.4';
+  const APP_VERSION = '2026.04.28.1';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
@@ -1132,6 +2166,5 @@
     }
   });
 </script>
-
-
-</body></html>
+</body>
+</html>
