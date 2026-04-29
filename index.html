@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_3.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_5.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -703,6 +703,121 @@
   }
   .rank-tab.active::after { background: var(--amber); }
 
+  /* ─── Source toggle (server/local) ─── */
+  .source-toggle {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .src-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+  }
+  .src-btn:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+  .src-btn.active {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: rgba(255, 179, 71, 0.08);
+    box-shadow: 0 0 6px var(--amber-glow);
+  }
+  .src-btn .src-icon { font-size: 13px; }
+
+  .src-refresh {
+    background: var(--bg-2);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .src-refresh:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+  .src-refresh.spinning {
+    animation: spin 0.8s linear infinite;
+    color: var(--amber);
+    border-color: var(--amber);
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* ─── Pending notice (offline queue) ─── */
+  .pending-notice {
+    background: rgba(255, 179, 71, 0.08);
+    border: 1px dashed var(--amber-dim);
+    border-radius: 2px;
+    padding: 9px 12px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+  .pending-notice a {
+    color: var(--amber);
+    text-decoration: underline;
+  }
+
+  /* ─── Rank section label ─── */
+  .rank-section-label {
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--ink-dim); text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .rank-section-label .label-aux {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--amber);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12px;
+  }
+
+  .rank-loading {
+    text-align: center;
+    padding: 30px;
+    color: var(--ink-dim);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .rank-loading::after {
+    content: ' ⋯';
+    animation: dots 1.4s steps(4) infinite;
+  }
+  @keyframes dots {
+    0% { content: ' ⋯'; }
+    33% { content: ' ⋯⋯'; }
+    66% { content: ' ⋯⋯⋯'; }
+  }
+
   .sub-tabs {
     display: flex;
     border-bottom: 1px solid var(--line);
@@ -790,11 +905,11 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="header-btn" data-mode="ranking" id="hdrRanking" aria-label="랭킹">
+      <button class="header-btn active" data-mode="ranking" id="hdrRanking" aria-label="랭킹">
         <span class="hb-icon">🏆</span>
         <span class="hb-label">랭킹</span>
       </button>
-      <button class="header-btn active" data-mode="reference" id="hdrReference" aria-label="부호표">
+      <button class="header-btn" data-mode="reference" id="hdrReference" aria-label="부호표">
         <span class="hb-icon">📖</span>
         <span class="hb-label">부호표</span>
       </button>
@@ -980,7 +1095,7 @@
 
         <div class="panel-label">
           <span>플레이어 / Player</span>
-          <span class="badge" id="profileNameBadge">guest</span>
+          <span class="badge" id="profileNameBadge">CGSOS</span>
         </div>
         <div class="setting">
           <div class="setting-label">이름<small>profile name</small></div>
@@ -1007,14 +1122,30 @@
   </section>
 
   <!-- ═══ RANKING MODE ═══ -->
-  <section id="mode-ranking" class="mode hidden">
+  <section id="mode-ranking" class="mode">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
       <div class="panel-label">
         <span>랭킹 / Hall of Records</span>
-        <span class="badge" id="rankProfileBadge">guest</span>
+        <span class="badge" id="rankProfileBadge">CGSOS</span>
+      </div>
+
+      <!-- source toggle: server / local -->
+      <div class="source-toggle">
+        <button class="src-btn active" data-source="server">
+          <span class="src-icon">🌐</span> 전체 랭킹
+        </button>
+        <button class="src-btn" data-source="local">
+          <span class="src-icon">📱</span> 내 기록
+        </button>
+        <button class="src-refresh" id="rankRefreshBtn" title="새로고침" aria-label="새로고침">↻</button>
+      </div>
+
+      <!-- pending queue notice -->
+      <div id="pendingNotice" class="pending-notice hidden">
+        ⏳ <span id="pendingCount">0</span>개 기록이 서버에 업로드 대기 중 — <a href="file:///C:/Users/cg/Downloads/morse_5.html#" id="retryNowLink">지금 재시도</a>
       </div>
 
       <!-- sub-tabs -->
@@ -1025,19 +1156,115 @@
       </div>
 
       <div id="rankSection-overall" class="rank-section">
-        <div style="font-size:10px; letter-spacing:0.2em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">— 전체 기록 TOP 10 —</div>
-        <div id="rankOverall" class="rank-table"><div class="rank-row empty">아직 기록이 없습니다 · 도전 모드에서 첫 라운드를 시작하세요</div></div>
+        <div class="rank-section-label">— 전체 기록 TOP 10 —<span class="label-aux">전 세계</span></div>
+        <div id="rankOverall" class="rank-table"><div class="rank-row top1 me">
+      <div class="rank-num">1</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 100% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">475</div>
+    </div><div class="rank-row top2 me">
+      <div class="rank-num">2</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">390</div>
+    </div><div class="rank-row top3 me">
+      <div class="rank-num">3</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">390</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">4</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">375</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">5</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">375</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">6</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 2 — I·M·S·O · 50% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">290</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">7</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 25% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">205</div>
+    </div></div>
       </div>
 
       <div id="rankSection-lessons" class="rank-section hidden">
-        <div style="font-size:10px; letter-spacing:0.2em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">— 레슨별 최고 기록 —</div>
+        <div class="rank-section-label">— 레슨별 최고 기록 —</div>
         <div id="rankByLesson"><div class="lesson-rank-block">
         <div class="lrb-title">
           <span>기초 1 — E·T·A·N</span>
           <span class="badge">도전 가능</span>
         </div>
         <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
+          <div class="rank-row top1 me">
+      <div class="rank-num">1</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 100% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">475</div>
+    </div><div class="rank-row top2 me">
+      <div class="rank-num">2</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">390</div>
+    </div><div class="rank-row top3 me">
+      <div class="rank-num">3</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">390</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">4</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">375</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">5</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">375</div>
+    </div>
         </div>
       </div><div class="lesson-rank-block">
         <div class="lrb-title">
@@ -1045,7 +1272,15 @@
           <span class="badge">🔒 잠김</span>
         </div>
         <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
+          <div class="rank-row top1 me">
+      <div class="rank-num">1</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 2 — I·M·S·O · 50% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">290</div>
+    </div>
         </div>
       </div><div class="lesson-rank-block">
         <div class="lrb-title">
@@ -1099,17 +1334,73 @@
       </div>
 
       <div id="rankSection-hof" class="rank-section hidden">
-        <div style="font-size:10px; letter-spacing:0.2em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">— 명예의 전당 (TOP 10 신기록 보존) —</div>
-        <div id="rankHof" class="rank-table"><div class="rank-row empty">명예의 전당이 비어있습니다</div></div>
+        <div class="rank-section-label">— 명예의 전당 —<span class="label-aux">서버 TOP 10</span></div>
+        <div id="rankHof" class="rank-table"><div class="rank-row top1 me">
+      <div class="rank-num">1</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 100% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">475</div>
+    </div><div class="rank-row top2 me">
+      <div class="rank-num">2</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">390</div>
+    </div><div class="rank-row top3 me">
+      <div class="rank-num">3</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">390</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">4</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">375</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">5</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">375</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">6</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 2 — I·M·S·O · 50% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">290</div>
+    </div><div class="rank-row me">
+      <div class="rank-num">7</div>
+      <div>
+        <div class="rank-name">CGSOS</div>
+        <div class="rank-meta">기초 1 — E·T·A·N · 25% · 2026-04-29</div>
+      </div>
+      <div></div>
+      <div class="rank-score">205</div>
+    </div></div>
       </div>
 
       <div style="margin-top:32px; text-align:center;">
-        <a href="file:///C:/Users/cg/Downloads/morse_3.html#" id="rankReset" style="font-size:10px; letter-spacing:0.25em; color:var(--ink-faint); text-transform:uppercase; text-decoration:none; border-bottom:1px dashed var(--ink-faint); padding-bottom:1px;">전체 기록 초기화</a>
+        <a href="file:///C:/Users/cg/Downloads/morse_5.html#" id="rankReset" style="font-size:10px; letter-spacing:0.25em; color:var(--ink-faint); text-transform:uppercase; text-decoration:none; border-bottom:1px dashed var(--ink-faint); padding-bottom:1px;">로컬 기록 초기화</a>
       </div>
     </div>
   </section>
 
-  <section id="mode-reference" class="mode">
+  <section id="mode-reference" class="mode hidden">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -1133,8 +1424,8 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.04.28.2</span> ·
-      <a href="file:///C:/Users/cg/Downloads/morse_3.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
+      <span id="versionLabel">v2026.04.28.3</span> ·
+      <a href="file:///C:/Users/cg/Downloads/morse_5.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
 </div>
@@ -1598,6 +1889,116 @@
   // ─────── STORAGE / PROFILE / RECORDS ───────
   // ════════════════════════════════════════════════════════════
   const STORE_KEY = 'morsePracticeData_v1';
+
+  // ─────── SERVER (Google Apps Script) ───────
+  const SERVER_URL = 'https://script.google.com/macros/s/AKfycbzhvbfjufVyPbLILnIep9KhTZWImI1ndHldU1r0sqyKThjCACQYOHav20xCUJdF5SIN/exec';
+  const SERVER_CACHE_MS = 30 * 1000; // 30초 동안 동일 fetch 결과 재사용
+  let serverCache = { records: null, fetchedAt: 0, fetching: null };
+  let serverPendingQueue = []; // 인터넷 없을 때 못 올린 기록들
+
+  // localStorage에서 보류 중인 큐 복원
+  try {
+    const q = localStorage.getItem('morseServerQueue_v1');
+    if (q) serverPendingQueue = JSON.parse(q) || [];
+  } catch(e) {}
+  function saveQueue() {
+    try { localStorage.setItem('morseServerQueue_v1', JSON.stringify(serverPendingQueue)); } catch(e) {}
+  }
+
+  // 점수 제출. 실패 시 큐에 저장 후 다음 기회에 재시도.
+  async function submitToServer(record) {
+    const payload = {
+      name: record.name,
+      lessonId: record.lessonId,
+      lessonName: record.lessonName,
+      score: record.score,
+      accuracy: record.accuracy,
+      streak: record.streak,
+      time: record.time
+    };
+    try {
+      // Apps Script는 CORS 응답을 안 줘서 일반 fetch는 preflight 실패하기 쉬움.
+      // text/plain content-type을 쓰면 simple request로 분류되어 preflight 없이 통과.
+      const res = await fetch(SERVER_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        redirect: 'follow'
+      });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'server rejected');
+      // 성공 → 서버 캐시 무효화
+      serverCache.fetchedAt = 0;
+      return true;
+    } catch(e) {
+      // 실패 → 큐에 저장
+      serverPendingQueue.push(payload);
+      if (serverPendingQueue.length > 20) serverPendingQueue.shift(); // 최대 20개
+      saveQueue();
+      return false;
+    }
+  }
+
+  // 큐에 쌓인 기록을 백그라운드에서 재시도
+  async function flushPendingQueue() {
+    if (serverPendingQueue.length === 0) return;
+    const queue = serverPendingQueue.slice();
+    const failed = [];
+    for (const item of queue) {
+      try {
+        const res = await fetch(SERVER_URL, {
+          method: 'POST',
+          body: JSON.stringify(item),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          redirect: 'follow'
+        });
+        const data = await res.json();
+        if (!data.ok) failed.push(item);
+      } catch(e) {
+        failed.push(item);
+      }
+    }
+    serverPendingQueue = failed;
+    saveQueue();
+    if (failed.length === 0) serverCache.fetchedAt = 0;
+  }
+
+  // 서버에서 전체 기록 가져오기 (캐시 적용)
+  async function fetchFromServer(force) {
+    const now = Date.now();
+    if (!force && serverCache.records && (now - serverCache.fetchedAt) < SERVER_CACHE_MS) {
+      return serverCache.records;
+    }
+    if (serverCache.fetching) return serverCache.fetching;
+    serverCache.fetching = (async () => {
+      try {
+        const res = await fetch(SERVER_URL, { redirect: 'follow' });
+        if (!res.ok) throw new Error('http ' + res.status);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'server error');
+        // records 정규화 — 시트의 timestamp를 date 문자열로
+        const records = (data.records || []).map(r => ({
+          name: String(r.name || ''),
+          lessonId: String(r.lessonId || ''),
+          lessonName: String(r.lessonName || ''),
+          score: Number(r.score) || 0,
+          accuracy: Number(r.accuracy) || 0,
+          streak: Number(r.streak) || 0,
+          date: r.timestamp ? String(r.timestamp).slice(0, 10) : ''
+        }));
+        serverCache.records = records;
+        serverCache.fetchedAt = Date.now();
+        return records;
+      } catch(e) {
+        return null; // 실패 시 null
+      } finally {
+        serverCache.fetching = null;
+      }
+    })();
+    return serverCache.fetching;
+  }
+
   const defaultStore = () => ({
     profileName: '',
     unlocked: { [lessons[0].id]: true }, // first lesson always unlocked
@@ -1878,6 +2279,9 @@
 
     saveStore(store);
     showResultModal(record, passed, isNewBest, inHof, unlockedNext);
+
+    // 서버로 비동기 제출 (실패해도 사용자 흐름에 영향 없음)
+    submitToServer(record);
   }
 
   function showResultModal(record, passed, isNewBest, inHof, unlockedNext) {
@@ -2077,14 +2481,39 @@
   // ════════════════════════════════════════════════════════════
   // ─────── RANKING MODE ───────
   // ════════════════════════════════════════════════════════════
-  function renderRanking() {
+  let rankSource = 'server'; // 'server' | 'local'
+
+  async function renderRanking() {
     refreshProfileBadges();
-    renderOverall();
-    renderByLesson();
-    renderHof();
+    updatePendingNotice();
+
+    if (rankSource === 'server') {
+      // show loading state
+      $('rankOverall').innerHTML = '<div class="rank-loading">서버에서 가져오는 중</div>';
+      $('rankByLesson').innerHTML = '<div class="rank-loading">서버에서 가져오는 중</div>';
+      $('rankHof').innerHTML = '<div class="rank-loading">서버에서 가져오는 중</div>';
+
+      const records = await fetchFromServer(false);
+      if (records === null) {
+        const errMsg = '<div class="rank-row empty">서버에 연결할 수 없습니다 · 인터넷을 확인하거나 ↻를 눌러 재시도</div>';
+        $('rankOverall').innerHTML = errMsg;
+        $('rankByLesson').innerHTML = errMsg;
+        $('rankHof').innerHTML = errMsg;
+        return;
+      }
+      renderRankingFromRecords(records, 'server');
+    } else {
+      renderRankingFromRecords(store.history, 'local');
+    }
   }
 
-  function rankRow(rank, record, special) {
+  function renderRankingFromRecords(records, source) {
+    renderOverall(records, source);
+    renderByLesson(records, source);
+    renderHof(records, source);
+  }
+
+  function rankRow(rank, record) {
     const me = record.name === getProfileName();
     const cls = ['rank-row'];
     if (rank === 1) cls.push('top1');
@@ -2108,46 +2537,111 @@
     }[c]));
   }
 
-  function renderOverall() {
+  function renderOverall(records, source) {
     const c = $('rankOverall');
-    const top = [...store.history].sort((a, b) => b.score - a.score).slice(0, 10);
+    const top = [...records].sort((a, b) => b.score - a.score).slice(0, 10);
+    const label = $('rankSection-overall').querySelector('.rank-section-label');
+    if (label) {
+      label.innerHTML = '— 전체 기록 TOP 10 —' +
+        '<span class="label-aux">' + (source === 'server' ? '전 세계' : '내 기록') + '</span>';
+    }
     if (top.length === 0) {
-      c.innerHTML = '<div class="rank-row empty">아직 기록이 없습니다 · 도전 모드에서 첫 라운드를 시작하세요</div>';
+      c.innerHTML = '<div class="rank-row empty">' +
+        (source === 'server' ? '아직 등록된 기록이 없습니다 · 첫 도전자가 되어보세요'
+                              : '아직 기록이 없습니다 · 도전 모드에서 첫 라운드를 시작하세요') +
+        '</div>';
       return;
     }
     c.innerHTML = top.map((r, i) => rankRow(i + 1, r)).join('');
   }
 
-  function renderByLesson() {
+  function renderByLesson(records, source) {
     const c = $('rankByLesson');
     let html = '';
     lessons.forEach(l => {
-      const records = store.history.filter(r => r.lessonId === l.id)
+      const lessonRecords = records.filter(r => r.lessonId === l.id)
         .sort((a, b) => b.score - a.score).slice(0, 5);
+      // 잠금/클리어 표시는 항상 로컬 기준 (서버 모드에서도)
       const cleared = !!(store.bestByLesson[l.id] && store.bestByLesson[l.id].accuracy >= 90);
+      const unlocked = !!store.unlocked[l.id];
       html += `<div class="lesson-rank-block">
         <div class="lrb-title">
           <span>${escapeHtml(l.name)}</span>
-          <span class="badge">${cleared ? '✓ 클리어' : (store.unlocked[l.id] ? '도전 가능' : '🔒 잠김')}</span>
+          <span class="badge">${cleared ? '✓ 클리어' : (unlocked ? '도전 가능' : '🔒 잠김')}</span>
         </div>
         <div class="rank-table">
-          ${records.length === 0
+          ${lessonRecords.length === 0
             ? '<div class="rank-row empty">기록 없음</div>'
-            : records.map((r, i) => rankRow(i + 1, r)).join('')}
+            : lessonRecords.map((r, i) => rankRow(i + 1, r)).join('')}
         </div>
       </div>`;
     });
     c.innerHTML = html;
   }
 
-  function renderHof() {
+  function renderHof(records, source) {
     const c = $('rankHof');
-    if (!store.hof || store.hof.length === 0) {
+    const label = $('rankSection-hof').querySelector('.rank-section-label');
+    if (label) {
+      label.innerHTML = '— 명예의 전당 —' +
+        '<span class="label-aux">' + (source === 'server' ? '서버 TOP 10' : '내 TOP 10') + '</span>';
+    }
+    let hof;
+    if (source === 'server') {
+      // 서버 모드: 가져온 기록 중 점수순 TOP 10
+      hof = [...records].sort((a, b) => b.score - a.score).slice(0, 10);
+    } else {
+      // 로컬 모드: 저장된 hof 사용
+      hof = store.hof || [];
+    }
+    if (hof.length === 0) {
       c.innerHTML = '<div class="rank-row empty">명예의 전당이 비어있습니다</div>';
       return;
     }
-    c.innerHTML = store.hof.map((r, i) => rankRow(i + 1, r)).join('');
+    c.innerHTML = hof.map((r, i) => rankRow(i + 1, r)).join('');
   }
+
+  function updatePendingNotice() {
+    const notice = $('pendingNotice');
+    if (serverPendingQueue.length > 0) {
+      $('pendingCount').textContent = serverPendingQueue.length;
+      notice.classList.remove('hidden');
+    } else {
+      notice.classList.add('hidden');
+    }
+  }
+
+  // source toggle
+  document.querySelectorAll('.src-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.src-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      rankSource = btn.dataset.source;
+      renderRanking();
+    });
+  });
+
+  // refresh button
+  $('rankRefreshBtn').addEventListener('click', async () => {
+    const btn = $('rankRefreshBtn');
+    btn.classList.add('spinning');
+    if (rankSource === 'server') {
+      // 새로고침 전에 보류 큐도 한 번 시도
+      await flushPendingQueue();
+      updatePendingNotice();
+      await fetchFromServer(true); // force
+    }
+    await renderRanking();
+    setTimeout(() => btn.classList.remove('spinning'), 300);
+  });
+
+  // retry now link in pending notice
+  $('retryNowLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+    await flushPendingQueue();
+    updatePendingNotice();
+    if (rankSource === 'server') await renderRanking();
+  });
 
   // ranking sub-tabs
   document.querySelectorAll('.rank-tab').forEach(tab => {
@@ -2163,8 +2657,8 @@
 
   $('rankReset').addEventListener('click', (e) => {
     e.preventDefault();
-    if (!confirm('모든 기록과 잠금 해제 정보가 삭제됩니다. 정말로 초기화하시겠어요?')) return;
-    if (!confirm('정말 정말로 모두 삭제할까요? 되돌릴 수 없습니다.')) return;
+    if (!confirm('로컬에 저장된 모든 기록과 잠금 해제 정보가 삭제됩니다.\n(서버 기록은 유지됩니다)\n\n정말로 초기화하시겠어요?')) return;
+    if (!confirm('정말 정말로 로컬 기록을 모두 삭제할까요? 되돌릴 수 없습니다.')) return;
     const name = store.profileName;
     store = defaultStore();
     store.profileName = name;
@@ -2181,6 +2675,11 @@
   ch.lesson = firstUnlocked;
   refreshProfileBadges();
   buildChallengeLessonList();
+
+  // 앱 시작 후 5초 뒤 자동으로 보류 큐 처리
+  setTimeout(() => {
+    if (serverPendingQueue.length > 0) flushPendingQueue();
+  }, 5000);
 
 
   function buildLessonList() {
@@ -2267,7 +2766,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.04.28.2';
+  const APP_VERSION = '2026.04.28.3';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
