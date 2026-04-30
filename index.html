@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_6.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/morse_10.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -155,19 +155,41 @@
   .status-strip .sep { color: var(--ink-faint); }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  .tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
-  .tab {
-    background: none; border: none; color: var(--ink-dim);
-    font-family: inherit; font-size: 12px;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    padding: 14px 22px; cursor: pointer; position: relative;
-    transition: color 0.2s;
+  /* ─── Main tabs (boxed style) ─── */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 6px;
+    margin-bottom: 24px;
   }
-  .tab:hover { color: var(--ink); }
-  .tab.active { color: var(--amber); }
-  .tab.active::after {
-    content: ''; position: absolute; left: 0; right: 0; bottom: -1px;
-    height: 2px; background: var(--amber); box-shadow: 0 0 10px var(--amber-glow);
+  .tab {
+    flex: 1;
+    background: rgba(20,16,10,0.5);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab:hover {
+    color: var(--ink);
+    border-color: var(--ink-dim);
+  }
+  .tab.active {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(255, 179, 71, 0.08);
+    box-shadow: inset 0 0 8px rgba(255,179,71,0.12), 0 0 6px var(--amber-glow);
   }
   .tab .num {
     font-family: 'Cormorant Garamond', serif;
@@ -348,7 +370,15 @@
     margin: 0 4px; font-size: 10px;
   }
 
-  .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 10px;
+  }
   .btn {
     background: transparent; border: 1px solid var(--ink-faint);
     color: var(--ink-dim); font-family: inherit;
@@ -878,8 +908,13 @@
     .header-btn .hb-icon { font-size: 18px; }
     .status-strip { font-size: 8px; letter-spacing: 0.18em; }
     .brand h1 { font-size: 42px; }
-    .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .tab { padding: 12px 14px; font-size: 11px; white-space: nowrap; }
+    .tabs { padding: 4px; gap: 4px; }
+    .tab {
+      padding: 10px 4px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+    .tab .num { display: none; }
     .panel { padding: 16px 14px; }
     .display-stack { padding: 22px 16px; }
     .target-char { font-size: 80px; }
@@ -888,7 +923,8 @@
     .tx-btn { padding: 28px 16px; }
     .tx-btn-icon { font-size: 56px; }
     .stat .v { font-size: 22px; }
-    .controls .btn { flex: 1 1 calc(50% - 4px); padding: 10px 6px; font-size: 9px; }
+    .controls { padding: 8px; gap: 6px; }
+    .controls .btn { flex: 1 1 calc(33.333% - 4px); padding: 10px 4px; font-size: 9px; }
     .mini-ref-grid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
   }
 </style>
@@ -905,10 +941,6 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="header-btn" data-mode="ranking" id="hdrRanking" aria-label="랭킹">
-        <span class="hb-icon">🏆</span>
-        <span class="hb-label">랭킹</span>
-      </button>
       <button class="header-btn" data-mode="reference" id="hdrReference" aria-label="부호표">
         <span class="hb-icon">📖</span>
         <span class="hb-label">부호표</span>
@@ -925,12 +957,13 @@
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
     <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
-    <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
+    <button class="tab active" data-mode="challenge"><span class="num">iii.</span>도전</button>
+    <button class="tab" data-mode="ranking"><span class="num">iv.</span>랭킹</button>
   </div>
 
-  <section id="mode-main" class="mode">
+  <section id="mode-main" class="mode hidden">
     <div class="grid">
 
       <div class="panel">
@@ -938,11 +971,11 @@
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
         <div class="panel-label">
-          <span id="modeTitle">자유 송신 / Free Transmission</span>
-          <span class="badge" id="modeSubtitle">no target · just send</span>
+          <span id="modeTitle">연습 모드 / Practice</span>
+          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
         </div>
 
-        <div class="stats-bar hidden" id="statsBar">
+        <div class="stats-bar" id="statsBar">
           <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
           <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
           <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
@@ -950,15 +983,15 @@
         </div>
 
         <div class="display-stack" id="displayStack">
-          <div class="target-row hidden" id="targetRow">
+          <div class="target-row" id="targetRow">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="targetChar">A</div>
-            <div class="target-code" id="targetCode">·—</div>
+            <div class="target-char" id="targetChar">T</div>
+            <div class="target-code" id="targetCode">-</div>
           </div>
           <div class="input-row">
-            <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
+            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text empty" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
+            <div class="input-display text empty hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
           </div>
         </div>
 
@@ -970,12 +1003,12 @@
           </div>
         </div>
 
-        <div class="controls" id="freeControls">
+        <div class="controls hidden" id="freeControls">
           <button class="btn" id="clearBtn">CLEAR</button>
           <button class="btn" id="spaceBtn">단어 공백</button>
           <button class="btn primary" id="playbackBtn">▷ 재생</button>
         </div>
-        <div class="controls hidden" id="practiceControls">
+        <div class="controls" id="practiceControls">
           <button class="btn" id="practiceSkip">SKIP →</button>
           <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
           <button class="btn" id="practiceReset">RESET</button>
@@ -986,7 +1019,7 @@
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
-        <div id="lessonSection" class="hidden">
+        <div id="lessonSection" class="">
           <div class="panel-label">
             <span>레슨 / Lessons</span>
             <span class="badge">curriculum</span>
@@ -1030,15 +1063,15 @@
 
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
-          클릭=소리 재생 · <span id="refHint">전체 글자</span>
+          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item in-lesson" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item in-lesson" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item in-lesson" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item in-lesson" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item in-lesson" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item in-lesson" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item in-lesson" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item in-lesson" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item in-lesson" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item in-lesson" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item in-lesson" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item in-lesson" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item in-lesson" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item in-lesson" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item in-lesson" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item in-lesson" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item in-lesson" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item in-lesson" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item in-lesson" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item in-lesson" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item in-lesson" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item in-lesson" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item in-lesson" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item in-lesson" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item in-lesson" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item in-lesson" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item in-lesson" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item in-lesson" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item in-lesson" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item in-lesson" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item in-lesson" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item in-lesson" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson current" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
 
   <!-- ═══ CHALLENGE MODE ═══ -->
-  <section id="mode-challenge" class="mode hidden">
+  <section id="mode-challenge" class="mode">
     <div class="grid">
       <div class="panel">
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
@@ -1051,22 +1084,22 @@
 
         <!-- progress + stats -->
         <div class="stats-bar">
-          <div class="stat"><div class="v" id="chProgress">0/4</div><div class="l">진행</div></div>
-          <div class="stat"><div class="v" id="chScore">0</div><div class="l">점수</div></div>
-          <div class="stat"><div class="v" id="chStreak">0</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="chProgress">2/4</div><div class="l">진행</div></div>
+          <div class="stat"><div class="v" id="chScore">100</div><div class="l">점수</div></div>
+          <div class="stat"><div class="v" id="chStreak">1</div><div class="l">연속</div></div>
           <div class="stat"><div class="v" id="chMult">×1.0</div><div class="l">배수</div></div>
         </div>
 
         <!-- progress bar -->
         <div style="height:4px;background:var(--bg-2);border:1px solid var(--line);border-radius:2px;margin-bottom:18px;overflow:hidden;">
-          <div id="chProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--amber-dim),var(--amber));box-shadow:0 0 8px var(--amber-glow);transition:width 250ms;"></div>
+          <div id="chProgressBar" style="height: 100%; width: 25%; background: linear-gradient(90deg,var(--amber-dim),var(--amber)); box-shadow: 0 0 8px var(--amber-glow); transition: width 250ms;"></div>
         </div>
 
         <div class="display-stack" id="chDisplayStack">
           <div class="target-row">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="chTargetChar">A</div>
-            <div class="target-code" id="chTargetCode">·—</div>
+            <div class="target-char" id="chTargetChar">N</div>
+            <div class="target-code" id="chTargetCode">-.</div>
           </div>
           <div class="input-row">
             <div class="input-label">입력한 부호 / Your Input</div>
@@ -1145,7 +1178,7 @@
 
       <!-- pending queue notice -->
       <div id="pendingNotice" class="pending-notice hidden">
-        ⏳ <span id="pendingCount">0</span>개 기록이 서버에 업로드 대기 중 — <a href="file:///C:/Users/cg/Downloads/morse_6.html#" id="retryNowLink">지금 재시도</a>
+        ⏳ <span id="pendingCount">0</span>개 기록이 서버에 업로드 대기 중 — <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="retryNowLink">지금 재시도</a>
       </div>
 
       <!-- sub-tabs -->
@@ -1171,7 +1204,7 @@
       </div>
 
       <div style="margin-top:32px; text-align:center;">
-        <a href="file:///C:/Users/cg/Downloads/morse_6.html#" id="rankReset" style="font-size:10px; letter-spacing:0.25em; color:var(--ink-faint); text-transform:uppercase; text-decoration:none; border-bottom:1px dashed var(--ink-faint); padding-bottom:1px;">로컬 기록 초기화</a>
+        <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="rankReset" style="font-size:10px; letter-spacing:0.25em; color:var(--ink-faint); text-transform:uppercase; text-decoration:none; border-bottom:1px dashed var(--ink-faint); padding-bottom:1px;">로컬 기록 초기화</a>
       </div>
     </div>
   </section>
@@ -1200,8 +1233,8 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.04.28.5</span> ·
-      <a href="file:///C:/Users/cg/Downloads/morse_6.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
+      <span id="versionLabel">v2026.04.28.7</span> ·
+      <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
 </div>
@@ -2606,7 +2639,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.04.28.5';
+  const APP_VERSION = '2026.04.28.7';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
