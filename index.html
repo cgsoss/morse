@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_5.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/morse_6.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -905,7 +905,7 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="header-btn active" data-mode="ranking" id="hdrRanking" aria-label="랭킹">
+      <button class="header-btn" data-mode="ranking" id="hdrRanking" aria-label="랭킹">
         <span class="hb-icon">🏆</span>
         <span class="hb-label">랭킹</span>
       </button>
@@ -925,12 +925,12 @@
   </div>
 
   <div class="tabs">
-    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
     <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
     <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
   </div>
 
-  <section id="mode-main" class="mode hidden">
+  <section id="mode-main" class="mode">
     <div class="grid">
 
       <div class="panel">
@@ -1122,7 +1122,7 @@
   </section>
 
   <!-- ═══ RANKING MODE ═══ -->
-  <section id="mode-ranking" class="mode">
+  <section id="mode-ranking" class="mode hidden">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -1145,7 +1145,7 @@
 
       <!-- pending queue notice -->
       <div id="pendingNotice" class="pending-notice hidden">
-        ⏳ <span id="pendingCount">0</span>개 기록이 서버에 업로드 대기 중 — <a href="file:///C:/Users/cg/Downloads/morse_5.html#" id="retryNowLink">지금 재시도</a>
+        ⏳ <span id="pendingCount">0</span>개 기록이 서버에 업로드 대기 중 — <a href="file:///C:/Users/cg/Downloads/morse_6.html#" id="retryNowLink">지금 재시도</a>
       </div>
 
       <!-- sub-tabs -->
@@ -1156,246 +1156,22 @@
       </div>
 
       <div id="rankSection-overall" class="rank-section">
-        <div class="rank-section-label">— 전체 기록 TOP 10 —<span class="label-aux">전 세계</span></div>
-        <div id="rankOverall" class="rank-table"><div class="rank-row top1 me">
-      <div class="rank-num">1</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 100% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">475</div>
-    </div><div class="rank-row top2 me">
-      <div class="rank-num">2</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">390</div>
-    </div><div class="rank-row top3 me">
-      <div class="rank-num">3</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">390</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">4</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">375</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">5</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">375</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">6</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 2 — I·M·S·O · 50% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">290</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">7</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 25% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">205</div>
-    </div></div>
+        <div class="rank-section-label">— 전체 기록 TOP 10 —</div>
+        <div id="rankOverall" class="rank-table"></div>
       </div>
 
       <div id="rankSection-lessons" class="rank-section hidden">
         <div class="rank-section-label">— 레슨별 최고 기록 —</div>
-        <div id="rankByLesson"><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>기초 1 — E·T·A·N</span>
-          <span class="badge">도전 가능</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row top1 me">
-      <div class="rank-num">1</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 100% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">475</div>
-    </div><div class="rank-row top2 me">
-      <div class="rank-num">2</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">390</div>
-    </div><div class="rank-row top3 me">
-      <div class="rank-num">3</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">390</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">4</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">375</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">5</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">375</div>
-    </div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>기초 2 — I·M·S·O</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row top1 me">
-      <div class="rank-num">1</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 2 — I·M·S·O · 50% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">290</div>
-    </div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>기초 통합</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>중급 — 자주 쓰는 글자</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>알파벳 전체</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>숫자</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>혼합 (영문+숫자)</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
-        </div>
-      </div><div class="lesson-rank-block">
-        <div class="lrb-title">
-          <span>SOS / 비상 신호</span>
-          <span class="badge">🔒 잠김</span>
-        </div>
-        <div class="rank-table">
-          <div class="rank-row empty">기록 없음</div>
-        </div>
-      </div></div>
+        <div id="rankByLesson"></div>
       </div>
 
       <div id="rankSection-hof" class="rank-section hidden">
-        <div class="rank-section-label">— 명예의 전당 —<span class="label-aux">서버 TOP 10</span></div>
-        <div id="rankHof" class="rank-table"><div class="rank-row top1 me">
-      <div class="rank-num">1</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 100% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">475</div>
-    </div><div class="rank-row top2 me">
-      <div class="rank-num">2</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">390</div>
-    </div><div class="rank-row top3 me">
-      <div class="rank-num">3</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">390</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">4</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">375</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">5</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 75% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">375</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">6</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 2 — I·M·S·O · 50% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">290</div>
-    </div><div class="rank-row me">
-      <div class="rank-num">7</div>
-      <div>
-        <div class="rank-name">CGSOS</div>
-        <div class="rank-meta">기초 1 — E·T·A·N · 25% · 2026-04-29</div>
-      </div>
-      <div></div>
-      <div class="rank-score">205</div>
-    </div></div>
+        <div class="rank-section-label">— 명예의 전당 —</div>
+        <div id="rankHof" class="rank-table"></div>
       </div>
 
       <div style="margin-top:32px; text-align:center;">
-        <a href="file:///C:/Users/cg/Downloads/morse_5.html#" id="rankReset" style="font-size:10px; letter-spacing:0.25em; color:var(--ink-faint); text-transform:uppercase; text-decoration:none; border-bottom:1px dashed var(--ink-faint); padding-bottom:1px;">로컬 기록 초기화</a>
+        <a href="file:///C:/Users/cg/Downloads/morse_6.html#" id="rankReset" style="font-size:10px; letter-spacing:0.25em; color:var(--ink-faint); text-transform:uppercase; text-decoration:none; border-bottom:1px dashed var(--ink-faint); padding-bottom:1px;">로컬 기록 초기화</a>
       </div>
     </div>
   </section>
@@ -1424,8 +1200,8 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.04.28.3</span> ·
-      <a href="file:///C:/Users/cg/Downloads/morse_5.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
+      <span id="versionLabel">v2026.04.28.5</span> ·
+      <a href="file:///C:/Users/cg/Downloads/morse_6.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
 </div>
@@ -1492,14 +1268,42 @@
   let audioCtx = null, oscNode = null, gainNode = null;
   let soundOn = true, frequency = 600, volume = 0.4;
 
+  // Keep-alive: 거의 무음(gain 0.0001) 발진기를 항상 켜둔다.
+  // 이게 AudioContext를 active 상태로 유지해서 백그라운드/포그라운드 전환 시
+  // suspend 되는 것을 방지한다. iOS에서 가장 안정적인 방법.
+  let keepAliveOsc = null, keepAliveGain = null;
+
   function ensureAudio() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    ensureKeepAlive();
   }
+
+  function ensureKeepAlive() {
+    if (!audioCtx || keepAliveOsc) return;
+    try {
+      keepAliveOsc = audioCtx.createOscillator();
+      keepAliveGain = audioCtx.createGain();
+      keepAliveOsc.type = 'sine';
+      keepAliveOsc.frequency.value = 1; // 1Hz — 사실상 들리지 않음
+      keepAliveGain.gain.value = 0.0001; // 거의 0이지만 정확히 0은 아님
+      keepAliveOsc.connect(keepAliveGain);
+      keepAliveGain.connect(audioCtx.destination);
+      keepAliveOsc.start();
+    } catch(e) {
+      keepAliveOsc = null;
+      keepAliveGain = null;
+    }
+  }
+
   let audioUnlocked = false;
   function unlockAudioOnce() {
-    if (audioUnlocked) return;
     ensureAudio();
+    if (audioUnlocked) return;
     try {
       const buf = audioCtx.createBuffer(1, 1, 22050);
       const src = audioCtx.createBufferSource();
@@ -1507,8 +1311,44 @@
       audioUnlocked = true;
     } catch(e) {}
   }
+
+  // 모든 사용자 제스처에서 컨텍스트 깨우기 시도
   ['touchstart','pointerdown','mousedown','keydown'].forEach(ev => {
-    document.addEventListener(ev, unlockAudioOnce, { passive: true });
+    document.addEventListener(ev, () => {
+      unlockAudioOnce();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+      ensureKeepAlive();
+    }, { passive: true });
+  });
+
+  // 앱이 포그라운드로 돌아올 때 — 여러 번 시도
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && audioCtx) {
+      // 0ms / 100ms / 500ms 세 번 시도 — iOS는 timing이 까다로움
+      [0, 100, 500].forEach(delay => {
+        setTimeout(() => {
+          if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+          }
+          ensureKeepAlive();
+        }, delay);
+      });
+    }
+  });
+
+  // BFCache 복귀 / focus 복귀
+  window.addEventListener('pageshow', () => {
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    ensureKeepAlive();
+  });
+  window.addEventListener('focus', () => {
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
   });
 
   function startTone() {
@@ -2766,7 +2606,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.04.28.3';
+  const APP_VERSION = '2026.04.28.5';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
