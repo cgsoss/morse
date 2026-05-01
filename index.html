@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/morse_10.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/index_1.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -927,6 +927,149 @@
     .controls .btn { flex: 1 1 calc(33.333% - 4px); padding: 10px 4px; font-size: 9px; }
     .mini-ref-grid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
   }
+
+  /* ═══════════════════════════════════════════════════════════
+     TREE PRACTICE - 연습 모드 서브 모드 (트리 시각화 + 송신)
+     ═══════════════════════════════════════════════════════════ */
+  .practice-sub-toggle {
+    display: flex;
+    margin-bottom: 16px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .practice-sub-toggle button {
+    flex: 1; background: transparent; border: none;
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    padding: 11px 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .practice-sub-toggle button.active {
+    background: rgba(255, 179, 71, 0.08);
+    color: var(--amber);
+  }
+  .practice-sub-toggle button:not(:last-child) {
+    border-right: 1px solid var(--ink-faint);
+  }
+
+  /* 트리 SVG 영역 */
+  .tree-area {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 6px 4px 8px;
+    margin-bottom: 12px;
+  }
+  .tree-svg { display: block; width: 100%; height: auto; }
+
+  .tree-node circle, .tree-node rect {
+    fill: var(--bg-2);
+    stroke: var(--amber-dim);
+    stroke-width: 1.3;
+    transition: fill 0.2s, stroke 0.2s;
+    cursor: pointer;
+  }
+  .tree-node text {
+    fill: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    user-select: none;
+  }
+  .tree-node:hover circle,
+  .tree-node:hover rect {
+    fill: rgba(255, 179, 71, 0.15);
+    stroke: var(--amber);
+  }
+  .tree-node.path circle,
+  .tree-node.path rect {
+    fill: rgba(255, 179, 71, 0.3);
+    stroke: var(--amber);
+  }
+  .tree-node.active circle,
+  .tree-node.active rect {
+    fill: var(--amber);
+    stroke: var(--amber);
+  }
+  .tree-node.active text { fill: var(--bg); }
+
+  .tree-edge {
+    stroke: var(--ink-faint);
+    stroke-width: 1.2;
+    fill: none;
+    transition: stroke 0.2s, stroke-width 0.2s;
+  }
+  .tree-edge.path-active {
+    stroke: var(--amber);
+    stroke-width: 1.6;
+  }
+
+  .tree-antenna { stroke: var(--amber); stroke-width: 1.5; fill: none; }
+  .tree-antenna-tip { fill: var(--amber); }
+
+  .tree-legend {
+    display: flex; gap: 16px; justify-content: center;
+    margin-top: 6px; padding-top: 6px;
+    border-top: 1px dashed var(--line);
+    font-size: 9px; color: var(--ink-dim);
+    letter-spacing: 0.12em;
+  }
+  .tree-legend-item { display: flex; align-items: center; gap: 6px; }
+  .tree-legend-shape {
+    background: var(--bg-2); border: 1.3px solid var(--amber-dim);
+  }
+  .tree-legend-shape.dot { width: 9px; height: 9px; border-radius: 50%; }
+  .tree-legend-shape.dash { width: 20px; height: 9px; border-radius: 2px; }
+
+  /* 트리 연습 - 현재 입력 가로 줄 */
+  .tree-current {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 50px;
+  }
+  .tree-current-label {
+    font-size: 9px;
+    color: var(--ink-dim);
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .tree-current-signal {
+    color: var(--amber);
+    font-size: 22px;
+    letter-spacing: 0.4em;
+    font-family: 'JetBrains Mono', monospace;
+    flex: 1;
+    text-align: center;
+    min-height: 28px;
+  }
+  .tree-current-signal.empty { color: var(--ink-faint); }
+  .tree-current-letter {
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    min-width: 60px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .tree-current-letter.invalid { color: var(--red); }
+  .tree-current-letter.empty { color: var(--ink-faint); }
 </style>
 </head>
 <body>
@@ -957,13 +1100,19 @@
   </div>
 
   <div class="tabs">
-    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
     <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
-    <button class="tab active" data-mode="challenge"><span class="num">iii.</span>도전</button>
+    <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
     <button class="tab" data-mode="ranking"><span class="num">iv.</span>랭킹</button>
   </div>
 
-  <section id="mode-main" class="mode hidden">
+  <!-- 연습 모드 서브 토글: 연습 모드일 때만 표시 -->
+  <div class="practice-sub-toggle hidden" id="practiceSubToggle">
+    <button data-sub="lesson" class="active">레슨 연습 / Lesson</button>
+    <button data-sub="tree">트리 연습 / Tree</button>
+  </div>
+
+  <section id="mode-main" class="mode">
     <div class="grid">
 
       <div class="panel">
@@ -971,11 +1120,11 @@
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
         <div class="panel-label">
-          <span id="modeTitle">연습 모드 / Practice</span>
-          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
+          <span id="modeTitle">자유 송신 / Free Transmission</span>
+          <span class="badge" id="modeSubtitle">no target · just send</span>
         </div>
 
-        <div class="stats-bar" id="statsBar">
+        <div class="stats-bar hidden" id="statsBar">
           <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
           <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
           <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
@@ -983,15 +1132,15 @@
         </div>
 
         <div class="display-stack" id="displayStack">
-          <div class="target-row" id="targetRow">
+          <div class="target-row hidden" id="targetRow">
             <div class="target-label">다음 문자</div>
             <div class="target-char" id="targetChar">T</div>
             <div class="target-code" id="targetCode">-</div>
           </div>
           <div class="input-row">
-            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
+            <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text empty hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
+            <div class="input-display text empty" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
           </div>
         </div>
 
@@ -1003,12 +1152,12 @@
           </div>
         </div>
 
-        <div class="controls hidden" id="freeControls">
+        <div class="controls" id="freeControls">
           <button class="btn" id="clearBtn">CLEAR</button>
           <button class="btn" id="spaceBtn">단어 공백</button>
           <button class="btn primary" id="playbackBtn">▷ 재생</button>
         </div>
-        <div class="controls" id="practiceControls">
+        <div class="controls hidden" id="practiceControls">
           <button class="btn" id="practiceSkip">SKIP →</button>
           <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
           <button class="btn" id="practiceReset">RESET</button>
@@ -1019,7 +1168,7 @@
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
-        <div id="lessonSection" class="">
+        <div id="lessonSection" class="hidden">
           <div class="panel-label">
             <span>레슨 / Lessons</span>
             <span class="badge">curriculum</span>
@@ -1063,15 +1212,128 @@
 
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
-          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
+          클릭=소리 재생 · <span id="refHint">전체 글자</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson current" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item in-lesson" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item in-lesson" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item in-lesson" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item in-lesson" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item in-lesson" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item in-lesson" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item in-lesson" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item in-lesson" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item in-lesson" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item in-lesson" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item in-lesson" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item in-lesson" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item in-lesson" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item in-lesson" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item in-lesson" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item in-lesson" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item in-lesson" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item in-lesson" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item in-lesson" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item in-lesson" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item in-lesson" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item in-lesson" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item in-lesson" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item in-lesson" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item in-lesson" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item in-lesson" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item in-lesson" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item in-lesson" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item in-lesson" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item in-lesson" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item in-lesson" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item in-lesson" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TREE PRACTICE MODE ═══ -->
+  <section id="mode-tree-practice" class="mode hidden">
+    <div class="panel">
+      <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
+      <span class="panel-corner bl"></span><span class="panel-corner br"></span>
+
+      <div class="panel-label">
+        <span>트리 연습 / Tree Practice</span>
+        <span class="badge">structure</span>
+      </div>
+
+      <!-- 트리 SVG -->
+      <div class="tree-area">
+        <svg class="tree-svg" id="treeSvg" viewBox="60 60 480 320" xmlns="http://www.w3.org/2000/svg">
+          <!-- 안테나 START -->
+          <g id="treeAntenna" style="cursor: pointer;">
+            <line class="tree-antenna" x1="300" y1="180" x2="300" y2="148"></line>
+            <circle class="tree-antenna-tip" cx="300" cy="146" r="2.5"></circle>
+            <line class="tree-antenna" x1="294" y1="180" x2="300" y2="172"></line>
+            <line class="tree-antenna" x1="306" y1="180" x2="300" y2="172"></line>
+            <path class="tree-antenna" d="M 290 142 Q 295 138 300 142" opacity="0.6"></path>
+            <path class="tree-antenna" d="M 300 142 Q 305 138 310 142" opacity="0.6"></path>
+          </g>
+
+          <!-- 좌측(T 계열) EDGES -->
+          <line class="tree-edge" data-edge="T" x1="300" y1="180" x2="278" y2="180"></line>
+          <line class="tree-edge" data-edge="M" x1="242" y1="180" x2="228" y2="180"></line>
+          <line class="tree-edge" data-edge="N" x1="260" y1="191" x2="260" y2="228"></line>
+          <line class="tree-edge" data-edge="O" x1="192" y1="180" x2="178" y2="180"></line>
+          <line class="tree-edge" data-edge="G" x1="210" y1="169" x2="210" y2="142"></line>
+          <line class="tree-edge" data-edge="Q" x1="198" y1="130" x2="178" y2="130"></line>
+          <line class="tree-edge" data-edge="Z" x1="210" y1="118" x2="210" y2="92"></line>
+          <line class="tree-edge" data-edge="K" x1="248" y1="240" x2="228" y2="240"></line>
+          <line class="tree-edge" data-edge="D" x1="260" y1="252" x2="260" y2="278"></line>
+          <line class="tree-edge" data-edge="Y" x1="192" y1="240" x2="178" y2="240"></line>
+          <line class="tree-edge" data-edge="C" x1="210" y1="251" x2="210" y2="278"></line>
+          <line class="tree-edge" data-edge="B" x1="260" y1="302" x2="260" y2="328"></line>
+
+          <!-- 우측(E 계열) EDGES -->
+          <line class="tree-edge" data-edge="E" x1="300" y1="180" x2="328" y2="180"></line>
+          <line class="tree-edge" data-edge="I" x1="352" y1="180" x2="378" y2="180"></line>
+          <line class="tree-edge" data-edge="A" x1="340" y1="192" x2="340" y2="228"></line>
+          <line class="tree-edge" data-edge="S" x1="402" y1="180" x2="428" y2="180"></line>
+          <line class="tree-edge" data-edge="U" x1="390" y1="168" x2="390" y2="142"></line>
+          <line class="tree-edge" data-edge="H" x1="452" y1="180" x2="478" y2="180"></line>
+          <line class="tree-edge" data-edge="V" x1="440" y1="169" x2="440" y2="142"></line>
+          <line class="tree-edge" data-edge="F" x1="390" y1="118" x2="390" y2="92"></line>
+          <line class="tree-edge" data-edge="R" x1="358" y1="240" x2="378" y2="240"></line>
+          <line class="tree-edge" data-edge="W" x1="340" y1="251" x2="340" y2="278"></line>
+          <line class="tree-edge" data-edge="L" x1="402" y1="240" x2="428" y2="240"></line>
+          <line class="tree-edge" data-edge="P" x1="358" y1="290" x2="378" y2="290"></line>
+          <line class="tree-edge" data-edge="J" x1="340" y1="301" x2="340" y2="328"></line>
+
+          <!-- 좌측 NODES -->
+          <g class="tree-node" data-ch="T"><rect x="242" y="169" width="36" height="22" rx="2"></rect><text x="260" y="180">T</text></g>
+          <g class="tree-node" data-ch="M"><rect x="192" y="169" width="36" height="22" rx="2"></rect><text x="210" y="180">M</text></g>
+          <g class="tree-node" data-ch="N"><circle cx="260" cy="240" r="12"></circle><text x="260" y="240">N</text></g>
+          <g class="tree-node" data-ch="O"><rect x="142" y="169" width="36" height="22" rx="2"></rect><text x="160" y="180">O</text></g>
+          <g class="tree-node" data-ch="G"><circle cx="210" cy="130" r="12"></circle><text x="210" y="130">G</text></g>
+          <g class="tree-node" data-ch="Q"><rect x="142" y="119" width="36" height="22" rx="2"></rect><text x="160" y="130">Q</text></g>
+          <g class="tree-node" data-ch="Z"><circle cx="210" cy="80" r="12"></circle><text x="210" y="80">Z</text></g>
+          <g class="tree-node" data-ch="K"><rect x="192" y="229" width="36" height="22" rx="2"></rect><text x="210" y="240">K</text></g>
+          <g class="tree-node" data-ch="D"><circle cx="260" cy="290" r="12"></circle><text x="260" y="290">D</text></g>
+          <g class="tree-node" data-ch="Y"><rect x="142" y="229" width="36" height="22" rx="2"></rect><text x="160" y="240">Y</text></g>
+          <g class="tree-node" data-ch="C"><circle cx="210" cy="290" r="12"></circle><text x="210" y="290">C</text></g>
+          <g class="tree-node" data-ch="B"><circle cx="260" cy="340" r="12"></circle><text x="260" y="340">B</text></g>
+
+          <!-- 우측 NODES -->
+          <g class="tree-node" data-ch="E"><circle cx="340" cy="180" r="12"></circle><text x="340" y="180">E</text></g>
+          <g class="tree-node" data-ch="I"><circle cx="390" cy="180" r="12"></circle><text x="390" y="180">I</text></g>
+          <g class="tree-node" data-ch="A"><rect x="322" y="229" width="36" height="22" rx="2"></rect><text x="340" y="240">A</text></g>
+          <g class="tree-node" data-ch="S"><circle cx="440" cy="180" r="12"></circle><text x="440" y="180">S</text></g>
+          <g class="tree-node" data-ch="U"><rect x="372" y="119" width="36" height="22" rx="2"></rect><text x="390" y="130">U</text></g>
+          <g class="tree-node" data-ch="H"><circle cx="490" cy="180" r="12"></circle><text x="490" y="180">H</text></g>
+          <g class="tree-node" data-ch="V"><rect x="422" y="119" width="36" height="22" rx="2"></rect><text x="440" y="130">V</text></g>
+          <g class="tree-node" data-ch="F"><circle cx="390" cy="80" r="12"></circle><text x="390" y="80">F</text></g>
+          <g class="tree-node" data-ch="R"><circle cx="390" cy="240" r="12"></circle><text x="390" y="240">R</text></g>
+          <g class="tree-node" data-ch="W"><rect x="322" y="279" width="36" height="22" rx="2"></rect><text x="340" y="290">W</text></g>
+          <g class="tree-node" data-ch="L"><circle cx="440" cy="240" r="12"></circle><text x="440" y="240">L</text></g>
+          <g class="tree-node" data-ch="P"><circle cx="390" cy="290" r="12"></circle><text x="390" y="290">P</text></g>
+          <g class="tree-node" data-ch="J"><rect x="322" y="329" width="36" height="22" rx="2"></rect><text x="340" y="340">J</text></g>
+        </svg>
+
+        <div class="tree-legend">
+          <div class="tree-legend-item"><div class="tree-legend-shape dot"></div><span>· DOT</span></div>
+          <div class="tree-legend-item"><div class="tree-legend-shape dash"></div><span>— DASH</span></div>
+        </div>
+      </div>
+
+      <!-- 현재 입력 -->
+      <div class="tree-current">
+        <div class="tree-current-label">CURRENT</div>
+        <div class="tree-current-signal empty" id="treeCurrentSignal">—</div>
+        <div class="tree-current-letter empty" id="treeCurrentLetter">—</div>
+      </div>
+
+      <!-- 송신 버튼 (자유송신과 동일한 스타일) -->
+      <div class="tx-btn" id="treeTxButton">
+        <div class="tx-btn-icon">·—</div>
+        <div class="tx-btn-label">TRANSMIT</div>
+        <div class="tx-btn-hint">
+          <kbd>SPACE</kbd> · 클릭 또는 탭 · 짧게=· 길게=—
+        </div>
+      </div>
+
+      <!-- 액션 버튼 -->
+      <div class="controls">
+        <button class="btn" id="treeClearBtn">CLEAR</button>
+        <button class="btn primary" id="treePlaybackBtn">▷ 재생</button>
       </div>
     </div>
   </section>
 
   <!-- ═══ CHALLENGE MODE ═══ -->
-  <section id="mode-challenge" class="mode">
+  <section id="mode-challenge" class="mode hidden">
     <div class="grid">
       <div class="panel">
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
@@ -1233,7 +1495,7 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.04.28.7</span> ·
+      <span id="versionLabel">v2026.05.02.2</span> ·
       <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
@@ -1695,9 +1957,11 @@
     });
 
     // hide all top-level sections, then show one
-    ['mode-main', 'mode-challenge', 'mode-ranking', 'mode-reference'].forEach(id => {
+    ['mode-main', 'mode-challenge', 'mode-ranking', 'mode-reference', 'mode-tree-practice'].forEach(id => {
       const el = $(id); if (el) el.classList.add('hidden');
     });
+    // hide practice sub-toggle by default
+    $('practiceSubToggle').classList.add('hidden');
 
     stopTone();
     isPressed = false;
@@ -1705,6 +1969,8 @@
     clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
     clearFlash();
     unlockInput();
+    // reset tree practice state (safe even if not yet initialized)
+    if (typeof treeResetState === 'function') treeResetState();
 
     if (mode === 'reference') {
       $('mode-reference').classList.remove('hidden');
@@ -1746,7 +2012,15 @@
       decodedDisplay.classList.add('hidden');
       inputLabel.textContent = '입력한 부호 / Your Input';
       refHintEl.textContent = '강조 = 현재 레슨';
-      startPractice();
+      // show sub-toggle for practice mode
+      $('practiceSubToggle').classList.remove('hidden');
+      // apply current sub-mode (lesson by default)
+      if (typeof applyPracticeSubMode === 'function') {
+        applyPracticeSubMode(typeof practiceSubMode !== 'undefined' ? practiceSubMode : 'lesson');
+      }
+      if (typeof practiceSubMode === 'undefined' || practiceSubMode === 'lesson') {
+        startPractice();
+      }
     }
     refreshInputDisplay();
     updateMiniRefHighlight();
@@ -1756,6 +2030,258 @@
   });
   document.querySelectorAll('.header-btn').forEach(btn => {
     btn.addEventListener('click', () => setMode(btn.dataset.mode));
+  });
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── TREE PRACTICE (트리 연습 서브 모드) ───────
+  // ════════════════════════════════════════════════════════════
+  let practiceSubMode = 'lesson'; // 'lesson' | 'tree'
+
+  // 트리 연습 상태
+  let treeInputBuf = '';      // 현재 입력된 부호
+  let treePressed = false;
+  let treePressStart = 0;
+  let treeLetterTimer = null;
+  let treeAutoClearTimer = null;
+
+  const treeSvg = $('treeSvg');
+  const treeTxButton = $('treeTxButton');
+  const treeCurrentSignalEl = $('treeCurrentSignal');
+  const treeCurrentLetterEl = $('treeCurrentLetter');
+
+  // 표준 모스 → 글자 (트리에 그려진 26글자만)
+  function treeLookup(code) {
+    return REVERSE_MORSE[code] || null;
+  }
+
+  // 입력 부호의 단계별 경로를 반환 (각 prefix에 해당하는 글자)
+  // 예: '....' → ['E', 'I', 'S', 'H']
+  function treePathFromCode(code) {
+    const path = [];
+    for (let i = 1; i <= code.length; i++) {
+      const ch = REVERSE_MORSE[code.slice(0, i)];
+      if (ch) path.push(ch);
+    }
+    return path;
+  }
+
+  // 트리 시각 상태 갱신
+  function treeRefreshVisual() {
+    // 모든 노드/엣지 클래스 초기화
+    treeSvg.querySelectorAll('.tree-node').forEach(n => {
+      n.classList.remove('path', 'active');
+    });
+    treeSvg.querySelectorAll('.tree-edge').forEach(e => {
+      e.classList.remove('path-active');
+    });
+
+    if (!treeInputBuf) {
+      treeCurrentSignalEl.textContent = '—';
+      treeCurrentSignalEl.classList.add('empty');
+      treeCurrentLetterEl.textContent = '—';
+      treeCurrentLetterEl.classList.add('empty');
+      treeCurrentLetterEl.classList.remove('invalid');
+      return;
+    }
+
+    // 현재 입력 부호 표시 (점/선을 보기 좋게 띄움)
+    const display = treeInputBuf.split('').join(' ');
+    treeCurrentSignalEl.textContent = display;
+    treeCurrentSignalEl.classList.remove('empty');
+
+    // 경로 계산 후 노드/엣지 하이라이트
+    const path = treePathFromCode(treeInputBuf);
+    const finalCh = treeLookup(treeInputBuf);
+
+    if (path.length === 0) {
+      // 첫 신호조차 매칭 안 되는 경우는 없음 (E/T가 둘 다 있으니)
+      treeCurrentLetterEl.textContent = '? ';
+      treeCurrentLetterEl.classList.add('invalid');
+      treeCurrentLetterEl.classList.remove('empty');
+      return;
+    }
+
+    path.forEach((ch, idx) => {
+      const node = treeSvg.querySelector('.tree-node[data-ch="' + ch + '"]');
+      const edge = treeSvg.querySelector('.tree-edge[data-edge="' + ch + '"]');
+      if (node) {
+        if (idx === path.length - 1 && finalCh) {
+          node.classList.add('active');
+        } else {
+          node.classList.add('path');
+        }
+      }
+      if (edge) edge.classList.add('path-active');
+    });
+
+    if (finalCh) {
+      treeCurrentLetterEl.textContent = '→ ' + finalCh;
+      treeCurrentLetterEl.classList.remove('empty', 'invalid');
+    } else {
+      // 입력했지만 트리에 없는 부호 (예: ····—은 5번째)
+      treeCurrentLetterEl.textContent = '? ';
+      treeCurrentLetterEl.classList.add('invalid');
+      treeCurrentLetterEl.classList.remove('empty');
+    }
+  }
+
+  // 트리 입력 상태 완전 초기화 (모드 전환 시 호출)
+  function treeResetState() {
+    treeInputBuf = '';
+    treePressed = false;
+    clearTimeout(treeLetterTimer);
+    clearTimeout(treeAutoClearTimer);
+    if (treeTxButton) treeTxButton.classList.remove('pressed');
+    treeRefreshVisual();
+  }
+
+  // 트리 송신 버튼 - press 처리
+  function treePressDown() {
+    if (treePressed) return;
+    if (inputLocked) return;
+    treePressed = true;
+    treePressStart = performance.now();
+    if (navigator.vibrate) navigator.vibrate(8);
+    startTone();
+    clearTimeout(treeLetterTimer);
+    clearTimeout(treeAutoClearTimer);
+  }
+  function treePressUp() {
+    if (!treePressed) return;
+    treePressed = false;
+    stopTone();
+    const dur = performance.now() - treePressStart;
+    const symbol = dur < ditDahThreshold() ? '.' : '-';
+    treeInputBuf += symbol;
+    treeRefreshVisual();
+    // letter gap 후 자동 초기화 (다음 글자 입력 대비)
+    treeLetterTimer = setTimeout(() => {
+      // 글자 확정 + 잠시 후 리셋
+      treeAutoClearTimer = setTimeout(() => {
+        treeInputBuf = '';
+        treeRefreshVisual();
+      }, 1200);
+    }, letterGapMs());
+  }
+
+  // 트리 송신 버튼에 입력 핸들러 부착
+  if (treeTxButton) {
+    treeTxButton.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      unlockAudioOnce();
+      try { treeTxButton.setPointerCapture(e.pointerId); } catch(_) {}
+      treePressDown();
+      treeTxButton.classList.add('pressed');
+    });
+    const treeRelease = (e) => {
+      try { treeTxButton.releasePointerCapture(e.pointerId); } catch(_) {}
+      if (treePressed) treePressUp();
+      treeTxButton.classList.remove('pressed');
+    };
+    treeTxButton.addEventListener('pointerup', treeRelease);
+    treeTxButton.addEventListener('pointercancel', treeRelease);
+    treeTxButton.addEventListener('pointerleave', e => {
+      if (treePressed) { treePressUp(); treeTxButton.classList.remove('pressed'); }
+    });
+    treeTxButton.addEventListener('contextmenu', e => e.preventDefault());
+  }
+
+  // 스페이스바도 트리 연습에서 작동
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.repeat) {
+      if (activeMode === 'practice' && practiceSubMode === 'tree') {
+        e.preventDefault();
+        treePressDown();
+        treeTxButton.classList.add('pressed');
+      }
+    }
+  });
+  document.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+      if (activeMode === 'practice' && practiceSubMode === 'tree') {
+        e.preventDefault();
+        treePressUp();
+        treeTxButton.classList.remove('pressed');
+      }
+    }
+  });
+
+  // 노드 클릭 → 그 글자 재생 + 경로 시각화
+  treeSvg.querySelectorAll('.tree-node[data-ch]').forEach(node => {
+    node.addEventListener('click', async () => {
+      const ch = node.getAttribute('data-ch');
+      const code = MORSE[ch];
+      if (!code) return;
+      // 입력 부호를 이 글자로 설정 + 시각화
+      clearTimeout(treeLetterTimer);
+      clearTimeout(treeAutoClearTimer);
+      treeInputBuf = code;
+      treeRefreshVisual();
+      // 소리 재생
+      try { unlockAudioOnce(); } catch(_) {}
+      await playString(ch);
+      // 일정 시간 후 자동 클리어
+      treeAutoClearTimer = setTimeout(() => {
+        treeInputBuf = '';
+        treeRefreshVisual();
+      }, 2000);
+    });
+  });
+
+  // 안테나(START) 클릭 → 리셋
+  $('treeAntenna').addEventListener('click', () => {
+    treeResetState();
+  });
+
+  // 액션 버튼
+  $('treeClearBtn').addEventListener('click', () => {
+    treeResetState();
+  });
+  $('treePlaybackBtn').addEventListener('click', async () => {
+    if (!treeInputBuf) return;
+    const ch = treeLookup(treeInputBuf);
+    if (!ch) return;
+    try { unlockAudioOnce(); } catch(_) {}
+    await playString(ch);
+  });
+
+  // 서브 토글 적용
+  // restartLesson: true면 lesson 모드로 갈 때 startPractice() 호출
+  function applyPracticeSubMode(sub, restartLesson) {
+    practiceSubMode = sub;
+    // 토글 버튼 active 클래스 갱신
+    document.querySelectorAll('#practiceSubToggle button').forEach(b => {
+      b.classList.toggle('active', b.dataset.sub === sub);
+    });
+    // 뷰 전환
+    if (sub === 'tree') {
+      $('mode-main').classList.add('hidden');
+      $('mode-tree-practice').classList.remove('hidden');
+      // 레슨 연습 진행 상태 정지
+      stopTone();
+      isPressed = false;
+      inputBuf = '';
+      clearTimeout(practiceTimer);
+      clearTimeout(letterTimer);
+      clearTimeout(wordTimer);
+      treeResetState();
+    } else {
+      // 'lesson'
+      $('mode-tree-practice').classList.add('hidden');
+      $('mode-main').classList.remove('hidden');
+      treeResetState();
+      // 레슨 연습 재시작 (명시적 요청 시만)
+      if (restartLesson && activeMode === 'practice') {
+        startPractice();
+      }
+    }
+  }
+
+  // 서브 토글 클릭 핸들러 - 사용자가 직접 누르면 restart
+  document.querySelectorAll('#practiceSubToggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyPracticeSubMode(btn.dataset.sub, true);
+    });
   });
 
   // ════════════════════════════════════════════════════════════
@@ -2639,7 +3165,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.04.28.7';
+  const APP_VERSION = '2026.05.02.2';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
