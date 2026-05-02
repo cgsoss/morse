@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/index_6.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/index_9.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -981,7 +981,7 @@
   .tree-node text {
     fill: var(--amber-dim);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     text-anchor: middle;
     dominant-baseline: central;
@@ -1125,19 +1125,19 @@
   </div>
 
   <div class="tabs">
-    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
-    <button class="tab active" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
+    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
     <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
     <button class="tab" data-mode="ranking"><span class="num">iv.</span>랭킹</button>
   </div>
 
   <!-- 연습 모드 서브 토글: 연습 모드일 때만 표시 -->
-  <div class="practice-sub-toggle" id="practiceSubToggle">
-    <button data-sub="lesson" class="">레슨 연습 / Lesson</button>
-    <button data-sub="tree" class="active">트리 연습 / Tree</button>
+  <div class="practice-sub-toggle hidden" id="practiceSubToggle">
+    <button data-sub="lesson" class="active">레슨 연습 / Lesson</button>
+    <button data-sub="tree">트리 연습 / Tree</button>
   </div>
 
-  <section id="mode-main" class="mode hidden">
+  <section id="mode-main" class="mode">
     <div class="grid">
 
       <div class="panel">
@@ -1145,11 +1145,11 @@
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
         <div class="panel-label">
-          <span id="modeTitle">연습 모드 / Practice</span>
-          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
+          <span id="modeTitle">자유 송신 / Free Transmission</span>
+          <span class="badge" id="modeSubtitle">no target · just send</span>
         </div>
 
-        <div class="stats-bar" id="statsBar">
+        <div class="stats-bar hidden" id="statsBar">
           <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
           <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
           <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
@@ -1157,15 +1157,15 @@
         </div>
 
         <div class="display-stack" id="displayStack">
-          <div class="target-row" id="targetRow">
+          <div class="target-row hidden" id="targetRow">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="targetChar">N</div>
-            <div class="target-code" id="targetCode">-.</div>
+            <div class="target-char" id="targetChar">T</div>
+            <div class="target-code" id="targetCode">-</div>
           </div>
           <div class="input-row">
-            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
+            <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text empty hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
+            <div class="input-display text empty" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
           </div>
         </div>
 
@@ -1177,12 +1177,12 @@
           </div>
         </div>
 
-        <div class="controls hidden" id="freeControls">
+        <div class="controls" id="freeControls">
           <button class="btn" id="clearBtn">CLEAR</button>
           <button class="btn" id="spaceBtn">단어 공백</button>
           <button class="btn primary" id="playbackBtn">▷ 재생</button>
         </div>
-        <div class="controls" id="practiceControls">
+        <div class="controls hidden" id="practiceControls">
           <button class="btn" id="practiceSkip">SKIP →</button>
           <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
           <button class="btn" id="practiceReset">RESET</button>
@@ -1193,7 +1193,7 @@
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
-        <div id="lessonSection" class="">
+        <div id="lessonSection" class="hidden">
           <div class="panel-label">
             <span>레슨 / Lessons</span>
             <span class="badge">curriculum</span>
@@ -1237,15 +1237,15 @@
 
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
-          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
+          클릭=소리 재생 · <span id="refHint">전체 글자</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson current" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item in-lesson" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item in-lesson" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item in-lesson" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item in-lesson" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item in-lesson" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item in-lesson" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item in-lesson" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item in-lesson" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item in-lesson" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item in-lesson" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item in-lesson" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item in-lesson" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item in-lesson" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item in-lesson" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item in-lesson" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item in-lesson" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item in-lesson" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item in-lesson" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item in-lesson" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item in-lesson" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item in-lesson" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item in-lesson" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item in-lesson" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item in-lesson" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item in-lesson" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item in-lesson" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item in-lesson" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item in-lesson" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item in-lesson" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item in-lesson" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item in-lesson" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item in-lesson" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
 
   <!-- ═══ TREE PRACTICE MODE ═══ -->
-  <section id="mode-tree-practice" class="mode">
+  <section id="mode-tree-practice" class="mode hidden">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -1279,62 +1279,64 @@
           </g>
 
           <!-- 좌측(T 계열) EDGES -->
-          <line class="tree-edge" data-edge="T" x1="320" y1="190" x2="294" y2="190"></line>
-          <line class="tree-edge" data-edge="M" x1="258" y1="190" x2="250" y2="190"></line>
-          <line class="tree-edge" data-edge="N" x1="276" y1="199" x2="276" y2="218"></line>
-          <line class="tree-edge" data-edge="O" x1="214" y1="190" x2="206" y2="190"></line>
-          <line class="tree-edge" data-edge="G" x1="232" y1="181" x2="232" y2="162"></line>
-          <line class="tree-edge" data-edge="Q" x1="220" y1="150" x2="206" y2="150"></line>
+          <line class="tree-edge" data-edge="T" x1="320" y1="190" x2="293" y2="190"></line>
+          <line class="tree-edge" data-edge="M" x1="259" y1="190" x2="249" y2="190"></line>
+          <line class="tree-edge" data-edge="N" x1="276" y1="198.5" x2="276" y2="218"></line>
+          <line class="tree-edge" data-edge="O" x1="215" y1="190" x2="205" y2="190"></line>
+          <line class="tree-edge" data-edge="G" x1="232" y1="181.5" x2="232" y2="162"></line>
+          <line class="tree-edge" data-edge="Q" x1="220" y1="150" x2="205" y2="150"></line>
           <line class="tree-edge" data-edge="Z" x1="232" y1="138" x2="232" y2="122"></line>
-          <line class="tree-edge" data-edge="K" x1="264" y1="230" x2="250" y2="230"></line>
+          <line class="tree-edge" data-edge="K" x1="264" y1="230" x2="249" y2="230"></line>
           <line class="tree-edge" data-edge="D" x1="276" y1="242" x2="276" y2="258"></line>
-          <line class="tree-edge" data-edge="Y" x1="214" y1="230" x2="206" y2="230"></line>
-          <line class="tree-edge" data-edge="C" x1="232" y1="239" x2="232" y2="258"></line>
+          <line class="tree-edge" data-edge="Y" x1="215" y1="230" x2="205" y2="230"></line>
+          <line class="tree-edge" data-edge="C" x1="232" y1="238.5" x2="232" y2="258"></line>
+          <line class="tree-edge" data-edge="X" x1="288" y1="270" x2="297" y2="270"></line>
           <line class="tree-edge" data-edge="B" x1="276" y1="282" x2="276" y2="298"></line>
 
           <!-- 우측(E 계열) EDGES -->
           <line class="tree-edge" data-edge="E" x1="320" y1="190" x2="352" y2="190"></line>
           <line class="tree-edge" data-edge="I" x1="376" y1="190" x2="396" y2="190"></line>
-          <line class="tree-edge" data-edge="A" x1="364" y1="202" x2="364" y2="221"></line>
+          <line class="tree-edge" data-edge="A" x1="364" y1="202" x2="364" y2="221.5"></line>
           <line class="tree-edge" data-edge="S" x1="420" y1="190" x2="440" y2="190"></line>
-          <line class="tree-edge" data-edge="U" x1="408" y1="178" x2="408" y2="159"></line>
+          <line class="tree-edge" data-edge="U" x1="408" y1="178" x2="408" y2="158.5"></line>
           <line class="tree-edge" data-edge="H" x1="464" y1="190" x2="484" y2="190"></line>
-          <line class="tree-edge" data-edge="V" x1="452" y1="178" x2="452" y2="159"></line>
-          <line class="tree-edge" data-edge="F" x1="408" y1="141" x2="408" y2="122"></line>
-          <line class="tree-edge" data-edge="R" x1="382" y1="230" x2="396" y2="230"></line>
-          <line class="tree-edge" data-edge="W" x1="364" y1="239" x2="364" y2="261"></line>
+          <line class="tree-edge" data-edge="V" x1="452" y1="178" x2="452" y2="158.5"></line>
+          <line class="tree-edge" data-edge="F" x1="408" y1="141.5" x2="408" y2="122"></line>
+          <line class="tree-edge" data-edge="R" x1="381" y1="230" x2="396" y2="230"></line>
+          <line class="tree-edge" data-edge="W" x1="364" y1="238.5" x2="364" y2="261.5"></line>
           <line class="tree-edge" data-edge="L" x1="420" y1="230" x2="440" y2="230"></line>
-          <line class="tree-edge" data-edge="P" x1="382" y1="270" x2="396" y2="270"></line>
-          <line class="tree-edge" data-edge="J" x1="364" y1="279" x2="364" y2="301"></line>
+          <line class="tree-edge" data-edge="P" x1="381" y1="270" x2="396" y2="270"></line>
+          <line class="tree-edge" data-edge="J" x1="364" y1="278.5" x2="364" y2="301.5"></line>
 
           <!-- 좌측 NODES -->
-          <g class="tree-node" data-ch="T"><rect x="258" y="181" width="36" height="18" rx="2"></rect><text x="276" y="190">T</text></g>
-          <g class="tree-node" data-ch="M"><rect x="214" y="181" width="36" height="18" rx="2"></rect><text x="232" y="190">M</text></g>
+          <g class="tree-node" data-ch="T"><rect x="259" y="181.5" width="34" height="17" rx="2"></rect><text x="276" y="190">T</text></g>
+          <g class="tree-node" data-ch="M"><rect x="215" y="181.5" width="34" height="17" rx="2"></rect><text x="232" y="190">M</text></g>
           <g class="tree-node" data-ch="N"><circle cx="276" cy="230" r="12"></circle><text x="276" y="230">N</text></g>
-          <g class="tree-node" data-ch="O"><rect x="170" y="181" width="36" height="18" rx="2"></rect><text x="188" y="190">O</text></g>
+          <g class="tree-node" data-ch="O"><rect x="171" y="181.5" width="34" height="17" rx="2"></rect><text x="188" y="190">O</text></g>
           <g class="tree-node" data-ch="G"><circle cx="232" cy="150" r="12"></circle><text x="232" y="150">G</text></g>
-          <g class="tree-node" data-ch="Q"><rect x="170" y="141" width="36" height="18" rx="2"></rect><text x="188" y="150">Q</text></g>
+          <g class="tree-node" data-ch="Q"><rect x="171" y="141.5" width="34" height="17" rx="2"></rect><text x="188" y="150">Q</text></g>
           <g class="tree-node" data-ch="Z"><circle cx="232" cy="110" r="12"></circle><text x="232" y="110">Z</text></g>
-          <g class="tree-node" data-ch="K"><rect x="214" y="221" width="36" height="18" rx="2"></rect><text x="232" y="230">K</text></g>
+          <g class="tree-node" data-ch="K"><rect x="215" y="221.5" width="34" height="17" rx="2"></rect><text x="232" y="230">K</text></g>
           <g class="tree-node" data-ch="D"><circle cx="276" cy="270" r="12"></circle><text x="276" y="270">D</text></g>
-          <g class="tree-node" data-ch="Y"><rect x="170" y="221" width="36" height="18" rx="2"></rect><text x="188" y="230">Y</text></g>
+          <g class="tree-node" data-ch="Y"><rect x="171" y="221.5" width="34" height="17" rx="2"></rect><text x="188" y="230">Y</text></g>
           <g class="tree-node" data-ch="C"><circle cx="232" cy="270" r="12"></circle><text x="232" y="270">C</text></g>
+          <g class="tree-node" data-ch="X"><rect x="297" y="261.5" width="34" height="17" rx="2"></rect><text x="314" y="270">X</text></g>
           <g class="tree-node" data-ch="B"><circle cx="276" cy="310" r="12"></circle><text x="276" y="310">B</text></g>
 
           <!-- 우측 NODES -->
           <g class="tree-node" data-ch="E"><circle cx="364" cy="190" r="12"></circle><text x="364" y="190">E</text></g>
           <g class="tree-node" data-ch="I"><circle cx="408" cy="190" r="12"></circle><text x="408" y="190">I</text></g>
-          <g class="tree-node" data-ch="A"><rect x="346" y="221" width="36" height="18" rx="2"></rect><text x="364" y="230">A</text></g>
+          <g class="tree-node" data-ch="A"><rect x="347" y="221.5" width="34" height="17" rx="2"></rect><text x="364" y="230">A</text></g>
           <g class="tree-node" data-ch="S"><circle cx="452" cy="190" r="12"></circle><text x="452" y="190">S</text></g>
-          <g class="tree-node" data-ch="U"><rect x="390" y="141" width="36" height="18" rx="2"></rect><text x="408" y="150">U</text></g>
+          <g class="tree-node" data-ch="U"><rect x="391" y="141.5" width="34" height="17" rx="2"></rect><text x="408" y="150">U</text></g>
           <g class="tree-node" data-ch="H"><circle cx="496" cy="190" r="12"></circle><text x="496" y="190">H</text></g>
-          <g class="tree-node" data-ch="V"><rect x="434" y="141" width="36" height="18" rx="2"></rect><text x="452" y="150">V</text></g>
+          <g class="tree-node" data-ch="V"><rect x="435" y="141.5" width="34" height="17" rx="2"></rect><text x="452" y="150">V</text></g>
           <g class="tree-node" data-ch="F"><circle cx="408" cy="110" r="12"></circle><text x="408" y="110">F</text></g>
           <g class="tree-node" data-ch="R"><circle cx="408" cy="230" r="12"></circle><text x="408" y="230">R</text></g>
-          <g class="tree-node" data-ch="W"><rect x="346" y="261" width="36" height="18" rx="2"></rect><text x="364" y="270">W</text></g>
+          <g class="tree-node" data-ch="W"><rect x="347" y="261.5" width="34" height="17" rx="2"></rect><text x="364" y="270">W</text></g>
           <g class="tree-node" data-ch="L"><circle cx="452" cy="230" r="12"></circle><text x="452" y="230">L</text></g>
           <g class="tree-node" data-ch="P"><circle cx="408" cy="270" r="12"></circle><text x="408" y="270">P</text></g>
-          <g class="tree-node" data-ch="J"><rect x="346" y="301" width="36" height="18" rx="2"></rect><text x="364" y="310">J</text></g>
+          <g class="tree-node" data-ch="J"><rect x="347" y="301.5" width="34" height="17" rx="2"></rect><text x="364" y="310">J</text></g>
         </svg>
 
         <div class="tree-legend">
@@ -1530,7 +1532,7 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.05.02.9</span> ·
+      <span id="versionLabel">v2026.05.02.11</span> ·
       <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
@@ -3237,7 +3239,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.05.02.9';
+  const APP_VERSION = '2026.05.02.11';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
