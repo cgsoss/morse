@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/index_4.html -->
+<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/index_5.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -1108,6 +1108,12 @@
     #treeTxButton .tx-btn-icon { font-size: 30px; }
     #treeTxButton .tx-btn-label { font-size: 14px; }
   }
+  /* 트리 재생 중 송신 버튼 비활성 */
+  #treeTxButton.tx-btn.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 </style>
 </head>
 <body>
@@ -1543,7 +1549,7 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.05.02.5</span> ·
+      <span id="versionLabel">v2026.05.02.6</span> ·
       <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
@@ -2092,6 +2098,7 @@
   let treeLetterTimer = null;
   let treeAutoClearTimer = null;
   let treeLetterCommitted = false; // letter gap 경과 후 확정된 상태인지
+  let isPlayingTreeAudio = false;  // 노드/재생 버튼으로 소리 재생 중인지 (입력 차단용)
 
   const treeSvg = $('treeSvg');
   const treeTxButton = $('treeTxButton');
@@ -2189,6 +2196,7 @@
   function treePressDown() {
     if (treePressed) return;
     if (inputLocked) return;
+    if (isPlayingTreeAudio) return;  // 재생 중이면 입력 차단
     // 이전 글자가 이미 확정되어 잔상으로 표시 중이면 즉시 클리어하고 새 입력 시작
     if (treeLetterCommitted || treeInputBuf) {
       // letter timer가 이미 발화했거나, 글자 입력 중간에 새로 누르는 경우 모두
@@ -2273,6 +2281,7 @@
   // 노드 클릭 → 그 글자 재생 + 경로 시각화
   treeSvg.querySelectorAll('.tree-node[data-ch]').forEach(node => {
     node.addEventListener('click', async () => {
+      if (isPlayingTreeAudio) return;  // 다른 재생 중이면 무시
       const ch = node.getAttribute('data-ch');
       const code = MORSE[ch];
       if (!code) return;
@@ -2282,9 +2291,16 @@
       treeInputBuf = code;
       treeLetterCommitted = false;
       treeRefreshVisual();
-      // 소리 재생
+      // 소리 재생 (재생 중 플래그 + 송신 버튼 비활성)
       try { unlockAudioOnce(); } catch(_) {}
-      await playString(ch);
+      isPlayingTreeAudio = true;
+      treeTxButton.classList.add('disabled');
+      try {
+        await playString(ch);
+      } finally {
+        isPlayingTreeAudio = false;
+        treeTxButton.classList.remove('disabled');
+      }
       // 재생 끝나면 확정 상태로 표시. 짧은 잔상 후 자동 클리어
       treeLetterCommitted = true;
       treeAutoClearTimer = setTimeout(() => {
@@ -2305,11 +2321,19 @@
     treeResetState();
   });
   $('treePlaybackBtn').addEventListener('click', async () => {
+    if (isPlayingTreeAudio) return;
     if (!treeInputBuf) return;
     const ch = treeLookup(treeInputBuf);
     if (!ch) return;
     try { unlockAudioOnce(); } catch(_) {}
-    await playString(ch);
+    isPlayingTreeAudio = true;
+    treeTxButton.classList.add('disabled');
+    try {
+      await playString(ch);
+    } finally {
+      isPlayingTreeAudio = false;
+      treeTxButton.classList.remove('disabled');
+    }
   });
 
   // 서브 토글 적용
@@ -3232,7 +3256,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.05.02.5';
+  const APP_VERSION = '2026.05.02.6';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
