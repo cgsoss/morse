@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/cg/Downloads/index_9.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_10.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -1029,6 +1029,63 @@
     stroke: var(--amber-dim);
     stroke-width: 1.2;
   }
+  /* 숫자 영역 엣지 - 히든 모드 */
+  .tree-edge.hidden {
+    stroke: #211917;
+  }
+  .tree-edge.hidden.path-active {
+    stroke: var(--amber-dim);
+  }
+
+  /* 빈 노드 (비표준 부호 통과 지점) */
+  .tree-empty circle, .tree-empty rect {
+    fill: #211917;
+    stroke: #211917;
+    stroke-width: 1;
+    transition: fill 0.3s, stroke 0.3s, filter 0.3s;
+    cursor: default;
+  }
+  /* 빈 노드도 경로/활성 상태 가능 */
+  .tree-empty.path circle, .tree-empty.path rect {
+    fill: url(#treeGradWarm);
+    stroke: var(--amber-dim);
+    filter: drop-shadow(0 0 2px rgba(255, 179, 71, 0.35));
+  }
+  .tree-empty.active circle, .tree-empty.active rect {
+    fill: url(#treeGradHot);
+    stroke: var(--amber);
+    filter: drop-shadow(0 0 3px rgba(255, 206, 128, 0.5))
+            drop-shadow(0 0 6px rgba(255, 179, 71, 0.25));
+  }
+
+  /* 숫자 노드 - 히든 모드 (specificity 높임) */
+  .tree-node.num text { fill: #211917; }
+  .tree-node.num circle, .tree-node.num rect {
+    stroke: #211917;
+    fill: #130f06;
+  }
+  .tree-node.num:hover circle, .tree-node.num:hover rect {
+    fill: rgba(255, 179, 71, 0.08);
+    stroke: var(--amber-darker);
+  }
+  /* 숫자도 path/active 상태에선 밝게 (다른 노드와 동일) */
+  .tree-node.num.path circle, .tree-node.num.path rect {
+    fill: url(#treeGradWarm);
+    stroke: var(--amber-dim);
+    filter: drop-shadow(0 0 2px rgba(255, 179, 71, 0.35));
+  }
+  .tree-node.num.path text { fill: var(--amber); }
+  .tree-node.num.active circle, .tree-node.num.active rect {
+    fill: url(#treeGradHot);
+    stroke: var(--amber);
+    filter: drop-shadow(0 0 3px rgba(255, 206, 128, 0.5))
+            drop-shadow(0 0 6px rgba(255, 179, 71, 0.25));
+  }
+  .tree-node.num.active text {
+    fill: #fffaef;
+    filter: drop-shadow(0 0 1.5px rgba(200, 100, 30, 0.9))
+            drop-shadow(0 0 0.5px rgba(160, 70, 20, 1));
+  }
 
   .tree-antenna { stroke: var(--amber); stroke-width: 1.2; fill: none; stroke-linecap: round; }
   .tree-antenna-tip { fill: var(--amber); }
@@ -1257,7 +1314,7 @@
 
       <!-- 트리 SVG -->
       <div class="tree-area">
-        <svg class="tree-svg" id="treeSvg" viewBox="140 86 387 248" xmlns="http://www.w3.org/2000/svg">
+        <svg class="tree-svg" id="treeSvg" viewBox="76 86 493 245" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <radialgradient id="treeGradWarm" cx="50%" cy="50%" r="60%">
               <stop offset="0%" stop-color="rgba(255, 220, 160, 0.55)"></stop>
@@ -1270,12 +1327,13 @@
             </radialgradient>
           </defs>
 
-          <!-- 안테나 (WiFi 스타일, 점은 T-E 중앙) -->
+          <!-- 안테나: 점 + 수직 막대 + WiFi 호 -->
           <g id="treeAntenna" style="cursor: pointer;">
             <circle class="tree-antenna-tip" cx="320" cy="190" r="2"></circle>
-            <path class="tree-antenna" d="M 316 185 Q 320 183 324 185"></path>
-            <path class="tree-antenna" d="M 314 182 Q 320 178 326 182" opacity="0.7"></path>
-            <path class="tree-antenna" d="M 311 179 Q 320 173 329 179" opacity="0.45"></path>
+            <line class="tree-antenna" x1="320" y1="188" x2="320" y2="172"></line>
+            <path class="tree-antenna" d="M 316 168 Q 320 166 324 168"></path>
+            <path class="tree-antenna" d="M 314 165 Q 320 161 326 165" opacity="0.7"></path>
+            <path class="tree-antenna" d="M 311 162 Q 320 156 329 162" opacity="0.45"></path>
           </g>
 
           <!-- 좌측(T 계열) EDGES -->
@@ -1308,6 +1366,32 @@
           <line class="tree-edge" data-edge="P" x1="381" y1="270" x2="396" y2="270"></line>
           <line class="tree-edge" data-edge="J" x1="364" y1="278.5" x2="364" y2="301.5"></line>
 
+          <!-- 숫자 영역 EDGES (히든 모드) -->
+          <!-- J → 1 -->
+          <line class="tree-edge hidden" data-edge="1" x1="381" y1="310" x2="391" y2="310"></line>
+          <!-- U → ..-- 빈 사각형 (2의 부모) -->
+          <line class="tree-edge hidden" data-edge="EMPTY_DDDD" x1="391" y1="150" x2="374" y2="150"></line>
+          <!-- ..-- → 2 -->
+          <line class="tree-edge hidden" data-edge="2" x1="364" y1="146" x2="364" y2="122"></line>
+          <!-- V → 3 -->
+          <line class="tree-edge hidden" data-edge="3" x1="452" y1="141.5" x2="452" y2="122"></line>
+          <!-- H → 4 -->
+          <line class="tree-edge hidden" data-edge="4" x1="508" y1="190" x2="523" y2="190"></line>
+          <!-- H → 5 -->
+          <line class="tree-edge hidden" data-edge="5" x1="496" y1="202" x2="496" y2="218"></line>
+          <!-- B → 6 -->
+          <line class="tree-edge hidden" data-edge="6" x1="264" y1="310" x2="244" y2="310"></line>
+          <!-- Z → 7 -->
+          <line class="tree-edge hidden" data-edge="7" x1="244" y1="110" x2="264" y2="110"></line>
+          <!-- O → ---- 빈 사각형 -->
+          <line class="tree-edge hidden" data-edge="EMPTY_4DASH" x1="171" y1="190" x2="154" y2="190"></line>
+          <!-- ---- → 9 -->
+          <line class="tree-edge hidden" data-edge="9" x1="134" y1="190" x2="112" y2="190"></line>
+          <!-- ---- → 0 -->
+          <line class="tree-edge hidden" data-edge="0" x1="144" y1="194" x2="144" y2="221.5"></line>
+          <!-- ---. → 8 (위로) -->
+          <line class="tree-edge hidden" data-edge="8" x1="144" y1="172" x2="144" y2="162"></line>
+
           <!-- 좌측 NODES -->
           <g class="tree-node" data-ch="T"><rect x="259" y="181.5" width="34" height="17" rx="2"></rect><text x="276" y="190">T</text></g>
           <g class="tree-node" data-ch="M"><rect x="215" y="181.5" width="34" height="17" rx="2"></rect><text x="232" y="190">M</text></g>
@@ -1337,6 +1421,23 @@
           <g class="tree-node" data-ch="L"><circle cx="452" cy="230" r="12"></circle><text x="452" y="230">L</text></g>
           <g class="tree-node" data-ch="P"><circle cx="408" cy="270" r="12"></circle><text x="408" y="270">P</text></g>
           <g class="tree-node" data-ch="J"><rect x="347" y="301.5" width="34" height="17" rx="2"></rect><text x="364" y="310">J</text></g>
+
+          <!-- 빈 노드 (비표준 부호) -->
+          <g class="tree-empty" data-code="..--"><rect x="354" y="146" width="20" height="8" rx="1"></rect></g>
+          <g class="tree-empty" data-code="----"><rect x="134" y="186" width="20" height="8" rx="1"></rect></g>
+          <g class="tree-empty" data-code="---."><circle cx="144" cy="178" r="6"></circle></g>
+
+          <!-- 숫자 NODES -->
+          <g class="tree-node num" data-ch="1"><rect x="391" y="301.5" width="34" height="17" rx="2"></rect><text x="408" y="310">1</text></g>
+          <g class="tree-node num" data-ch="2"><rect x="347" y="101.5" width="34" height="17" rx="2"></rect><text x="364" y="110">2</text></g>
+          <g class="tree-node num" data-ch="3"><rect x="435" y="101.5" width="34" height="17" rx="2"></rect><text x="452" y="110">3</text></g>
+          <g class="tree-node num" data-ch="4"><rect x="523" y="181.5" width="34" height="17" rx="2"></rect><text x="540" y="190">4</text></g>
+          <g class="tree-node num" data-ch="5"><circle cx="496" cy="230" r="12"></circle><text x="496" y="230">5</text></g>
+          <g class="tree-node num" data-ch="6"><circle cx="232" cy="310" r="12"></circle><text x="232" y="310">6</text></g>
+          <g class="tree-node num" data-ch="7"><circle cx="276" cy="110" r="12"></circle><text x="276" y="110">7</text></g>
+          <g class="tree-node num" data-ch="8"><circle cx="144" cy="150" r="12"></circle><text x="144" y="150">8</text></g>
+          <g class="tree-node num" data-ch="9"><circle cx="100" cy="190" r="12"></circle><text x="100" y="190">9</text></g>
+          <g class="tree-node num" data-ch="0"><rect x="127" y="221.5" width="34" height="17" rx="2"></rect><text x="144" y="230">0</text></g>
         </svg>
 
         <div class="tree-legend">
@@ -1532,7 +1633,7 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.05.02.11</span> ·
+      <span id="versionLabel">v2026.05.02.12</span> ·
       <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
@@ -2107,7 +2208,7 @@
   // 트리 시각 상태 갱신
   function treeRefreshVisual() {
     // 모든 노드/엣지 클래스 초기화
-    treeSvg.querySelectorAll('.tree-node').forEach(n => {
+    treeSvg.querySelectorAll('.tree-node, .tree-empty').forEach(n => {
       n.classList.remove('path', 'active');
     });
     treeSvg.querySelectorAll('.tree-edge').forEach(e => {
@@ -2133,31 +2234,54 @@
     const finalCh = treeLookup(treeInputBuf);
 
     if (path.length === 0) {
-      // 첫 신호조차 매칭 안 되는 경우는 없음 (E/T가 둘 다 있으니)
       treeCurrentLetterEl.textContent = '? ';
       treeCurrentLetterEl.classList.add('invalid');
       treeCurrentLetterEl.classList.remove('empty');
       return;
     }
 
-    path.forEach((ch, idx) => {
-      const node = treeSvg.querySelector('.tree-node[data-ch="' + ch + '"]');
-      const edge = treeSvg.querySelector('.tree-edge[data-edge="' + ch + '"]');
+    // 각 prefix를 노드/빈노드 + 엣지로 매핑하여 활성화
+    const totalSteps = treeInputBuf.length;
+    for (let i = 1; i <= totalSteps; i++) {
+      const prefix = treeInputBuf.slice(0, i);
+      const ch = REVERSE_MORSE[prefix];
+      const isFinal = (i === totalSteps);
+
+      // 노드 활성화 (글자 노드 또는 빈 노드)
+      let node;
+      if (ch) {
+        node = treeSvg.querySelector('.tree-node[data-ch="' + ch + '"]');
+      } else {
+        // 글자 매핑 없는 prefix → 빈 노드 찾기
+        node = treeSvg.querySelector('.tree-empty[data-code="' + prefix + '"]');
+      }
       if (node) {
-        if (idx === path.length - 1 && finalCh) {
+        if (isFinal && finalCh) {
           node.classList.add('active');
         } else {
           node.classList.add('path');
         }
       }
+
+      // 엣지 활성화 (글자 엣지 또는 빈 노드 엣지)
+      let edge;
+      if (ch) {
+        edge = treeSvg.querySelector('.tree-edge[data-edge="' + ch + '"]');
+      } else {
+        // 빈 노드로 가는 엣지 (data-edge="EMPTY_xxx")
+        const emptyMap = { '..--': 'EMPTY_DDDD', '----': 'EMPTY_4DASH' };
+        const edgeKey = emptyMap[prefix];
+        if (edgeKey) {
+          edge = treeSvg.querySelector('.tree-edge[data-edge="' + edgeKey + '"]');
+        }
+      }
       if (edge) edge.classList.add('path-active');
-    });
+    }
 
     if (finalCh) {
       treeCurrentLetterEl.textContent = '→ ' + finalCh;
       treeCurrentLetterEl.classList.remove('empty', 'invalid');
     } else {
-      // 입력했지만 트리에 없는 부호 (예: ····—은 5번째)
       treeCurrentLetterEl.textContent = '? ';
       treeCurrentLetterEl.classList.add('invalid');
       treeCurrentLetterEl.classList.remove('empty');
@@ -3239,7 +3363,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.05.02.11';
+  const APP_VERSION = '2026.05.02.12';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
