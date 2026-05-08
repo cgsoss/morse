@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_18.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_19.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -1072,7 +1072,7 @@
   }
 
   /* 숫자 노드 - 히든 모드 (specificity 높임) */
-  .tree-node.num text { fill: #291f1d; }
+  .tree-node.num text { fill: #352824; }
   .tree-node.num circle, .tree-node.num rect {
     stroke: #291f1d;
     fill: #151006;
@@ -1183,6 +1183,10 @@
         <span class="hb-icon">📖</span>
         <span class="hb-label">부호표</span>
       </button>
+      <button class="header-btn" id="hdrOptions" aria-label="옵션">
+        <span class="hb-icon">⚙</span>
+        <span class="hb-label">옵션</span>
+      </button>
     </div>
   </header>
 
@@ -1229,8 +1233,8 @@
         <div class="display-stack" id="displayStack">
           <div class="target-row hidden" id="targetRow">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="targetChar">A</div>
-            <div class="target-code" id="targetCode">.-</div>
+            <div class="target-char" id="targetChar">T</div>
+            <div class="target-code" id="targetCode">-</div>
           </div>
           <div class="input-row">
             <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
@@ -1271,40 +1275,6 @@
           <div class="lesson-list" id="lessonList"><button class="lesson-btn active"><span class="num">1.</span>기초 1 — E·T·A·N</button><button class="lesson-btn"><span class="num">2.</span>기초 2 — I·M·S·O</button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>SOS / 비상 신호</button></div>
         </div>
 
-        <div class="panel-label" id="settingsLabel" style="margin-top:14px;">
-          <span>설정 / Settings</span>
-          <span class="badge">control room</span>
-        </div>
-
-        <div class="setting">
-          <div class="setting-label">사운드<small>oscillator output</small></div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span class="wave" id="waveIndicator"><span></span><span></span><span></span><span></span><span></span></span>
-            <div class="toggle on" id="soundToggle"></div>
-          </div>
-        </div>
-        <div class="setting">
-          <div class="setting-label">속도 (WPM)<small>words per minute</small></div>
-          <div class="slider-wrap">
-            <input type="range" id="wpmSlider" min="5" max="35" value="15">
-            <span class="slider-val" id="wpmVal">15</span>
-          </div>
-        </div>
-        <div class="setting">
-          <div class="setting-label">주파수<small>tone frequency</small></div>
-          <div class="slider-wrap">
-            <input type="range" id="freqSlider" min="400" max="900" value="600" step="10">
-            <span class="slider-val" id="freqVal">600Hz</span>
-          </div>
-        </div>
-        <div class="setting">
-          <div class="setting-label">볼륨<small>output level</small></div>
-          <div class="slider-wrap">
-            <input type="range" id="volSlider" min="0" max="100" value="40">
-            <span class="slider-val" id="volVal">40%</span>
-          </div>
-        </div>
-
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
           클릭=소리 재생 · <span id="refHint">전체 글자</span>
@@ -1340,14 +1310,7 @@
             </radialgradient>
           </defs>
 
-          <!-- 안테나: 점 + 수직 막대 + WiFi 호 -->
-          <g id="treeAntenna" style="cursor: pointer;">
-            <circle class="tree-antenna-tip" cx="320" cy="190" r="2"></circle>
-            <line class="tree-antenna" x1="320" y1="188" x2="320" y2="172"></line>
-            <path class="tree-antenna" d="M 316 168 Q 320 166 324 168"></path>
-            <path class="tree-antenna" d="M 314 165 Q 320 161 326 165" opacity="0.7"></path>
-            <path class="tree-antenna" d="M 311 162 Q 320 156 329 162" opacity="0.45"></path>
-          </g>
+          <!-- 안테나는 SVG 끝(z-order 위)으로 이동 -->
 
           <!-- 좌측(T 계열) EDGES -->
           <line class="tree-edge" data-edge="T" x1="320" y1="190" x2="293" y2="190"></line>
@@ -1453,6 +1416,15 @@
           <g class="tree-node num" data-ch="8"><circle cx="144" cy="150" r="12"></circle><text x="144" y="150">8</text></g>
           <g class="tree-node num" data-ch="9"><circle cx="100" cy="190" r="12"></circle><text x="100" y="190">9</text></g>
           <g class="tree-node num" data-ch="0"><rect x="127" y="221.5" width="34" height="17" rx="2"></rect><text x="144" y="230">0</text></g>
+
+          <!-- 안테나: 점 + 수직 막대 + WiFi 호 (SVG 끝 = z-order 위, 라인이 점 뒤로 지나감) -->
+          <g id="treeAntenna" style="cursor: pointer;">
+            <circle class="tree-antenna-tip" cx="320" cy="190" r="2"></circle>
+            <line class="tree-antenna" x1="320" y1="190" x2="320" y2="172"></line>
+            <path class="tree-antenna" d="M 316 168 Q 320 166 324 168"></path>
+            <path class="tree-antenna" d="M 314 165 Q 320 161 326 165" opacity="0.7"></path>
+            <path class="tree-antenna" d="M 311 162 Q 320 156 329 162" opacity="0.45"></path>
+          </g>
         </svg>
 
         <div class="tree-legend">
@@ -1648,7 +1620,7 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.05.02.21</span> ·
+      <span id="versionLabel">v2026.05.02.24</span> ·
       <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
@@ -1695,6 +1667,48 @@
     <div class="modal-actions" style="margin-top:18px;">
       <button class="btn primary" id="profileSaveBtn">저장</button>
       <button class="btn" id="profileCancelBtn">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Options modal (글로벌 설정) ═══ -->
+<div class="modal-overlay hidden" id="optionsModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-corner tl"></div><div class="modal-corner tr"></div>
+    <div class="modal-corner bl"></div><div class="modal-corner br"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--line);">
+      <div class="modal-title" style="margin:0;">설정 / <b style="color:var(--amber); font-weight:500;">Settings</b></div>
+      <button id="optionsClose" style="background:transparent; border:1px solid var(--line); color:var(--ink-dim); width:28px; height:28px; border-radius:2px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;">✕</button>
+    </div>
+
+    <div class="setting">
+      <div class="setting-label">사운드<small>oscillator output</small></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="wave" id="waveIndicator"><span></span><span></span><span></span><span></span><span></span></span>
+        <div class="toggle on" id="soundToggle"></div>
+      </div>
+    </div>
+    <div class="setting">
+      <div class="setting-label">속도 (WPM)<small>words per minute</small></div>
+      <div class="slider-wrap">
+        <input type="range" id="wpmSlider" min="5" max="35" value="15">
+        <span class="slider-val" id="wpmVal">15</span>
+      </div>
+    </div>
+    <div class="setting">
+      <div class="setting-label">주파수<small>tone frequency</small></div>
+      <div class="slider-wrap">
+        <input type="range" id="freqSlider" min="400" max="900" value="600" step="10">
+        <span class="slider-val" id="freqVal">600Hz</span>
+      </div>
+    </div>
+    <div class="setting">
+      <div class="setting-label">볼륨<small>output level</small></div>
+      <div class="slider-wrap">
+        <input type="range" id="volSlider" min="0" max="100" value="40">
+        <span class="slider-val" id="volVal">40%</span>
+      </div>
     </div>
   </div>
 </div>
@@ -2676,6 +2690,25 @@
   });
   $('profileEditBtn').addEventListener('click', () => openProfileModal());
 
+  // ─── Options modal (글로벌 설정) ───
+  const optionsModal = $('optionsModal');
+  $('hdrOptions').addEventListener('click', () => {
+    optionsModal.classList.remove('hidden');
+  });
+  $('optionsClose').addEventListener('click', () => {
+    optionsModal.classList.add('hidden');
+  });
+  // 외부 클릭 시 닫기
+  optionsModal.addEventListener('click', e => {
+    if (e.target === optionsModal) optionsModal.classList.add('hidden');
+  });
+  // ESC 키로 닫기
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !optionsModal.classList.contains('hidden')) {
+      optionsModal.classList.add('hidden');
+    }
+  });
+
   // ════════════════════════════════════════════════════════════
   // ─────── CHALLENGE MODE ───────
   // ════════════════════════════════════════════════════════════
@@ -3384,7 +3417,7 @@
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.05.02.21';
+  const APP_VERSION = '2026.05.02.24';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
