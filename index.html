@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_31.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_19.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -26,7 +26,7 @@
 <title>Morse / 전신 연습기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="file:///C:/Users/cg/Downloads/index_files/css2" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
   :root {
     --bg: #0e0b07;
@@ -1199,16 +1199,16 @@
   </div>
 
   <div class="tabs">
-    <button class="tab" data-mode="free"><span class="num">i.</span>자유 송신</button>
-    <button class="tab active" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
+    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
+    <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
     <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
     <button class="tab" data-mode="ranking"><span class="num">iv.</span>랭킹</button>
   </div>
 
   <!-- 연습 모드 서브 토글: 연습 모드일 때만 표시 -->
-  <div class="practice-sub-toggle" id="practiceSubToggle">
-    <button data-sub="lesson" class="active">레슨 연습 / Lesson</button>
-    <button data-sub="tree" class="">트리 연습 / Tree</button>
+  <div class="practice-sub-toggle hidden" id="practiceSubToggle">
+    <button data-sub="lesson" class="">레슨 연습 / Lesson</button>
+    <button data-sub="tree" class="active">트리 연습 / Tree</button>
   </div>
 
   <section id="mode-main" class="mode">
@@ -1219,11 +1219,11 @@
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
         <div class="panel-label">
-          <span id="modeTitle">연습 모드 / Practice</span>
-          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
+          <span id="modeTitle">자유 송신 / Free Transmission</span>
+          <span class="badge" id="modeSubtitle">no target · just send</span>
         </div>
 
-        <div class="stats-bar" id="statsBar">
+        <div class="stats-bar hidden" id="statsBar">
           <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
           <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
           <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
@@ -1231,15 +1231,15 @@
         </div>
 
         <div class="display-stack" id="displayStack">
-          <div class="target-row" id="targetRow">
+          <div class="target-row hidden" id="targetRow">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="targetChar">N</div>
-            <div class="target-code" id="targetCode">-.</div>
+            <div class="target-char" id="targetChar">T</div>
+            <div class="target-code" id="targetCode">-</div>
           </div>
           <div class="input-row">
-            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
+            <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">T T T T T T T T T T T T T T </div>
+            <div class="input-display text empty" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
           </div>
         </div>
 
@@ -1251,12 +1251,12 @@
           </div>
         </div>
 
-        <div class="controls hidden" id="freeControls">
+        <div class="controls" id="freeControls">
           <button class="btn" id="clearBtn">CLEAR</button>
           <button class="btn" id="spaceBtn">단어 공백</button>
           <button class="btn primary" id="playbackBtn">▷ 재생</button>
         </div>
-        <div class="controls" id="practiceControls">
+        <div class="controls hidden" id="practiceControls">
           <button class="btn" id="practiceSkip">SKIP →</button>
           <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
           <button class="btn" id="practiceReset">RESET</button>
@@ -1267,7 +1267,7 @@
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
-        <div id="lessonSection" class="">
+        <div id="lessonSection" class="hidden">
           <div class="panel-label">
             <span>레슨 / Lessons</span>
             <span class="badge">curriculum</span>
@@ -1277,9 +1277,9 @@
 
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
-          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
+          클릭=소리 재생 · <span id="refHint">전체 글자</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson current" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item in-lesson" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item in-lesson" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item in-lesson" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item in-lesson" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item in-lesson" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item in-lesson" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item in-lesson" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item in-lesson" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item in-lesson" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item in-lesson" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item in-lesson" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item in-lesson" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item in-lesson" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item in-lesson" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item in-lesson" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item in-lesson" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item in-lesson" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item in-lesson" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item in-lesson" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item in-lesson" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item in-lesson" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item in-lesson" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item in-lesson" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item in-lesson" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item in-lesson" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item in-lesson" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item in-lesson" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item in-lesson" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item in-lesson" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item in-lesson" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item in-lesson" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item in-lesson" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
@@ -1708,42 +1708,6 @@
       <div class="slider-wrap">
         <input type="range" id="volSlider" min="0" max="100" value="40">
         <span class="slider-val" id="volVal">40%</span>
-      </div>
-    </div>
-
-    <!-- ─── 외부 신호기 (마이크 입력 감지) ─── -->
-    <div class="setting" style="border-top:1px solid var(--line); padding-top:16px; margin-top:8px;">
-      <div class="setting-label">외부 신호기<small>external key via mic input</small></div>
-      <div class="toggle on" id="extKeyToggle"></div>
-    </div>
-    <div id="extKeyPanel" class="" style="margin-top:-8px; padding:12px 14px; background:rgba(255,179,71,0.04); border:1px solid var(--line); border-radius:2px;">
-      <div id="extKeyStatus" style="font-size:10px; letter-spacing:0.1em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:10px;">● 감지 중 / DETECTING</div>
-
-      <!-- 실시간 레벨 미터 -->
-      <div style="font-size:10px; letter-spacing:0.1em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:6px;">입력 레벨 / Input Level</div>
-      <div style="position:relative; height:14px; background:rgba(0,0,0,0.3); border:1px solid var(--line); border-radius:2px; overflow:hidden; margin-bottom:12px;">
-        <div id="extKeyMeter" style="height: 100%; width: 4.94066e-321%; background: var(--amber); transition: width 50ms linear;"></div>
-        <div id="extKeyThreshLine" style="position: absolute; top: 0px; bottom: 0px; width: 2px; background: rgb(255, 107, 107); left: 33.3333%; pointer-events: none;"></div>
-      </div>
-
-      <!-- 임계값 슬라이더 -->
-      <div style="font-size:10px; letter-spacing:0.1em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:6px; display:flex; justify-content:space-between;">
-        <span>감도 임계값 / Threshold</span>
-        <span id="extKeyThreshVal" style="color:var(--amber);">0.100</span>
-      </div>
-      <input type="range" id="extKeyThreshSlider" min="50" max="500" value="150" style="width:100%; margin-bottom:12px;">
-
-      <!-- 캘리브레이션 버튼 -->
-      <button id="extKeyCalibBtn" class="btn" style="width:100%;">
-        자동 조정 / Auto-Calibrate
-      </button>
-
-      <div style="font-size:9px; letter-spacing:0.05em; color:var(--ink-dim); margin-top:10px; line-height:1.5;">
-        ※ 3.5mm 잭을 헤드폰 단자에 꽂고 토글을 켜면 마이크 권한을 요청합니다.<br>
-        ※ <b>임펄스 카운팅 방식</b>: 키를 누를 때와 뗄 때의 큰 신호를 감지해서 상태를 토글합니다.<br>
-        ※ 미터 색: <span style="color:var(--amber);">노랑</span>=대기, <span style="color:#ff6b6b;">빨강</span>=임펄스 감지, <span style="color:#6dd47e;">초록</span>=키 ON 상태<br>
-        ※ 잘 인식되지 않으면 자동 조정을 누르거나 임계값을 직접 조정하세요.<br>
-        ※ ON 상태로 2초 지나면 자동 복구됩니다.
       </div>
     </div>
   </div>
@@ -2743,390 +2707,6 @@
     if (e.key === 'Escape' && !optionsModal.classList.contains('hidden')) {
       optionsModal.classList.add('hidden');
     }
-  });
-
-  // ════════════════════════════════════════════════════════════
-  // ─────── EXTERNAL KEY (마이크 입력으로 외부 신호기 감지) ───────
-  // ════════════════════════════════════════════════════════════
-  const extKey = {
-    enabled: false,
-    stream: null,
-    audioCtx: null,
-    analyser: null,
-    dataArr: null,
-    rafId: null,
-    threshold: 0.150,           // 임펄스용으로 기본값 상향 (잔류 무시)
-    isOn: false,                // 현재 키가 눌린 상태인지 (토글 상태)
-    inImpulse: false,           // 현재 임펄스 진행 중인지 (임계값 위에 머물고 있는 동안)
-    impulseEndedAt: 0,          // 임펄스가 끝난(임계값 아래로 떨어진) 시각
-    minGapMs: 200,              // 임펄스 종료 후 이만큼 지나야 다음 임펄스 받음 (잔류 노이즈 + 바운스 방어)
-    autoReleaseMs: 2000,        // ON 상태로 들어간 후 이만큼 지나도 OFF 임펄스 안 오면 강제 복구
-    onStartedAt: 0,             // ON 상태로 진입한 시각
-    smoothedLevel: 0,
-    calibrating: false
-  };
-
-  const extKeyToggle = $('extKeyToggle');
-  const extKeyPanel = $('extKeyPanel');
-  const extKeyStatus = $('extKeyStatus');
-  const extKeyMeter = $('extKeyMeter');
-  const extKeyThreshLine = $('extKeyThreshLine');
-  const extKeyThreshSlider = $('extKeyThreshSlider');
-  const extKeyThreshVal = $('extKeyThreshVal');
-  const extKeyCalibBtn = $('extKeyCalibBtn');
-
-  // localStorage에서 설정 복원 (임펄스 방식 전용 키)
-  try {
-    const savedThresh = parseFloat(localStorage.getItem('extKeyThreshold_v2'));
-    if (!isNaN(savedThresh) && savedThresh > 0 && savedThresh < 1) {
-      extKey.threshold = savedThresh;
-    }
-  } catch(_) {}
-  updateExtKeyThreshUI();
-
-  function updateExtKeyThreshUI() {
-    // threshold (0.001 ~ 0.500) → slider (1 ~ 500)
-    const sliderVal = Math.round(extKey.threshold * 1000);
-    extKeyThreshSlider.value = sliderVal;
-    extKeyThreshVal.textContent = extKey.threshold.toFixed(3);
-    // 미터 위 빨간 선 위치 (threshold를 0~0.3 범위로 시각화)
-    const pct = Math.min(100, (extKey.threshold / 0.3) * 100);
-    extKeyThreshLine.style.left = pct + '%';
-  }
-
-  function setExtKeyStatus(text, isError) {
-    extKeyStatus.textContent = text;
-    extKeyStatus.style.color = isError ? '#ff6b6b' : 'var(--ink-dim)';
-  }
-
-  // 신호기 입력 → 활성 모드에 맞는 press 핸들러 호출
-  function extKeyPressDown() {
-    if (activeMode === 'free') {
-      pressDown();
-      const el = $('txButton'); if (el) el.classList.add('pressed');
-    } else if (activeMode === 'practice') {
-      if (typeof practiceSubMode !== 'undefined' && practiceSubMode === 'tree') {
-        treePressDown();
-        const el = $('treeTxButton'); if (el) el.classList.add('pressed');
-      } else {
-        pressDown();
-        const el = $('txButton'); if (el) el.classList.add('pressed');
-      }
-    } else if (activeMode === 'challenge') {
-      chPressDown();
-      const el = $('chTxButton'); if (el) el.classList.add('pressed');
-    }
-    // ranking, reference 모드에서는 입력 무시
-  }
-  function extKeyPressUp() {
-    if (activeMode === 'free') {
-      pressUp();
-      const el = $('txButton'); if (el) el.classList.remove('pressed');
-    } else if (activeMode === 'practice') {
-      if (typeof practiceSubMode !== 'undefined' && practiceSubMode === 'tree') {
-        treePressUp();
-        const el = $('treeTxButton'); if (el) el.classList.remove('pressed');
-      } else {
-        pressUp();
-        const el = $('txButton'); if (el) el.classList.remove('pressed');
-      }
-    } else if (activeMode === 'challenge') {
-      chPressUp();
-      const el = $('chTxButton'); if (el) el.classList.remove('pressed');
-    }
-  }
-
-  // 마이크 입력 활성화
-  async function enableExtKey() {
-    setExtKeyStatus('● 마이크 권한 요청 중...');
-    console.log('[extKey] enableExtKey 시작');
-
-    // 환경 체크
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setExtKeyStatus('✕ 이 브라우저는 마이크 입력을 지원하지 않습니다', true);
-      console.error('[extKey] mediaDevices.getUserMedia 미지원');
-      extKey.enabled = false;
-      extKeyToggle.classList.remove('on');
-      return;
-    }
-    // file:// 또는 비-secure context 체크
-    if (window.isSecureContext === false) {
-      setExtKeyStatus('✕ HTTPS 또는 localhost에서만 작동합니다 (file:// 불가)', true);
-      console.error('[extKey] insecure context. location:', window.location.href);
-      extKey.enabled = false;
-      extKeyToggle.classList.remove('on');
-      return;
-    }
-
-    try {
-      // 신호기 펄스를 죽이지 않으려면 모든 후처리 끄기
-      extKey.stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: false,
-          noiseSuppression: false,
-          autoGainControl: false
-        }
-      });
-      console.log('[extKey] 마이크 스트림 획득 성공');
-    } catch (e) {
-      console.error('[extKey] getUserMedia 실패:', e.name, e.message);
-      let msg = '✕ 마이크 권한 거부됨';
-      if (e.name === 'NotAllowedError') msg = '✕ 마이크 권한이 거부되었습니다';
-      else if (e.name === 'NotFoundError') msg = '✕ 마이크 장치를 찾을 수 없습니다';
-      else if (e.name === 'NotReadableError') msg = '✕ 마이크가 다른 앱에서 사용 중입니다';
-      else if (e.name === 'SecurityError') msg = '✕ 보안 컨텍스트 오류 (HTTPS 필요)';
-      else msg = '✕ 마이크 오류: ' + e.name;
-      setExtKeyStatus(msg, true);
-      extKey.enabled = false;
-      extKeyToggle.classList.remove('on');
-      return;
-    }
-
-    try {
-      // 메인 앱의 audioCtx 재사용 (이중 컨텍스트 방지)
-      ensureAudio(); // 메인 audioCtx 보장
-      extKey.audioCtx = audioCtx;
-      if (extKey.audioCtx.state === 'suspended') {
-        try { await extKey.audioCtx.resume(); } catch(_) {}
-      }
-
-      const source = extKey.audioCtx.createMediaStreamSource(extKey.stream);
-      extKey.analyser = extKey.audioCtx.createAnalyser();
-      extKey.analyser.fftSize = 512;
-      extKey.analyser.smoothingTimeConstant = 0;
-      source.connect(extKey.analyser);
-      extKey.dataArr = new Float32Array(extKey.analyser.fftSize);
-      console.log('[extKey] AudioContext/Analyser 설정 완료');
-    } catch (e) {
-      console.error('[extKey] AudioContext 설정 실패:', e);
-      setExtKeyStatus('✕ 오디오 컨텍스트 오류: ' + e.message, true);
-      if (extKey.stream) {
-        extKey.stream.getTracks().forEach(t => t.stop());
-        extKey.stream = null;
-      }
-      extKey.enabled = false;
-      extKeyToggle.classList.remove('on');
-      return;
-    }
-
-    setExtKeyStatus('● 감지 중 / DETECTING');
-    extKey.isOn = false;
-    runExtKeyLoop();
-  }
-
-  // 마이크 입력 비활성화
-  function disableExtKey() {
-    if (extKey.rafId) {
-      cancelAnimationFrame(extKey.rafId);
-      extKey.rafId = null;
-    }
-    if (extKey.stream) {
-      extKey.stream.getTracks().forEach(t => t.stop());
-      extKey.stream = null;
-    }
-    extKey.analyser = null;
-    if (extKey.isOn) {
-      // 모든 모드의 press 상태를 안전하게 해제
-      try { if (typeof isPressed !== 'undefined' && isPressed) pressUp(); } catch(_) {}
-      try { if (typeof treePressed !== 'undefined' && treePressed) treePressUp(); } catch(_) {}
-      try { if (typeof chIsPressed !== 'undefined' && chIsPressed) chPressUp(); } catch(_) {}
-      ['txButton', 'treeTxButton', 'chTxButton'].forEach(id => {
-        const el = $(id); if (el) el.classList.remove('pressed');
-      });
-      extKey.isOn = false;
-    }
-    extKeyMeter.style.width = '0%';
-    setExtKeyStatus('─ 대기 중 / IDLE');
-  }
-
-  // RMS 계산
-  function calcRMS() {
-    if (!extKey.analyser || !extKey.dataArr) return 0;
-    extKey.analyser.getFloatTimeDomainData(extKey.dataArr);
-    let sum = 0;
-    for (let i = 0; i < extKey.dataArr.length; i++) {
-      sum += extKey.dataArr[i] * extKey.dataArr[i];
-    }
-    return Math.sqrt(sum / extKey.dataArr.length);
-  }
-
-  // 메인 감지 루프 — 임펄스 카운팅 방식 (상태 머신)
-  //
-  // 임펄스 1회는 여러 프레임에 걸쳐 임계값 위에 머물 수 있음.
-  // 따라서 "임계값 위로 올라감" → "임계값 아래로 내려감" → 잠시 대기 → 다음 임펄스 받을 수 있음
-  // 즉 임펄스의 "상승 에지"만 토글로 카운트한다.
-  function runExtKeyLoop() {
-    if (!extKey.enabled) return;
-    const rms = calcRMS();
-
-    // 미터용 부드러운 값
-    if (rms > extKey.smoothedLevel) {
-      extKey.smoothedLevel = rms;
-    } else {
-      extKey.smoothedLevel = extKey.smoothedLevel * 0.85 + rms * 0.15;
-    }
-    const pct = Math.min(100, (extKey.smoothedLevel / 0.3) * 100);
-    extKeyMeter.style.width = pct + '%';
-    if (extKey.isOn) {
-      extKeyMeter.style.background = '#6dd47e'; // 녹색 = 키 ON
-    } else if (extKey.inImpulse) {
-      extKeyMeter.style.background = '#ff6b6b'; // 빨강 = 임펄스 진행 중
-    } else {
-      extKeyMeter.style.background = 'var(--amber)';
-    }
-
-    if (extKey.calibrating) {
-      extKey.rafId = requestAnimationFrame(runExtKeyLoop);
-      return;
-    }
-
-    const now = performance.now();
-    const aboveThreshold = rms >= extKey.threshold;
-    // 종료 임계값은 시작 임계값보다 약간 낮음 (히스테리시스, 임펄스 꼬리 안정적 검출)
-    const belowExitThreshold = rms < extKey.threshold * 0.6;
-
-    if (!extKey.inImpulse) {
-      // 대기 → 임펄스 시작 검출
-      // 단, 직전 임펄스 종료 후 minGapMs 지나야 함
-      if (aboveThreshold && (now - extKey.impulseEndedAt) >= extKey.minGapMs) {
-        extKey.inImpulse = true;
-        // 상승 에지에서 토글
-        if (!extKey.isOn) {
-          extKey.isOn = true;
-          extKey.onStartedAt = now;
-          if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume().catch(() => {});
-          }
-          extKeyPressDown();
-        } else {
-          extKey.isOn = false;
-          extKeyPressUp();
-        }
-      }
-    } else {
-      // 임펄스 진행 중 → 종료 검출
-      if (belowExitThreshold) {
-        extKey.inImpulse = false;
-        extKey.impulseEndedAt = now;
-      }
-    }
-
-    // 자동 복구
-    if (extKey.isOn && (now - extKey.onStartedAt) >= extKey.autoReleaseMs) {
-      extKey.isOn = false;
-      extKeyPressUp();
-      setExtKeyStatus('● 감지 중 (자동 복구됨) / DETECTING', false);
-      setTimeout(() => {
-        if (extKey.enabled && !extKey.calibrating) setExtKeyStatus('● 감지 중 / DETECTING');
-      }, 1500);
-    }
-
-    extKey.rafId = requestAnimationFrame(runExtKeyLoop);
-  }
-
-  // 토글 클릭
-  extKeyToggle.addEventListener('click', async () => {
-    extKey.enabled = !extKey.enabled;
-    extKeyToggle.classList.toggle('on', extKey.enabled);
-    if (extKey.enabled) {
-      // 토글은 사용자 제스처이므로 이 시점에 오디오 언락 (외부 신호기 입력은 제스처가 아니라 직접 톤 재생 못 할 수 있음)
-      unlockAudioOnce();
-      ensureAudio();
-      if (audioCtx && audioCtx.state === 'suspended') {
-        try { await audioCtx.resume(); } catch(_) {}
-      }
-      // 켤 때는 항상 패널을 보여줌 (에러 메시지든 정상 메시지든)
-      extKeyPanel.classList.remove('hidden');
-      await enableExtKey();
-      // enableExtKey 안에서 실패하면 enabled=false로 바뀜.
-      if (!extKey.enabled) {
-        extKeyToggle.classList.remove('on');
-      }
-    } else {
-      disableExtKey();
-      extKeyPanel.classList.add('hidden');
-    }
-  });
-
-  // 임계값 슬라이더
-  extKeyThreshSlider.addEventListener('input', e => {
-    extKey.threshold = parseInt(e.target.value, 10) / 1000;
-    extKeyThreshVal.textContent = extKey.threshold.toFixed(3);
-    const pct = Math.min(100, (extKey.threshold / 0.3) * 100);
-    extKeyThreshLine.style.left = pct + '%';
-    try { localStorage.setItem('extKeyThreshold_v2', String(extKey.threshold)); } catch(_) {}
-  });
-
-  // 자동 캘리브레이션 — 임펄스 방식
-  // 누름 임펄스와 뗌 임펄스를 모두 측정해서 둘 중 약한 쪽도 잡을 수 있도록
-  extKeyCalibBtn.addEventListener('click', async () => {
-    if (!extKey.enabled || !extKey.analyser) {
-      setExtKeyStatus('✕ 먼저 외부 신호기 토글을 켜세요', true);
-      return;
-    }
-    extKey.calibrating = true;
-    extKeyCalibBtn.disabled = true;
-
-    // 1단계: 배경/잔류 노이즈 측정 (2초)
-    setExtKeyStatus('① 가만히 계세요... (2초)');
-    const bgSamples = [];
-    const t1 = performance.now();
-    while (performance.now() - t1 < 2000) {
-      bgSamples.push(calcRMS());
-      await new Promise(r => setTimeout(r, 20));
-    }
-    const bgMax = Math.max(...bgSamples);
-
-    // 2단계: 누름 + 뗌 임펄스 측정 (1초 정도 누르고 떼라고 안내)
-    setExtKeyStatus('② 키를 한 번 누르고 1초 후 떼세요... (5초 안에)');
-    const impulses = []; // 검출된 임펄스 RMS 값들
-    const t2 = performance.now();
-    const minImpulseLevel = bgMax * 2 + 0.02; // 배경의 2배 + 마진
-    let lastImpulseTime = -1000;
-
-    while (performance.now() - t2 < 5000) {
-      const r = calcRMS();
-      const now = performance.now();
-      // 새 임펄스 (이전 임펄스로부터 충분히 떨어진 시점에서 큰 값)
-      if (r >= minImpulseLevel && (now - lastImpulseTime) >= 100) {
-        impulses.push(r);
-        lastImpulseTime = now;
-      }
-      // 임펄스 2개 잡았고 1초 지나면 종료
-      if (impulses.length >= 2 && (now - lastImpulseTime) >= 800) break;
-      await new Promise(r => setTimeout(r, 15));
-    }
-
-    if (impulses.length === 0) {
-      setExtKeyStatus('✕ 임펄스 감지 실패. 신호기를 더 세게 누르고 다시 시도하세요', true);
-      extKey.calibrating = false;
-      extKeyCalibBtn.disabled = false;
-      return;
-    }
-
-    // 임펄스들 중 가장 약한 것이 임계값을 넘도록 설정
-    const minImpulse = Math.min(...impulses);
-    const maxImpulse = Math.max(...impulses);
-    // 임계값 = (배경최댓값과 가장 약한 임펄스 사이)의 70% 지점 (잔류 확실히 무시)
-    // 단, 최소 0.10은 보장 (잔류 노이즈가 가끔 0.05~0.08까지 튀는 것 방어)
-    let newThresh = bgMax + (minImpulse - bgMax) * 0.7;
-    newThresh = Math.max(0.10, newThresh);   // 최소 보장
-    newThresh = Math.min(0.5, newThresh);    // 최대 제한
-    extKey.threshold = newThresh;
-    updateExtKeyThreshUI();
-    try { localStorage.setItem('extKeyThreshold_v2', String(extKey.threshold)); } catch(_) {}
-
-    const detected = impulses.length === 1 ? '1개 (누름만)'
-                   : impulses.length === 2 ? '2개 (누름+뗌)'
-                   : `${impulses.length}개`;
-    setExtKeyStatus(`✓ 조정 완료 — 임펄스 ${detected} / 배경 ${bgMax.toFixed(3)} / 신호 ${minImpulse.toFixed(3)}~${maxImpulse.toFixed(3)}`);
-    extKey.calibrating = false;
-    extKeyCalibBtn.disabled = false;
-
-    // 4초 후 상태 텍스트 복귀
-    setTimeout(() => {
-      if (extKey.enabled && !extKey.calibrating) setExtKeyStatus('● 감지 중 / DETECTING');
-    }, 4000);
   });
 
   // ════════════════════════════════════════════════════════════
