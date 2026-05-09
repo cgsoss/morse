@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_19.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_34.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -26,7 +26,7 @@
 <title>Morse / 전신 연습기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="./index_files/css2" rel="stylesheet">
+<link href="file:///C:/Users/cg/Downloads/index_files/css2" rel="stylesheet">
 <style>
   :root {
     --bg: #0e0b07;
@@ -1195,7 +1195,7 @@
     <span class="sep">·</span>
     <span>FREQ <span id="freqDisplay">600</span> Hz</span>
     <span class="sep">·</span>
-    <span>WPM <span id="wpmDisplay">15</span></span>
+    <span>WPM <span id="wpmDisplay">17</span></span>
   </div>
 
   <div class="tabs">
@@ -1692,8 +1692,8 @@
     <div class="setting">
       <div class="setting-label">속도 (WPM)<small>words per minute</small></div>
       <div class="slider-wrap">
-        <input type="range" id="wpmSlider" min="5" max="35" value="15">
-        <span class="slider-val" id="wpmVal">15</span>
+        <input type="range" id="wpmSlider" min="5" max="35" value="17">
+        <span class="slider-val" id="wpmVal">17</span>
       </div>
     </div>
     <div class="setting">
@@ -1856,7 +1856,7 @@
   }
   function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
-  let wpm = 15;
+  let wpm = 17;
   function ditMs() { return 1200 / wpm; }
   function dahMs() { return ditMs() * 3; }
   function ditDahThreshold() { return ditMs() * 2; }
@@ -2038,14 +2038,14 @@
   attachKeyEvents(txButton);
 
   document.addEventListener('keydown', e => {
-    if (e.code === 'Space' && !e.repeat) {
+    if ((e.code === 'Space' || e.code === 'BracketLeft') && !e.repeat) {
       if (activeMode === 'free' || activeMode === 'practice') {
         e.preventDefault(); pressDown(); txButton.classList.add('pressed');
       }
     }
   });
   document.addEventListener('keyup', e => {
-    if (e.code === 'Space') {
+    if (e.code === 'Space' || e.code === 'BracketLeft') {
       if (activeMode === 'free' || activeMode === 'practice') {
         e.preventDefault(); pressUp(); txButton.classList.remove('pressed');
       }
@@ -2402,7 +2402,7 @@
 
   // 스페이스바도 트리 연습에서 작동
   document.addEventListener('keydown', e => {
-    if (e.code === 'Space' && !e.repeat) {
+    if ((e.code === 'Space' || e.code === 'BracketLeft') && !e.repeat) {
       if (activeMode === 'practice' && practiceSubMode === 'tree') {
         e.preventDefault();
         treePressDown();
@@ -2411,7 +2411,7 @@
     }
   });
   document.addEventListener('keyup', e => {
-    if (e.code === 'Space') {
+    if (e.code === 'Space' || e.code === 'BracketLeft') {
       if (activeMode === 'practice' && practiceSubMode === 'tree') {
         e.preventDefault();
         treePressUp();
@@ -3048,7 +3048,7 @@
 
   // spacebar for challenge
   document.addEventListener('keydown', e => {
-    if (e.code === 'Space' && !e.repeat && activeMode === 'challenge') {
+    if ((e.code === 'Space' || e.code === 'BracketLeft') && !e.repeat && activeMode === 'challenge') {
       e.preventDefault();
       if (ch.locked || !ch.active) return;
       chPressDown();
@@ -3056,7 +3056,7 @@
     }
   });
   document.addEventListener('keyup', e => {
-    if (e.code === 'Space' && activeMode === 'challenge') {
+    if ((e.code === 'Space' || e.code === 'BracketLeft') && activeMode === 'challenge') {
       e.preventDefault();
       if (chIsPressed) {
         chPressUp();
