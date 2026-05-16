@@ -1906,20 +1906,32 @@
 
   // "연속 펄스 = 길게 누름" 로직
   // 모듈이 길게 눌러도 짧은 펄스를 반복 발사하는 동작에 대응.
-  // keyup 즉시 처리하지 않고 PULSE_GAP_MS 만큼 대기 → 그 사이 새 keydown 오면 계속 누름으로 간주.
+  // keyup 시 즉시 finalize 처리. PULSE_GAP_MS 이내 새 keydown 오면 방금 추가한 부호 취소하고 누름 상태 복원.
   const PULSE_GAP_MS = 50;
-  let releaseTimer = null;
-  let trueDownTime = 0;  // 실제 누름 시작 시각 (펄스 연속 시 변경 안 됨)
+  let trueDownTime = 0;             // 실제 누름 시작 시각
+  let justFinalized = false;        // 방금 finalize됨 (펄스 취소 대기 중)
+  let finalizeRevertAt = 0;         // 펄스 취소 가능 시한
 
   function pressDown() {
     if (activeMode === 'reference') return;
     if (inputLocked) return;
-    // 대기 중인 release 타이머가 있으면 → 계속 누름. 새 누름 시작 아님.
-    if (releaseTimer) {
-      clearTimeout(releaseTimer);
-      releaseTimer = null;
+
+    // 방금 finalize 했고 PULSE_GAP_MS 이내라면 → 펄스 병합
+    if (justFinalized && performance.now() < finalizeRevertAt) {
+      // 마지막 부호 취소
+      if (inputBuf.length > 0) {
+        inputBuf = inputBuf.slice(0, -1);
+      }
+      justFinalized = false;
+      // 이미 잡혀있던 타이머 취소 (검사/확정이 일어나면 안 됨)
+      clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
+      // 누름 상태 복원 (trueDownTime은 이전 누름 시작 시각 유지)
+      isPressed = true;
+      startTone();
+      refreshInputDisplay();
       return;
     }
+
     if (isPressed) return;
     // 새 누름 시작
     isPressed = true;
@@ -1932,26 +1944,21 @@
 
   function pressUp() {
     if (!isPressed) return;
-    // 즉시 떼지 않고 PULSE_GAP_MS 동안 새 keydown 기다림
-    if (releaseTimer) clearTimeout(releaseTimer);
-    releaseTimer = setTimeout(() => {
-      releaseTimer = null;
-      finalizeRelease();
-    }, PULSE_GAP_MS);
-  }
-
-  function finalizeRelease() {
-    if (!isPressed) return;
     isPressed = false;
     stopTone();
-    const dur = performance.now() - trueDownTime - PULSE_GAP_MS;  // 대기 시간 제외
+    const dur = performance.now() - trueDownTime;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     inputBuf += symbol;
     refreshInputDisplay();
 
+    // PULSE_GAP_MS 이내 새 keydown 오면 이 부호 취소 가능
+    justFinalized = true;
+    finalizeRevertAt = performance.now() + PULSE_GAP_MS;
+
     if (activeMode === 'free') {
-      letterTimer = setTimeout(commitFreeLetter, letterGapMs());
+      letterTimer = setTimeout(() => { justFinalized = false; commitFreeLetter(); }, letterGapMs());
       wordTimer = setTimeout(() => {
+        justFinalized = false;
         commitFreeLetter();
         if (decodedBuf && !decodedBuf.endsWith(' ')) {
           decodedBuf += ' ';
@@ -1959,7 +1966,13 @@
         }
       }, wordGapMs());
     } else if (activeMode === 'practice') {
-      practiceTimer = setTimeout(checkPracticeAnswer, letterGapMs());
+      // 즉시 채점: buf가 정답과 정확히 일치하면 letterGap 대기 없이 바로 판정
+      if (currentTarget && inputBuf === MORSE[currentTarget]) {
+        justFinalized = false;  // 채점되면 펄스 취소 불필요
+        checkPracticeAnswer();
+      } else {
+        practiceTimer = setTimeout(() => { justFinalized = false; checkPracticeAnswer(); }, letterGapMs());
+      }
     }
   }
 
@@ -2369,15 +2382,30 @@
   // 트리 송신 버튼 - press 처리
   let treeReleaseTimer = null;
   let treeTrueDownTime = 0;
+  let treeJustFinalized = false;     // 방금 finalize 됨 (펄스 취소 대기 중)
+  let treeFinalizeRevertAt = 0;      // 펄스 취소 가능 시한
+
   function treePressDown() {
     if (inputLocked) return;
     if (isPlayingTreeAudio) return;
-    // 대기 중인 release 타이머가 있으면 → 계속 누름
-    if (treeReleaseTimer) {
-      clearTimeout(treeReleaseTimer);
-      treeReleaseTimer = null;
+
+    // 방금 finalize 했고 PULSE_GAP_MS 이내라면 → 펄스 병합: 방금 추가한 부호 취소하고 계속 누름으로
+    if (treeJustFinalized && performance.now() < treeFinalizeRevertAt) {
+      // 마지막 부호 제거
+      if (treeInputBuf.length > 0) {
+        treeInputBuf = treeInputBuf.slice(0, -1);
+      }
+      treeJustFinalized = false;
+      clearTimeout(treeLetterTimer);
+      clearTimeout(treeAutoClearTimer);
+      // 누름 상태 복원
+      treePressed = true;
+      // treeTrueDownTime 는 이전 누름 시작 시각 그대로 유지
+      startTone();
+      treeRefreshVisual();
       return;
     }
+
     if (treePressed) return;
     // 이전 글자가 이미 확정되어 잔상으로 표시 중이면 즉시 클리어하고 새 입력 시작
     if (treeLetterCommitted || treeInputBuf) {
@@ -2396,24 +2424,21 @@
     clearTimeout(treeLetterTimer);
     clearTimeout(treeAutoClearTimer);
   }
+
   function treePressUp() {
-    if (!treePressed) return;
-    if (treeReleaseTimer) clearTimeout(treeReleaseTimer);
-    treeReleaseTimer = setTimeout(() => {
-      treeReleaseTimer = null;
-      treeFinalizeRelease();
-    }, PULSE_GAP_MS);
-  }
-  function treeFinalizeRelease() {
     if (!treePressed) return;
     treePressed = false;
     stopTone();
-    const dur = performance.now() - treeTrueDownTime - PULSE_GAP_MS;
+    const dur = performance.now() - treeTrueDownTime;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     treeInputBuf += symbol;
     treeLetterCommitted = false;
     treeRefreshVisual();
+    // PULSE_GAP_MS 이내 새 keydown 오면 이 부호 취소 (펄스 합치기)
+    treeJustFinalized = true;
+    treeFinalizeRevertAt = performance.now() + PULSE_GAP_MS;
     treeLetterTimer = setTimeout(() => {
+      treeJustFinalized = false;  // 취소 윈도우 만료
       treeLetterCommitted = true;
       treeAutoClearTimer = setTimeout(() => {
         treeInputBuf = '';
@@ -3055,15 +3080,29 @@
 
   // Press / release for challenge button
   let chPressStart = 0, chIsPressed = false;
-  let chReleaseTimer = null, chTrueDownTime = 0;
+  let chTrueDownTime = 0;
+  let chJustFinalized = false;
+  let chFinalizeRevertAt = 0;
+
   function chPressDown() {
     if (ch.locked || !ch.active) return;
-    // 대기 중인 release 타이머가 있으면 → 계속 누름
-    if (chReleaseTimer) {
-      clearTimeout(chReleaseTimer);
-      chReleaseTimer = null;
+
+    // 방금 finalize 했고 PULSE_GAP_MS 이내라면 → 펄스 병합
+    if (chJustFinalized && performance.now() < chFinalizeRevertAt) {
+      // 마지막 부호 취소
+      if (ch.inputBuf.length > 0) {
+        ch.inputBuf = ch.inputBuf.slice(0, -1);
+      }
+      chJustFinalized = false;
+      clearTimeout(ch.timer);
+      // 누름 상태 복원
+      chIsPressed = true;
+      startTone();
+      chInputDisplay.textContent = ch.inputBuf || '—';
+      if (!ch.inputBuf) chInputDisplay.classList.add('empty');
       return;
     }
+
     if (chIsPressed) return;
     chIsPressed = true;
     chTrueDownTime = performance.now();
@@ -3072,24 +3111,27 @@
     startTone();
     clearTimeout(ch.timer);
   }
+
   function chPressUp() {
-    if (!chIsPressed) return;
-    if (chReleaseTimer) clearTimeout(chReleaseTimer);
-    chReleaseTimer = setTimeout(() => {
-      chReleaseTimer = null;
-      chFinalizeRelease();
-    }, PULSE_GAP_MS);
-  }
-  function chFinalizeRelease() {
     if (!chIsPressed) return;
     chIsPressed = false;
     stopTone();
-    const dur = performance.now() - chTrueDownTime - PULSE_GAP_MS;
+    const dur = performance.now() - chTrueDownTime;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     ch.inputBuf += symbol;
     chInputDisplay.textContent = ch.inputBuf;
     chInputDisplay.classList.remove('empty');
-    ch.timer = setTimeout(checkChallengeAnswer, letterGapMs());
+
+    chJustFinalized = true;
+    chFinalizeRevertAt = performance.now() + PULSE_GAP_MS;
+
+    // 즉시 채점: buf가 정답과 정확히 일치하면 letterGap 대기 없이 바로 판정
+    if (ch.target && ch.inputBuf === MORSE[ch.target]) {
+      chJustFinalized = false;
+      checkChallengeAnswer();
+    } else {
+      ch.timer = setTimeout(() => { chJustFinalized = false; checkChallengeAnswer(); }, letterGapMs());
+    }
   }
 
   // attach pointer events
