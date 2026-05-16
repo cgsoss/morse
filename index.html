@@ -1168,6 +1168,7 @@
 </style>
 </head>
 <body>
+
 <div class="wrap">
 
   <header>
@@ -1182,6 +1183,10 @@
       <button class="header-btn" data-mode="reference" id="hdrReference" aria-label="부호표">
         <span class="hb-icon">📖</span>
         <span class="hb-label">부호표</span>
+      </button>
+      <button class="header-btn" id="hdrRhythm" aria-label="리듬 모드">
+        <span class="hb-icon">🎮</span>
+        <span class="hb-label">리듬</span>
       </button>
       <button class="header-btn" id="hdrOptions" aria-label="옵션">
         <span class="hb-icon">⚙</span>
@@ -1899,20 +1904,47 @@
   const lessonSection = $('lessonSection');
   const refHintEl = $('refHint');
 
+  // "연속 펄스 = 길게 누름" 로직
+  // 모듈이 길게 눌러도 짧은 펄스를 반복 발사하는 동작에 대응.
+  // keyup 즉시 처리하지 않고 PULSE_GAP_MS 만큼 대기 → 그 사이 새 keydown 오면 계속 누름으로 간주.
+  const PULSE_GAP_MS = 50;
+  let releaseTimer = null;
+  let trueDownTime = 0;  // 실제 누름 시작 시각 (펄스 연속 시 변경 안 됨)
+
   function pressDown() {
-    if (isPressed || activeMode === 'reference') return;
-    if (inputLocked) return; // blocked during feedback animation
+    if (activeMode === 'reference') return;
+    if (inputLocked) return;
+    // 대기 중인 release 타이머가 있으면 → 계속 누름. 새 누름 시작 아님.
+    if (releaseTimer) {
+      clearTimeout(releaseTimer);
+      releaseTimer = null;
+      return;
+    }
+    if (isPressed) return;
+    // 새 누름 시작
     isPressed = true;
-    pressStart = performance.now();
+    trueDownTime = performance.now();
+    pressStart = trueDownTime;
     if (navigator.vibrate) navigator.vibrate(8);
     startTone();
     clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
   }
+
   function pressUp() {
+    if (!isPressed) return;
+    // 즉시 떼지 않고 PULSE_GAP_MS 동안 새 keydown 기다림
+    if (releaseTimer) clearTimeout(releaseTimer);
+    releaseTimer = setTimeout(() => {
+      releaseTimer = null;
+      finalizeRelease();
+    }, PULSE_GAP_MS);
+  }
+
+  function finalizeRelease() {
     if (!isPressed) return;
     isPressed = false;
     stopTone();
-    const dur = performance.now() - pressStart;
+    const dur = performance.now() - trueDownTime - PULSE_GAP_MS;  // 대기 시간 제외
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     inputBuf += symbol;
     refreshInputDisplay();
@@ -2038,7 +2070,7 @@
   attachKeyEvents(txButton);
 
   document.addEventListener('keydown', e => {
-    if ((e.code === 'Space' || e.code === 'BracketLeft') && !e.repeat) {
+    if ((e.code === 'Space' || e.code === 'BracketLeft')) {
       if (activeMode === 'free' || activeMode === 'practice') {
         e.preventDefault(); pressDown(); txButton.classList.add('pressed');
       }
@@ -2335,14 +2367,20 @@
   }
 
   // 트리 송신 버튼 - press 처리
+  let treeReleaseTimer = null;
+  let treeTrueDownTime = 0;
   function treePressDown() {
-    if (treePressed) return;
     if (inputLocked) return;
-    if (isPlayingTreeAudio) return;  // 재생 중이면 입력 차단
+    if (isPlayingTreeAudio) return;
+    // 대기 중인 release 타이머가 있으면 → 계속 누름
+    if (treeReleaseTimer) {
+      clearTimeout(treeReleaseTimer);
+      treeReleaseTimer = null;
+      return;
+    }
+    if (treePressed) return;
     // 이전 글자가 이미 확정되어 잔상으로 표시 중이면 즉시 클리어하고 새 입력 시작
     if (treeLetterCommitted || treeInputBuf) {
-      // letter timer가 이미 발화했거나, 글자 입력 중간에 새로 누르는 경우 모두
-      // 새 글자 입력 시작 → 이전 잔상 즉시 제거
       if (treeLetterCommitted) {
         clearTimeout(treeAutoClearTimer);
         treeInputBuf = '';
@@ -2351,7 +2389,8 @@
       }
     }
     treePressed = true;
-    treePressStart = performance.now();
+    treeTrueDownTime = performance.now();
+    treePressStart = treeTrueDownTime;
     if (navigator.vibrate) navigator.vibrate(8);
     startTone();
     clearTimeout(treeLetterTimer);
@@ -2359,16 +2398,22 @@
   }
   function treePressUp() {
     if (!treePressed) return;
+    if (treeReleaseTimer) clearTimeout(treeReleaseTimer);
+    treeReleaseTimer = setTimeout(() => {
+      treeReleaseTimer = null;
+      treeFinalizeRelease();
+    }, PULSE_GAP_MS);
+  }
+  function treeFinalizeRelease() {
+    if (!treePressed) return;
     treePressed = false;
     stopTone();
-    const dur = performance.now() - treePressStart;
+    const dur = performance.now() - treeTrueDownTime - PULSE_GAP_MS;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     treeInputBuf += symbol;
-    treeLetterCommitted = false; // 입력 진행 중
+    treeLetterCommitted = false;
     treeRefreshVisual();
-    // letter gap 후 글자 확정. 그 후 짧은 시간 동안만 잔상 유지
     treeLetterTimer = setTimeout(() => {
-      // 글자 확정
       treeLetterCommitted = true;
       treeAutoClearTimer = setTimeout(() => {
         treeInputBuf = '';
@@ -2402,7 +2447,7 @@
 
   // 스페이스바도 트리 연습에서 작동
   document.addEventListener('keydown', e => {
-    if ((e.code === 'Space' || e.code === 'BracketLeft') && !e.repeat) {
+    if ((e.code === 'Space' || e.code === 'BracketLeft')) {
       if (activeMode === 'practice' && practiceSubMode === 'tree') {
         e.preventDefault();
         treePressDown();
@@ -2709,6 +2754,13 @@
     }
   });
 
+  // ─── Rhythm mode button ───
+  $('hdrRhythm').addEventListener('click', () => {
+    // 진행 중인 톤 끊기
+    try { stopTone(); } catch(e) {}
+    location.href = 'rhythm.html';
+  });
+
   // ════════════════════════════════════════════════════════════
   // ─────── CHALLENGE MODE ───────
   // ════════════════════════════════════════════════════════════
@@ -3003,19 +3055,36 @@
 
   // Press / release for challenge button
   let chPressStart = 0, chIsPressed = false;
+  let chReleaseTimer = null, chTrueDownTime = 0;
   function chPressDown() {
-    if (chIsPressed || ch.locked || !ch.active) return;
+    if (ch.locked || !ch.active) return;
+    // 대기 중인 release 타이머가 있으면 → 계속 누름
+    if (chReleaseTimer) {
+      clearTimeout(chReleaseTimer);
+      chReleaseTimer = null;
+      return;
+    }
+    if (chIsPressed) return;
     chIsPressed = true;
-    chPressStart = performance.now();
+    chTrueDownTime = performance.now();
+    chPressStart = chTrueDownTime;
     if (navigator.vibrate) navigator.vibrate(8);
     startTone();
     clearTimeout(ch.timer);
   }
   function chPressUp() {
     if (!chIsPressed) return;
+    if (chReleaseTimer) clearTimeout(chReleaseTimer);
+    chReleaseTimer = setTimeout(() => {
+      chReleaseTimer = null;
+      chFinalizeRelease();
+    }, PULSE_GAP_MS);
+  }
+  function chFinalizeRelease() {
+    if (!chIsPressed) return;
     chIsPressed = false;
     stopTone();
-    const dur = performance.now() - chPressStart;
+    const dur = performance.now() - chTrueDownTime - PULSE_GAP_MS;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     ch.inputBuf += symbol;
     chInputDisplay.textContent = ch.inputBuf;
@@ -3048,7 +3117,7 @@
 
   // spacebar for challenge
   document.addEventListener('keydown', e => {
-    if ((e.code === 'Space' || e.code === 'BracketLeft') && !e.repeat && activeMode === 'challenge') {
+    if ((e.code === 'Space' || e.code === 'BracketLeft') && activeMode === 'challenge') {
       e.preventDefault();
       if (ch.locked || !ch.active) return;
       chPressDown();

@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Morse Rhythm">
+<meta name="theme-color" content="#0e0b07">
+<title>Morse Rhythm / 모스 리듬</title>
+<style>
+  :root {
+    --bg: #0e0b07;
+    --bg-2: #14100a;
+    --panel: #1a1510;
+    --line: #2a2118;
+    --amber: #ffb347;
+    --amber-dim: #c08438;
+    --amber-darker: #5a4020;
+    --amber-glow: rgba(255, 179, 71, 0.45);
+    --green: #5fdc8a;
+    --green-glow: rgba(95, 220, 138, 0.4);
+    --red: #e26b5a;
+    --red-glow: rgba(226, 107, 90, 0.45);
+    --blue: #6bafdc;
+    --blue-glow: rgba(107, 175, 220, 0.45);
+    --ink: #f4e4c8;
+    --ink-dim: #8a7a62;
+    --ink-faint: #4a4133;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-weight: 400;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at top, rgba(255,179,71,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(95,220,138,0.03) 0%, transparent 50%);
+    min-height: 100vh;
+    -webkit-user-select: none; user-select: none;
+    -webkit-text-size-adjust: 100%; overscroll-behavior: none;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px);
+    pointer-events: none; z-index: 100; mix-blend-mode: multiply;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: 0.04; pointer-events: none; z-index: 99; mix-blend-mode: overlay;
+  }
+
+  .wrap {
+    max-width: 700px; margin: 0 auto;
+    padding: calc(20px + env(safe-area-inset-top, 0px)) 20px calc(40px + env(safe-area-inset-bottom, 0px));
+    position: relative; z-index: 1;
+  }
+
+  /* ─── Header ─── */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 14px; margin-bottom: 20px;
+  }
+  .back-btn {
+    background: var(--bg-2); border: 1px solid var(--line);
+    color: var(--ink-dim); font-family: inherit;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 2px; cursor: pointer;
+    transition: all 0.15s; display: flex; align-items: center; gap: 6px;
+  }
+  .back-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .title {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: clamp(22px, 4vw, 30px);
+    color: var(--amber); letter-spacing: -0.01em; line-height: 1;
+    text-shadow: 0 0 18px var(--amber-glow);
+  }
+  .rank-btn {
+    background: var(--bg-2); border: 1px solid var(--line);
+    color: var(--ink-dim); font-family: inherit;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 2px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rank-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* ─── Status strip ─── */
+  .status-strip {
+    display: flex; gap: 8px; align-items: center;
+    font-size: 9px; letter-spacing: 0.25em;
+    color: var(--ink-dim); text-transform: uppercase;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--line);
+    flex-wrap: wrap;
+  }
+  .status-strip .sep { color: var(--ink-faint); }
+  .status-strip .label { color: var(--amber); }
+
+  /* ─── Screens ─── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ═══════ SCREEN: SONG SELECT ═══════ */
+  .section-label {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-dim); margin-bottom: 12px;
+  }
+  .section-label.adv { color: var(--red); }
+  .section-label.int { color: var(--blue); }
+  .section-label.beg { color: var(--amber); }
+  .section-label.tut { color: var(--green); }
+
+  /* Speed control panel */
+  .speed-panel {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  .speed-panel-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .speed-panel-title {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .speed-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--amber);
+    text-shadow: 0 0 6px var(--amber-glow);
+  }
+  .speed-slider-wrap {
+    position: relative; padding: 8px 0;
+  }
+  .speed-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px;
+    background: var(--line); border-radius: 2px;
+    outline: none; cursor: pointer;
+  }
+  .speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px;
+    background: var(--amber); border-radius: 50%;
+    cursor: pointer; border: 2px solid var(--bg-2);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+  .speed-slider::-moz-range-thumb {
+    width: 18px; height: 18px;
+    background: var(--amber); border-radius: 50%;
+    cursor: pointer; border: 2px solid var(--bg-2);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+  .speed-ticks {
+    display: flex; justify-content: space-between;
+    font-size: 9px; color: var(--ink-faint);
+    letter-spacing: 0.1em; margin-top: 4px;
+    padding: 0 2px;
+  }
+  .speed-tick-current { color: var(--amber); }
+  .speed-hint {
+    font-size: 10px; color: var(--ink-dim); margin-top: 8px;
+    line-height: 1.5;
+  }
+  .speed-hint b { color: var(--amber-dim); }
+
+  .track-list {
+    display: grid; gap: 10px; margin-bottom: 24px;
+  }
+  .track-group-header {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    margin: 18px 0 10px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .track-group-header::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--line);
+  }
+  .track-group-header.tut { color: var(--green); }
+  .track-group-header.beg { color: var(--amber); }
+  .track-group-header.int { color: var(--blue); }
+  .track-group-header.adv { color: var(--red); }
+  .track-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .track-card:hover {
+    border-color: var(--amber);
+    background: rgba(255, 179, 71, 0.05);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+  .track-card .track-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; color: var(--ink); font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .track-card .track-meta {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-dim); margin-top: 4px;
+  }
+  .track-card .track-diff {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 2px;
+    border: 1px solid currentColor;
+  }
+  .track-card .track-diff.tut { color: var(--green); }
+  .track-card .track-diff.beg { color: var(--amber); }
+  .track-card .track-diff.int { color: var(--blue); }
+  .track-card .track-diff.adv { color: var(--red); }
+  .track-card .track-best {
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--amber-dim); margin-top: 4px;
+  }
+
+  .info-box {
+    background: rgba(255, 179, 71, 0.04);
+    border: 1px solid var(--amber-darker);
+    border-radius: 2px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+  }
+  .info-box b { color: var(--amber); font-weight: 600; }
+
+  /* ═══════ SCREEN: PLAY ═══════ */
+  .play-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .play-track-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; color: var(--amber); font-weight: 600;
+  }
+  .play-stat {
+    text-align: center;
+  }
+  .play-stat .pv {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: 22px; color: var(--ink); line-height: 1;
+  }
+  .play-stat .pl {
+    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--ink-dim); margin-top: 4px;
+  }
+  .play-stat.combo .pv { color: var(--amber); text-shadow: 0 0 8px var(--amber-glow); }
+
+  /* Track — the falling notes area */
+  .track-wrap {
+    position: relative;
+    height: 420px;
+    background: linear-gradient(180deg, rgba(20,16,10,0.8) 0%, rgba(26,21,16,0.6) 100%);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .track {
+    position: absolute; inset: 0;
+  }
+  /* Center lane line */
+  .track::before {
+    content: ''; position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent 0%, var(--ink-faint) 30%, var(--ink-faint) 70%, transparent 100%);
+    transform: translateX(-50%);
+    opacity: 0.5;
+  }
+  /* Judgment line */
+  .judge-line {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 60px;
+    height: 3px;
+    background: var(--amber);
+    box-shadow: 0 0 12px var(--amber-glow), 0 0 24px var(--amber-glow);
+    z-index: 5;
+  }
+  .judge-line::before, .judge-line::after {
+    content: ''; position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px;
+    border: 2px solid var(--amber);
+    border-radius: 2px;
+    background: var(--bg);
+  }
+  .judge-line::before { left: -8px; }
+  .judge-line::after { right: -8px; }
+
+  /* Notes */
+  .note {
+    position: absolute;
+    left: 50%;
+    width: 90px;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    will-change: transform, top;
+  }
+  .note.dit {
+    height: 14px;
+    background: linear-gradient(180deg, var(--amber) 0%, var(--amber-dim) 100%);
+    box-shadow: 0 0 8px var(--amber-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .note.dah {
+    /* height is set dynamically based on WPM */
+    background: linear-gradient(180deg, var(--amber) 0%, var(--amber-dim) 100%);
+    box-shadow: 0 0 8px var(--amber-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .note.holding {
+    background: linear-gradient(180deg, var(--green) 0%, #3fb56e 100%);
+    box-shadow: 0 0 12px var(--green-glow), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .note.judged-perfect { background: linear-gradient(180deg, var(--green) 0%, #3fb56e 100%); opacity: 0.4; }
+  .note.judged-great { background: linear-gradient(180deg, var(--blue) 0%, #4990bd 100%); opacity: 0.4; }
+  .note.judged-good { background: linear-gradient(180deg, var(--amber-dim) 0%, #8a5e28 100%); opacity: 0.4; }
+  .note.judged-miss { background: linear-gradient(180deg, var(--red) 0%, #a04030 100%); opacity: 0.4; }
+
+  /* Letter label above each character group */
+  .letter-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink-dim);
+    pointer-events: none;
+    text-shadow: 0 0 8px rgba(0,0,0,0.8);
+  }
+  .letter-label.completed { color: var(--green); text-shadow: 0 0 8px var(--green-glow); }
+  .letter-label.failed { color: var(--red); text-shadow: 0 0 8px var(--red-glow); }
+
+  /* Judgment popup */
+  .judge-popup {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 75px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    z-index: 10;
+    animation: popupFade 0.6s ease-out forwards;
+  }
+  .judge-popup.perfect { color: var(--green); text-shadow: 0 0 12px var(--green-glow); }
+  .judge-popup.great { color: var(--blue); text-shadow: 0 0 12px var(--blue-glow); }
+  .judge-popup.good { color: var(--amber); text-shadow: 0 0 12px var(--amber-glow); }
+  .judge-popup.miss { color: var(--red); text-shadow: 0 0 12px var(--red-glow); }
+  @keyframes popupFade {
+    0%   { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.8); }
+    20%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.1); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(1); }
+  }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    height: 6px; background: var(--bg-2);
+    border: 1px solid var(--line); border-radius: 2px;
+    overflow: hidden; margin-bottom: 14px;
+  }
+  .progress-bar {
+    height: 100%; background: linear-gradient(90deg, var(--amber-dim) 0%, var(--amber) 100%);
+    width: 0%; transition: width 0.2s linear;
+    box-shadow: 0 0 6px var(--amber-glow);
+  }
+
+  /* Key button */
+  .key-button {
+    width: 100%; height: 100px;
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+    border: 2px solid var(--amber-darker);
+    border-radius: 4px;
+    color: var(--amber); font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px; letter-spacing: 0.3em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.05s;
+    text-shadow: 0 0 8px var(--amber-glow);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 0 var(--amber-darker), 0 6px 12px rgba(0,0,0,0.4);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+  }
+  .key-button.pressed {
+    background: linear-gradient(180deg, var(--amber) 0%, var(--amber-dim) 100%);
+    color: var(--bg);
+    text-shadow: none;
+    transform: translateY(4px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 16px var(--amber-glow);
+  }
+
+  /* ═══════ SCREEN: RESULT ═══════ */
+  .result-panel {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .result-grade-wrap {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .result-grade {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 100px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  .result-grade.S { color: var(--amber); text-shadow: 0 0 30px var(--amber-glow), 0 0 60px var(--amber-glow); }
+  .result-grade.A { color: var(--green); text-shadow: 0 0 24px var(--green-glow); }
+  .result-grade.B { color: var(--blue); text-shadow: 0 0 24px var(--blue-glow); }
+  .result-grade.C { color: var(--ink-dim); }
+
+  .result-status {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    margin-top: 10px; color: var(--ink-dim);
+  }
+  .result-status.fc { color: var(--green); text-shadow: 0 0 8px var(--green-glow); }
+  .result-status.fp { color: var(--amber); text-shadow: 0 0 12px var(--amber-glow); }
+  .result-status.new-best { color: var(--amber); }
+
+  .result-score {
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 42px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .result-score-label {
+    text-align: center;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-dim); margin-bottom: 24px;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .result-cell {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .result-cell .rv {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: 22px; line-height: 1;
+  }
+  .result-cell.perfect .rv { color: var(--green); }
+  .result-cell.great .rv { color: var(--blue); }
+  .result-cell.good .rv { color: var(--amber); }
+  .result-cell.miss .rv { color: var(--red); }
+  .result-cell .rl {
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-dim); margin-top: 6px;
+  }
+
+  .result-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .result-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 14px; border-radius: 2px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .result-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .result-btn.primary {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: rgba(255, 179, 71, 0.08);
+  }
+  .result-btn.primary:hover {
+    background: rgba(255, 179, 71, 0.15);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+
+  /* ═══════ Countdown ═══════ */
+  .countdown {
+    position: fixed; inset: 0;
+    background: rgba(14,11,7,0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(4px);
+  }
+  .countdown.hidden { display: none; }
+  .countdown-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 180px;
+    color: var(--amber);
+    text-shadow: 0 0 40px var(--amber-glow), 0 0 80px var(--amber-glow);
+    animation: countPulse 1s ease-in-out;
+  }
+  @keyframes countPulse {
+    0%   { transform: scale(0.5); opacity: 0; }
+    30%  { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.4; }
+  }
+
+  /* ═══════ Modal (Leaderboard) ═══════ */
+  .modal {
+    position: fixed; inset: 0;
+    background: rgba(14,11,7,0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 150;
+    backdrop-filter: blur(4px);
+    padding: 20px;
+  }
+  .modal.hidden { display: none; }
+  .modal-panel {
+    background: var(--panel);
+    border: 1px solid var(--amber-darker);
+    border-radius: 4px;
+    max-width: 500px; width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6), 0 0 20px var(--amber-glow);
+  }
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 18px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 18px; color: var(--amber);
+    letter-spacing: 0.05em;
+  }
+  .modal-close {
+    background: transparent; border: 1px solid var(--line);
+    color: var(--ink-dim); font-family: inherit;
+    font-size: 14px; padding: 4px 10px; border-radius: 2px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .modal-close:hover { border-color: var(--red); color: var(--red); }
+
+  .lb-row {
+    display: grid;
+    grid-template-columns: 30px 1fr auto auto;
+    gap: 10px; align-items: center;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row .rank {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; color: var(--amber-dim);
+    text-align: center;
+  }
+  .lb-row.first .rank { color: var(--amber); text-shadow: 0 0 6px var(--amber-glow); }
+  .lb-row .name { color: var(--ink); }
+  .lb-row .song {
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--ink-dim); text-transform: uppercase;
+  }
+  .lb-row .lscore {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; color: var(--amber);
+  }
+  .lb-empty {
+    text-align: center; color: var(--ink-dim);
+    padding: 40px 20px; font-size: 12px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+  }
+
+  /* Help screen */
+  .help-section {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 2px; padding: 16px;
+    margin-bottom: 16px;
+  }
+  .help-section h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; color: var(--amber);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .help-section p, .help-section li {
+    font-size: 12px; color: var(--ink-dim); line-height: 1.7;
+  }
+  .help-section ul { padding-left: 18px; }
+  .help-section .note-demo {
+    display: inline-block; width: 30px; vertical-align: middle;
+    border-radius: 3px; margin: 0 4px;
+    background: linear-gradient(180deg, var(--amber) 0%, var(--amber-dim) 100%);
+    box-shadow: 0 0 6px var(--amber-glow);
+  }
+  .help-section .note-demo.dit { height: 10px; }
+  .help-section .note-demo.dah { height: 30px; }
+
+  /* version */
+  .version-strip {
+    text-align: center;
+    font-size: 9px; letter-spacing: 0.3em; color: var(--ink-faint);
+    margin-top: 30px; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <button class="back-btn" id="backBtn">← 돌아가기</button>
+    <div class="title">RHYTHM</div>
+    <button class="rank-btn" id="lbBtn">랭킹</button>
+  </header>
+
+  <div class="status-strip">
+    <span class="label">MORSE RHYTHM</span>
+    <span class="sep">·</span>
+    <span>BEAT TRAINER</span>
+    <span class="sep">·</span>
+    <span id="profileLabel">player</span>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SCREEN: TRACK SELECT                             -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div class="screen active" id="screenSelect">
+    <div class="info-box">
+      <b>리듬 모드</b> — 위에서 내려오는 노트를 박자에 맞춰 키로 누르세요.
+      짧은 노트는 <b>단점(·)</b>, 긴 노트는 <b>장점(–)</b>입니다.
+      누르는 길이까지 맞춰야 완벽한 판정을 받습니다.
+    </div>
+
+    <!-- Speed control -->
+    <div class="speed-panel">
+      <div class="speed-panel-header">
+        <span class="speed-panel-title">속도 조절</span>
+        <span class="speed-value" id="speedValue">×1.00</span>
+      </div>
+      <div class="speed-slider-wrap">
+        <input type="range" class="speed-slider" id="speedSlider"
+               min="0.5" max="2.0" step="0.05" value="1.0">
+        <div class="speed-ticks">
+          <span data-v="0.5">×0.5</span>
+          <span data-v="0.75">×0.75</span>
+          <span data-v="1.0">×1.0</span>
+          <span data-v="1.5">×1.5</span>
+          <span data-v="2.0">×2.0</span>
+        </div>
+      </div>
+      <div class="speed-hint">
+        모든 트랙에 적용됩니다. 초보자는 <b>×0.5~×0.75</b>로 시작하세요.
+        랭킹 점수는 배율에 따라 조정됩니다 — 빠를수록 보너스, 느릴수록 감점.
+      </div>
+    </div>
+
+    <!-- Track groups -->
+    <div id="trackGroups"></div>
+
+    <div class="section-label" style="margin-top: 24px;">HOW TO PLAY</div>
+    <div class="help-section">
+      <h3>입력 방법</h3>
+      <p>화면 하단의 <b>KEY</b> 버튼, <b>스페이스바</b>, 또는 <b>[</b> 키를 사용합니다.</p>
+    </div>
+    <div class="help-section">
+      <h3>노트 종류</h3>
+      <p>
+        <span class="note-demo dit"></span> 단점 — 짧게 누르고 떼기<br>
+        <span class="note-demo dah"></span> 장점 — 노트 길이만큼 누르고 있기
+      </p>
+    </div>
+    <div class="help-section">
+      <h3>판정 (키다운 / 키업 둘 다 평가)</h3>
+      <ul>
+        <li><b style="color:var(--green)">PERFECT</b> — ±50ms 이내 (300점)</li>
+        <li><b style="color:var(--blue)">GREAT</b> — ±100ms 이내 (200점)</li>
+        <li><b style="color:var(--amber)">GOOD</b> — ±150ms 이내 (100점)</li>
+        <li><b style="color:var(--red)">MISS</b> — 그 외 (0점, 콤보 끊김)</li>
+      </ul>
+    </div>
+    <div class="help-section">
+      <h3>등급</h3>
+      <p>최종 정확도 기준 — <b>S</b> 95% / <b>A</b> 85% / <b>B</b> 70% / <b>C</b> 그 미만</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SCREEN: PLAY                                     -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div class="screen" id="screenPlay">
+    <div class="play-header">
+      <div class="play-track-name" id="playTrackName">—</div>
+      <div class="play-stat combo">
+        <div class="pv" id="playCombo">0</div>
+        <div class="pl">Combo</div>
+      </div>
+      <div class="play-stat">
+        <div class="pv" id="playScore">0</div>
+        <div class="pl">Score</div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="track-wrap">
+      <div class="track" id="track"></div>
+      <div class="judge-line"></div>
+    </div>
+
+    <button class="key-button" id="keyButton">KEY</button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SCREEN: RESULT                                   -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div class="screen" id="screenResult">
+    <div class="result-panel">
+      <div class="result-grade-wrap">
+        <div class="result-grade" id="resultGrade">A</div>
+        <div class="result-status" id="resultStatus">CLEAR</div>
+      </div>
+
+      <div class="result-score" id="resultScore">0</div>
+      <div class="result-score-label">FINAL SCORE</div>
+
+      <div class="result-grid">
+        <div class="result-cell perfect">
+          <div class="rv" id="rPerfect">0</div>
+          <div class="rl">Perfect</div>
+        </div>
+        <div class="result-cell great">
+          <div class="rv" id="rGreat">0</div>
+          <div class="rl">Great</div>
+        </div>
+        <div class="result-cell good">
+          <div class="rv" id="rGood">0</div>
+          <div class="rl">Good</div>
+        </div>
+        <div class="result-cell miss">
+          <div class="rv" id="rMiss">0</div>
+          <div class="rl">Miss</div>
+        </div>
+      </div>
+
+      <div class="result-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="result-cell">
+          <div class="rv" id="rAccuracy" style="color:var(--amber)">0%</div>
+          <div class="rl">Accuracy</div>
+        </div>
+        <div class="result-cell">
+          <div class="rv" id="rMaxCombo" style="color:var(--amber)">0</div>
+          <div class="rl">Max Combo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-buttons">
+      <button class="result-btn" id="resultBack">곡 선택</button>
+      <button class="result-btn primary" id="resultRetry">다시 도전</button>
+    </div>
+  </div>
+
+  <div class="version-strip" id="versionLabel">v1.0.0</div>
+</div>
+
+<!-- Countdown overlay -->
+<div class="countdown hidden" id="countdown">
+  <div class="countdown-num" id="countdownNum">3</div>
+</div>
+
+<!-- Leaderboard modal -->
+<div class="modal hidden" id="lbModal">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <div class="modal-title">리듬 명예의 전당</div>
+      <button class="modal-close" id="lbClose">✕</button>
+    </div>
+    <div id="lbContent"></div>
+  </div>
+</div>
+
+<script>
+  // ════════════════════════════════════════════════════════════
+  // MORSE TABLE (본편과 동일)
+  // ════════════════════════════════════════════════════════════
+  const MORSE = {
+    'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.',
+    'H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.',
+    'O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-',
+    'V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
+    '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-',
+    '5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'
+  };
+
+  // ════════════════════════════════════════════════════════════
+  // TRACKS (트랙 — 모스 시퀀스)
+  // ════════════════════════════════════════════════════════════
+  const tracks = [
+    // 튜토리얼 — 단일 부호 익히기
+    { id: 'tut1',      name: 'E E E E E',         text: 'EEEEE',                 wpm: 8,  diff: 'tut', diffLabel: '튜토리얼' },
+    { id: 'tut2',      name: 'T T T T T',         text: 'TTTTT',                 wpm: 8,  diff: 'tut', diffLabel: '튜토리얼' },
+    { id: 'tut3',      name: 'SOS',               text: 'SOS',                   wpm: 8,  diff: 'tut', diffLabel: '튜토리얼' },
+    // 초급 — 짧은 시퀀스
+    { id: 'beg1',      name: 'CQ CQ DE',          text: 'CQ CQ DE',              wpm: 10, diff: 'beg', diffLabel: '초급' },
+    { id: 'beg2',      name: 'HELLO',             text: 'HELLO',                 wpm: 11, diff: 'beg', diffLabel: '초급' },
+    { id: 'beg3',      name: 'HAM RADIO',         text: 'HAM RADIO',             wpm: 12, diff: 'beg', diffLabel: '초급' },
+    // 중급 — 단어와 박자
+    { id: 'int1',      name: 'HELLO WORLD',       text: 'HELLO WORLD',           wpm: 13, diff: 'int', diffLabel: '중급' },
+    { id: 'int2',      name: 'PARIS',             text: 'PARIS PARIS PARIS',     wpm: 14, diff: 'int', diffLabel: '중급' },
+    { id: 'int3',      name: '베토벤 5번',         text: 'VVVV BEETHOVEN',        wpm: 15, diff: 'int', diffLabel: '중급' },
+    // 고급 — 긴 문장과 햄 표현
+    { id: 'adv1',      name: 'QSL QTH QRZ',       text: 'QSL QTH QRZ',           wpm: 17, diff: 'adv', diffLabel: '고급' },
+    { id: 'adv2',      name: 'THE QUICK BROWN',   text: 'THE QUICK BROWN FOX',   wpm: 18, diff: 'adv', diffLabel: '고급' },
+    { id: 'adv3',      name: '73 DE OM',          text: '73 DE OM TU EE',        wpm: 20, diff: 'adv', diffLabel: '고급' }
+  ];
+
+  // ════════════════════════════════════════════════════════════
+  // AUDIO (본편 시스템 차용)
+  // ════════════════════════════════════════════════════════════
+  let audioCtx = null, oscNode = null, gainNode = null;
+  let soundOn = true, frequency = 600, volume = 0.4;
+  let keepAliveOsc = null, keepAliveGain = null;
+
+  function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+    ensureKeepAlive();
+  }
+  function ensureKeepAlive() {
+    if (!audioCtx || keepAliveOsc) return;
+    try {
+      keepAliveOsc = audioCtx.createOscillator();
+      keepAliveGain = audioCtx.createGain();
+      keepAliveOsc.type = 'sine';
+      keepAliveOsc.frequency.value = 1;
+      keepAliveGain.gain.value = 0.0001;
+      keepAliveOsc.connect(keepAliveGain);
+      keepAliveGain.connect(audioCtx.destination);
+      keepAliveOsc.start();
+    } catch(e) { keepAliveOsc = null; keepAliveGain = null; }
+  }
+  let audioUnlocked = false;
+  function unlockAudioOnce() {
+    ensureAudio();
+    if (audioUnlocked) return;
+    try {
+      const buf = audioCtx.createBuffer(1, 1, 22050);
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf; src.connect(audioCtx.destination); src.start(0);
+      audioUnlocked = true;
+    } catch(e) {}
+  }
+  ['touchstart','pointerdown','mousedown','keydown'].forEach(ev => {
+    document.addEventListener(ev, () => {
+      unlockAudioOnce();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+      ensureKeepAlive();
+    }, { passive: true });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && audioCtx) {
+      [0, 100, 500].forEach(d => setTimeout(() => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+        ensureKeepAlive();
+      }, d));
+    }
+  });
+
+  function startTone() {
+    if (!soundOn) return;
+    ensureAudio();
+    if (oscNode) return;
+    oscNode = audioCtx.createOscillator();
+    gainNode = audioCtx.createGain();
+    oscNode.type = 'sine';
+    oscNode.frequency.value = frequency;
+    gainNode.gain.value = 0;
+    oscNode.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    const t = audioCtx.currentTime;
+    gainNode.gain.linearRampToValueAtTime(volume, t + 0.005);
+    oscNode.start();
+  }
+  function stopTone() {
+    if (!oscNode) return;
+    const t = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(t);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, t);
+    gainNode.gain.linearRampToValueAtTime(0, t + 0.01);
+    const o = oscNode, g = gainNode;
+    setTimeout(() => { try { o.stop(); o.disconnect(); g.disconnect(); } catch(e){} }, 30);
+    oscNode = null; gainNode = null;
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // STORAGE (본편과 분리된 키, 프로필명은 공유)
+  // ════════════════════════════════════════════════════════════
+  const STORE_KEY = 'morseRhythmStore_v1';
+  // 본편의 프로필명 키 (있으면 공유, 없으면 'player')
+  const MAIN_STORE_KEY = 'morsePracticeData_v1';
+
+  function getProfileName() {
+    try {
+      const main = JSON.parse(localStorage.getItem(MAIN_STORE_KEY) || '{}');
+      if (main && main.profileName) return main.profileName;
+    } catch(e) {}
+    try {
+      const own = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+      if (own && own.profileName) return own.profileName;
+    } catch(e) {}
+    return 'player';
+  }
+
+  function defaultStore() {
+    return {
+      bestByTrack: {},   // { trackId: { score, ..., speedMult } } — 가장 높은 점수만 유지 (배율 별 분리 X, 메인 베스트 1개)
+      hof: [],           // top 20
+      speedMult: 1.0     // 사용자의 마지막 속도 배율 설정
+    };
+  }
+  function loadStore() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (s && typeof s === 'object') {
+        return Object.assign(defaultStore(), s);
+      }
+    } catch(e) {}
+    return defaultStore();
+  }
+  function saveStore(s) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch(e) {}
+  }
+  let store = loadStore();
+
+  // 속도 배율 (0.5 ~ 2.0)
+  let speedMult = store.speedMult || 1.0;
+
+  // ════════════════════════════════════════════════════════════
+  // DOM REFERENCES
+  // ════════════════════════════════════════════════════════════
+  const $ = id => document.getElementById(id);
+  const screenSelect = $('screenSelect');
+  const screenPlay = $('screenPlay');
+  const screenResult = $('screenResult');
+  const track_dom = $('track');
+  const keyButton = $('keyButton');
+
+  function showScreen(name) {
+    [screenSelect, screenPlay, screenResult].forEach(s => s.classList.remove('active'));
+    if (name === 'select') screenSelect.classList.add('active');
+    else if (name === 'play') screenPlay.classList.add('active');
+    else if (name === 'result') screenResult.classList.add('active');
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // TRACK SELECT
+  // ════════════════════════════════════════════════════════════
+  const DIFF_ORDER = ['tut', 'beg', 'int', 'adv'];
+  const DIFF_NAMES = { tut: '튜토리얼', beg: '초급', int: '중급', adv: '고급' };
+
+  function buildTrackList() {
+    const container = $('trackGroups');
+    container.innerHTML = '';
+
+    DIFF_ORDER.forEach(diff => {
+      const groupTracks = tracks.filter(t => t.diff === diff);
+      if (!groupTracks.length) return;
+
+      const hdr = document.createElement('div');
+      hdr.className = 'track-group-header ' + diff;
+      hdr.textContent = DIFF_NAMES[diff];
+      container.appendChild(hdr);
+
+      const list = document.createElement('div');
+      list.className = 'track-list';
+
+      groupTracks.forEach(track => {
+        const best = store.bestByTrack[track.id];
+        const card = document.createElement('div');
+        card.className = 'track-card';
+        const effectiveWpm = (track.wpm * speedMult).toFixed(1);
+        card.innerHTML = `
+          <div>
+            <div class="track-name">${track.name}</div>
+            <div class="track-meta">${escapeHtml(track.text)} · ${effectiveWpm} WPM</div>
+            ${best ? `<div class="track-best">★ BEST: ${best.score.toLocaleString()} · ${best.grade} ${best.speedMult ? '(×' + best.speedMult.toFixed(2) + ')' : ''}</div>` : ''}
+          </div>
+          <div class="track-diff ${track.diff}">${track.diffLabel}</div>
+        `;
+        card.addEventListener('click', () => startTrack(track));
+        list.appendChild(card);
+      });
+      container.appendChild(list);
+    });
+  }
+
+  // 속도 변경 시 표시 갱신
+  function refreshTrackListWPM() {
+    document.querySelectorAll('.track-card').forEach((card, idx) => {
+      const tname = card.querySelector('.track-name').textContent;
+      const track = tracks.find(t => t.name === tname);
+      if (!track) return;
+      const meta = card.querySelector('.track-meta');
+      const effectiveWpm = (track.wpm * speedMult).toFixed(1);
+      meta.textContent = `${track.text} · ${effectiveWpm} WPM`;
+    });
+  }
+
+  // 속도 슬라이더 핸들러
+  function setupSpeedSlider() {
+    const slider = $('speedSlider');
+    const valLabel = $('speedValue');
+    slider.value = speedMult;
+    valLabel.textContent = '×' + speedMult.toFixed(2);
+
+    slider.addEventListener('input', () => {
+      speedMult = parseFloat(slider.value);
+      valLabel.textContent = '×' + speedMult.toFixed(2);
+      refreshTrackListWPM();
+      // 색상으로 영역 표시
+      if (speedMult < 0.9) valLabel.style.color = 'var(--green)';
+      else if (speedMult > 1.3) valLabel.style.color = 'var(--red)';
+      else valLabel.style.color = 'var(--amber)';
+    });
+    slider.addEventListener('change', () => {
+      store.speedMult = speedMult;
+      saveStore(store);
+    });
+
+    // 눈금 클릭으로 스냅
+    document.querySelectorAll('.speed-ticks span').forEach(tick => {
+      tick.style.cursor = 'pointer';
+      tick.addEventListener('click', () => {
+        const v = parseFloat(tick.dataset.v);
+        slider.value = v;
+        speedMult = v;
+        valLabel.textContent = '×' + v.toFixed(2);
+        refreshTrackListWPM();
+        if (v < 0.9) valLabel.style.color = 'var(--green)';
+        else if (v > 1.3) valLabel.style.color = 'var(--red)';
+        else valLabel.style.color = 'var(--amber)';
+        store.speedMult = v;
+        saveStore(store);
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // GAME STATE
+  // ════════════════════════════════════════════════════════════
+  // Constants — timing units derived from WPM
+  // 본편과 동일: 단점=1단위, 장점=3단위, 부호간=1, 문자간=3, 단어간=7
+  // 단위시간(ms) = 1200/wpm
+  let g = null;  // game state object
+
+  // Note structure:
+  // {
+  //   type: 'dit' | 'dah',
+  //   startMs: number,   // 판정선에 노트 시작이 닿는 시각
+  //   durationMs: number, // 노트 길이 (단점=1unit, 장점=3unit)
+  //   letterIdx: number,  // 어느 문자에 속하는지
+  //   noteIdxInLetter: number,
+  //   el: HTMLElement,
+  //   labelEl: HTMLElement | null,  // 첫 노트면 라벨
+  //   downAt: null | number,  // 키 눌린 시각 (실제)
+  //   upAt:   null | number,
+  //   judged: false,
+  //   downJudge: null | 'perfect'|'great'|'good'|'miss',
+  //   upJudge:   null | ...,
+  //   finalJudge: null | ...
+  // }
+
+  // 시각화 상수
+  const TRACK_HEIGHT = 420;         // track-wrap height (CSS와 일치)
+  const JUDGE_FROM_BOTTOM = 60;     // judge-line bottom 값
+  const JUDGE_LINE_Y = TRACK_HEIGHT - JUDGE_FROM_BOTTOM;  // 트랙 상단 기준 판정선 y (360)
+  const PIXELS_PER_UNIT = 18;       // 1단위시간(=ditMs)당 픽셀
+
+  // 판정 윈도우 (ms)
+  const W_PERFECT = 50;
+  const W_GREAT = 100;
+  const W_GOOD = 150;
+
+  function unitMs(wpm) { return 1200 / wpm; }
+  // 노트가 떨어지는 속도 (px/ms): 단위시간 동안 PIXELS_PER_UNIT 픽셀 이동
+  function fallSpeed(wpm) { return PIXELS_PER_UNIT / unitMs(wpm); }
+
+  // LEAD_IN을 WPM에 맞게 동적으로 계산
+  // 최소: 노트가 트랙 위쪽에서 판정선까지 떨어지는 시간 + 여유 1초
+  // 최대: 3.5초 (너무 길면 지루)
+  function computeLeadIn(wpm) {
+    const fallTime = JUDGE_LINE_Y / fallSpeed(wpm);  // 판정선까지 떨어지는 시간
+    return Math.min(3500, Math.max(2000, fallTime + 800));
+  }
+
+  // 텍스트 → 노트 시퀀스 빌드
+  function buildNotes(text, wpm) {
+    const u = unitMs(wpm);
+    const leadIn = computeLeadIn(wpm);
+    const notes = [];
+    const letterStartTimes = [];
+    let cursor = leadIn;  // 첫 노트가 판정선에 닿을 시각
+    let letterIdx = 0;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (ch === ' ') {
+        // 단어 간격 = 7단위 (이미 문자 간 3단위가 들어갔으므로 4단위 추가)
+        cursor += 4 * u;
+        continue;
+      }
+      const code = MORSE[ch];
+      if (!code) continue;
+      letterStartTimes.push({ char: ch, time: cursor, letterIdx });
+
+      for (let j = 0; j < code.length; j++) {
+        const sym = code[j];
+        const dur = (sym === '.' ? 1 : 3) * u;
+        notes.push({
+          type: sym === '.' ? 'dit' : 'dah',
+          startMs: cursor,
+          durationMs: dur,
+          letterIdx,
+          noteIdxInLetter: j,
+          el: null,
+          labelEl: null,
+          downAt: null,
+          upAt: null,
+          judged: false,
+          downJudge: null,
+          upJudge: null,
+          finalJudge: null,
+          isFirstInLetter: j === 0
+        });
+        cursor += dur;
+        // 부호 사이 간격 (마지막 부호 뒤엔 안 붙임)
+        if (j < code.length - 1) cursor += u;
+      }
+      // 문자 사이 간격
+      if (i < text.length - 1) cursor += 3 * u;
+      letterIdx++;
+    }
+    const totalMs = cursor + 1000;  // 마지막 노트 이후 여유
+    return { notes, letterStartTimes, totalMs };
+  }
+
+  function startTrack(track) {
+    const effectiveWpm = track.wpm * speedMult;
+    const built = buildNotes(track.text, effectiveWpm);
+    g = {
+      track,
+      baseWpm: track.wpm,
+      speedMult: speedMult,
+      notes: built.notes,
+      letterStartTimes: built.letterStartTimes,
+      totalMs: built.totalMs,
+      wpm: effectiveWpm,
+      speed: fallSpeed(effectiveWpm),
+      startTime: 0,
+      gameTime: 0,
+      score: 0,
+      combo: 0,
+      maxCombo: 0,
+      counts: { perfect: 0, great: 0, good: 0, miss: 0 },
+      keyDown: false,
+      keyDownTime: 0,
+      currentHoldNote: null,
+      paused: true,
+      finished: false,
+      rafId: null
+    };
+
+    $('playTrackName').textContent = track.name + ' · ×' + speedMult.toFixed(2);
+    $('playScore').textContent = '0';
+    $('playCombo').textContent = '0';
+    $('progressBar').style.width = '0%';
+    track_dom.innerHTML = '';
+
+    // 노트 DOM 생성
+    g.notes.forEach(n => {
+      const el = document.createElement('div');
+      el.className = 'note ' + n.type;
+      const heightPx = (n.durationMs / unitMs(g.wpm)) * PIXELS_PER_UNIT;
+      el.style.height = heightPx + 'px';
+      el.style.top = '-9999px';
+      track_dom.appendChild(el);
+      n.el = el;
+      if (n.isFirstInLetter) {
+        const lbl = document.createElement('div');
+        lbl.className = 'letter-label';
+        lbl.textContent = g.letterStartTimes.find(l => l.letterIdx === n.letterIdx).char;
+        track_dom.appendChild(lbl);
+        n.labelEl = lbl;
+      }
+    });
+
+    showScreen('play');
+    runCountdown(() => {
+      g.startTime = performance.now();
+      g.paused = false;
+      g.rafId = requestAnimationFrame(gameLoop);
+    });
+  }
+
+  function runCountdown(then) {
+    const cd = $('countdown');
+    const cn = $('countdownNum');
+    cd.classList.remove('hidden');
+    let n = 3;
+    cn.textContent = n;
+    cn.style.animation = 'none';
+    void cn.offsetWidth;
+    cn.style.animation = '';
+
+    const interval = setInterval(() => {
+      n--;
+      if (n > 0) {
+        cn.textContent = n;
+        cn.style.animation = 'none';
+        void cn.offsetWidth;
+        cn.style.animation = '';
+      } else if (n === 0) {
+        cn.textContent = 'GO';
+        cn.style.animation = 'none';
+        void cn.offsetWidth;
+        cn.style.animation = '';
+      } else {
+        clearInterval(interval);
+        cd.classList.add('hidden');
+        then();
+      }
+    }, 700);
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // GAME LOOP
+  // ════════════════════════════════════════════════════════════
+  function gameLoop() {
+    if (!g || g.paused || g.finished) return;
+    const now = performance.now();
+    g.gameTime = now - g.startTime;
+
+    // 노트 위치 업데이트
+    for (let i = 0; i < g.notes.length; i++) {
+      const n = g.notes[i];
+      // 노트 상단의 y 위치 = JUDGE_LINE_Y - (startMs - gameTime) * speed - height
+      // 즉, gameTime == startMs 일 때 노트 하단이 판정선에 닿음
+      const heightPx = (n.durationMs / unitMs(g.wpm)) * PIXELS_PER_UNIT;
+      const noteBottomY = JUDGE_LINE_Y + (g.gameTime - n.startMs) * g.speed;
+      const noteTopY = noteBottomY - heightPx;
+      n.el.style.top = noteTopY + 'px';
+
+      // 라벨 위치 (문자의 첫 노트 위쪽)
+      if (n.labelEl) {
+        n.labelEl.style.top = (noteTopY - 24) + 'px';
+      }
+
+      // 화면 밖으로 완전히 벗어나면 (판정선 아래 통과) 미판정인 경우 미스 처리
+      if (!n.judged && noteTopY > JUDGE_LINE_Y + W_GOOD * g.speed + 5) {
+        judgeMiss(n);
+      }
+    }
+
+    // 진행률 업데이트
+    const pct = Math.min(100, (g.gameTime / g.totalMs) * 100);
+    $('progressBar').style.width = pct + '%';
+
+    // 종료 체크
+    if (g.gameTime >= g.totalMs) {
+      finishGame();
+      return;
+    }
+
+    g.rafId = requestAnimationFrame(gameLoop);
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // JUDGMENT
+  // ════════════════════════════════════════════════════════════
+  function judgeOffset(offsetMs) {
+    const abs = Math.abs(offsetMs);
+    if (abs <= W_PERFECT) return 'perfect';
+    if (abs <= W_GREAT) return 'great';
+    if (abs <= W_GOOD) return 'good';
+    return 'miss';
+  }
+
+  function judgeMiss(note) {
+    note.judged = true;
+    note.finalJudge = 'miss';
+    note.el.classList.add('judged-miss');
+    if (note.labelEl) note.labelEl.classList.add('failed');
+    g.counts.miss++;
+    g.combo = 0;
+    refreshHUD();
+    showJudgePopup('MISS', 'miss');
+  }
+
+  // 등급 비교: perfect > great > good > miss
+  function worseJudge(a, b) {
+    const order = { perfect: 3, great: 2, good: 1, miss: 0 };
+    return order[a] < order[b] ? a : b;
+  }
+
+  function finalizeJudge(note) {
+    if (note.judged) return;
+    // downJudge와 upJudge 중 더 낮은 등급으로 결정
+    const dj = note.downJudge || 'miss';
+    const uj = note.upJudge || 'miss';
+    const finalJ = worseJudge(dj, uj);
+    note.finalJudge = finalJ;
+    note.judged = true;
+
+    note.el.classList.add('judged-' + finalJ);
+
+    let points = 0;
+    if (finalJ === 'perfect') points = 300;
+    else if (finalJ === 'great') points = 200;
+    else if (finalJ === 'good') points = 100;
+
+    // 콤보 보너스
+    let mult = 1.0;
+    if (g.combo >= 50) mult = 2.0;
+    else if (g.combo >= 30) mult = 1.5;
+    else if (g.combo >= 10) mult = 1.2;
+
+    const earned = Math.round(points * mult);
+    g.score += earned;
+
+    g.counts[finalJ]++;
+
+    if (finalJ === 'miss') {
+      g.combo = 0;
+      if (note.labelEl) note.labelEl.classList.add('failed');
+    } else {
+      g.combo++;
+      if (g.combo > g.maxCombo) g.maxCombo = g.combo;
+      // 문자의 마지막 노트면 라벨 완료 표시
+      const next = g.notes.find(nn => nn.letterIdx === note.letterIdx && nn.noteIdxInLetter > note.noteIdxInLetter);
+      if (!next) {
+        // 이 문자의 모든 노트가 통과되었는지 (미스 없이) 확인
+        const lettersNotes = g.notes.filter(nn => nn.letterIdx === note.letterIdx);
+        const allOk = lettersNotes.every(nn => nn.judged && nn.finalJudge !== 'miss');
+        const firstInLetter = lettersNotes.find(nn => nn.isFirstInLetter);
+        if (firstInLetter && firstInLetter.labelEl) {
+          if (allOk) firstInLetter.labelEl.classList.add('completed');
+        }
+      }
+    }
+
+    showJudgePopup(finalJ.toUpperCase(), finalJ);
+    refreshHUD();
+  }
+
+  function showJudgePopup(text, cls) {
+    const p = document.createElement('div');
+    p.className = 'judge-popup ' + cls;
+    p.textContent = text;
+    track_dom.appendChild(p);
+    setTimeout(() => p.remove(), 600);
+  }
+
+  function refreshHUD() {
+    $('playScore').textContent = g.score.toLocaleString();
+    $('playCombo').textContent = g.combo;
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // INPUT
+  // ════════════════════════════════════════════════════════════
+  // 가장 가까운 미판정 노트 찾기
+  function findClosestActiveNote(time) {
+    let best = null;
+    let bestDist = Infinity;
+    for (const n of g.notes) {
+      if (n.judged) continue;
+      const dist = Math.abs(n.startMs - time);
+      // 키다운은 노트의 startMs와 매칭. 너무 멀면 매칭 안 함
+      if (dist < bestDist && dist <= W_GOOD + 30) {
+        bestDist = dist;
+        best = n;
+      }
+    }
+    return best;
+  }
+
+  // "연속 펄스 = 길게 누름" 로직 (본편과 동일 — 모듈이 길게 누를 때 짧은 펄스 반복 발사)
+  const PULSE_GAP_MS = 50;
+  let rhythmReleaseTimer = null;
+  let rhythmTrueDownTime = 0;
+
+  function onKeyDown() {
+    if (!g || g.paused || g.finished) return;
+    // 대기 중인 release 타이머가 있으면 → 계속 누름
+    if (rhythmReleaseTimer) {
+      clearTimeout(rhythmReleaseTimer);
+      rhythmReleaseTimer = null;
+      return;
+    }
+    if (g.keyDown) return;
+    g.keyDown = true;
+    rhythmTrueDownTime = performance.now();
+    g.keyDownTime = g.gameTime;
+    keyButton.classList.add('pressed');
+    startTone();
+    if (navigator.vibrate) navigator.vibrate(8);
+
+    // 가장 가까운 미판정 노트 찾아서 키다운 판정
+    const target = findClosestActiveNote(g.gameTime);
+    if (target) {
+      const offset = g.gameTime - target.startMs;
+      const j = judgeOffset(offset);
+      target.downAt = g.gameTime;
+      target.downJudge = j;
+      target.el.classList.add('holding');
+      g.currentHoldNote = target;
+    }
+  }
+
+  function onKeyUp() {
+    if (!g) return;
+    if (!g.keyDown) return;
+    // 즉시 떼지 않고 PULSE_GAP_MS 동안 새 keydown 기다림
+    if (rhythmReleaseTimer) clearTimeout(rhythmReleaseTimer);
+    rhythmReleaseTimer = setTimeout(() => {
+      rhythmReleaseTimer = null;
+      rhythmFinalizeRelease();
+    }, PULSE_GAP_MS);
+  }
+
+  function rhythmFinalizeRelease() {
+    if (!g || !g.keyDown) return;
+    g.keyDown = false;
+    keyButton.classList.remove('pressed');
+    stopTone();
+
+    const n = g.currentHoldNote;
+    g.currentHoldNote = null;
+    if (!n || n.judged) return;
+
+    // 키업 시점은 PULSE_GAP_MS 만큼 지연되었으므로 게임 시각에서 보정
+    const adjustedGameTime = g.gameTime - PULSE_GAP_MS;
+    const expectedEndMs = n.startMs + n.durationMs;
+    const offset = adjustedGameTime - expectedEndMs;
+    n.upAt = adjustedGameTime;
+    n.upJudge = judgeOffset(offset);
+    n.el.classList.remove('holding');
+
+    finalizeJudge(n);
+  }
+
+  // 키보드
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'BracketLeft' || e.key === '[') {
+      e.preventDefault();
+      onKeyDown();
+    }
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space' || e.code === 'BracketLeft' || e.key === '[') {
+      e.preventDefault();
+      onKeyUp();
+    }
+  });
+
+  // 마우스/터치 (KEY 버튼)
+  keyButton.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    keyButton.setPointerCapture(e.pointerId);
+    onKeyDown();
+  });
+  keyButton.addEventListener('pointerup', (e) => {
+    e.preventDefault();
+    onKeyUp();
+  });
+  keyButton.addEventListener('pointercancel', () => onKeyUp());
+  keyButton.addEventListener('pointerleave', (e) => {
+    // 손가락이 버튼 밖으로 벗어나도 키업으로 처리
+    if (g && g.keyDown) onKeyUp();
+  });
+
+  // ════════════════════════════════════════════════════════════
+  // FINISH
+  // ════════════════════════════════════════════════════════════
+  function finishGame() {
+    if (!g || g.finished) return;
+    g.finished = true;
+    if (g.rafId) cancelAnimationFrame(g.rafId);
+    if (g.keyDown) { stopTone(); g.keyDown = false; keyButton.classList.remove('pressed'); }
+
+    // 남은 미판정 노트 처리
+    g.notes.forEach(n => { if (!n.judged) judgeMiss(n); });
+
+    const total = g.notes.length;
+    const hits = g.counts.perfect + g.counts.great + g.counts.good;
+    const accuracy = total > 0
+      ? Math.round(((g.counts.perfect * 1.0 + g.counts.great * 0.7 + g.counts.good * 0.4) / total) * 100)
+      : 0;
+
+    // Full combo / Full perfect 보너스
+    const isFC = g.counts.miss === 0 && total > 0;
+    const isFP = g.counts.miss === 0 && g.counts.great === 0 && g.counts.good === 0 && total > 0;
+    let finalScore = g.score;
+    if (isFP) finalScore = Math.round(finalScore * 1.5);
+    else if (isFC) finalScore = Math.round(finalScore * 1.2);
+
+    // 속도 배율 보정 — 빠를수록 보너스, 느릴수록 감점
+    // ×1.0 기준 100%, ×0.5는 70%, ×2.0는 140% 정도로 매핑 (선형 근사)
+    // 공식: 0.4 + 0.6 * speedMult  →  0.5→0.7, 1.0→1.0, 1.5→1.3, 2.0→1.6
+    // 너무 가팔라서 0.4+0.6를 0.55+0.45로 완화
+    const speedBonus = 0.55 + 0.45 * g.speedMult;
+    finalScore = Math.round(finalScore * speedBonus);
+
+    // 등급 (속도 배율과 무관, 순수 정확도)
+    let grade = 'C';
+    if (accuracy >= 95) grade = 'S';
+    else if (accuracy >= 85) grade = 'A';
+    else if (accuracy >= 70) grade = 'B';
+
+    const record = {
+      trackId: g.track.id,
+      trackName: g.track.name,
+      name: getProfileName(),
+      score: finalScore,
+      accuracy,
+      maxCombo: g.maxCombo,
+      counts: { ...g.counts },
+      grade,
+      isFC, isFP,
+      speedMult: g.speedMult,
+      date: new Date().toISOString().slice(0, 10)
+    };
+
+    // 최고기록 갱신 (트랙별로 점수 가장 높은 1개만)
+    const prev = store.bestByTrack[g.track.id];
+    const isNewBest = !prev || finalScore > prev.score;
+    if (isNewBest) store.bestByTrack[g.track.id] = record;
+
+    // 명예의 전당
+    store.hof.push(record);
+    store.hof.sort((a, b) => b.score - a.score);
+    if (store.hof.length > 20) store.hof.length = 20;
+    saveStore(store);
+
+    showResult(record, isNewBest);
+  }
+
+  function showResult(record, isNewBest) {
+    $('resultGrade').textContent = record.grade;
+    $('resultGrade').className = 'result-grade ' + record.grade;
+    $('resultScore').textContent = record.score.toLocaleString();
+    $('rPerfect').textContent = record.counts.perfect;
+    $('rGreat').textContent = record.counts.great;
+    $('rGood').textContent = record.counts.good;
+    $('rMiss').textContent = record.counts.miss;
+    $('rAccuracy').textContent = record.accuracy + '%';
+    $('rMaxCombo').textContent = record.maxCombo;
+
+    const statusEl = $('resultStatus');
+    if (record.isFP) {
+      statusEl.textContent = '★ FULL PERFECT ★';
+      statusEl.className = 'result-status fp';
+    } else if (record.isFC) {
+      statusEl.textContent = '★ FULL COMBO ★';
+      statusEl.className = 'result-status fc';
+    } else if (isNewBest) {
+      statusEl.textContent = 'NEW BEST!';
+      statusEl.className = 'result-status new-best';
+    } else {
+      statusEl.textContent = 'CLEAR';
+      statusEl.className = 'result-status';
+    }
+
+    showScreen('result');
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // LEADERBOARD MODAL
+  // ════════════════════════════════════════════════════════════
+  function openLeaderboard() {
+    const content = $('lbContent');
+    if (store.hof.length === 0) {
+      content.innerHTML = '<div class="lb-empty">아직 기록이 없습니다.<br>트랙을 플레이해보세요.</div>';
+    } else {
+      content.innerHTML = store.hof.map((r, i) => {
+        const speedTag = r.speedMult ? ` <span style="color:var(--ink-faint);">×${r.speedMult.toFixed(2)}</span>` : '';
+        const trackName = r.trackName || r.songName || '—';
+        return `
+        <div class="lb-row ${i === 0 ? 'first' : ''}">
+          <div class="rank">${i + 1}</div>
+          <div>
+            <div class="name">${escapeHtml(r.name)} · ${r.grade}</div>
+            <div class="song">${escapeHtml(trackName)}${speedTag}</div>
+          </div>
+          <div class="lscore">${r.score.toLocaleString()}</div>
+        </div>
+      `;
+      }).join('');
+    }
+    $('lbModal').classList.remove('hidden');
+  }
+  function closeLeaderboard() { $('lbModal').classList.add('hidden'); }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // BUTTON HANDLERS
+  // ════════════════════════════════════════════════════════════
+  $('backBtn').addEventListener('click', () => {
+    abortGame();
+    location.href = 'index.html';
+  });
+  $('lbBtn').addEventListener('click', openLeaderboard);
+  $('lbClose').addEventListener('click', closeLeaderboard);
+  $('lbModal').addEventListener('click', (e) => {
+    if (e.target === $('lbModal')) closeLeaderboard();
+  });
+  $('resultBack').addEventListener('click', () => {
+    buildTrackList();
+    showScreen('select');
+  });
+  $('resultRetry').addEventListener('click', () => {
+    if (g && g.track) startTrack(g.track);
+  });
+
+  function abortGame() {
+    if (g) {
+      g.finished = true;
+      g.paused = true;
+      if (g.rafId) cancelAnimationFrame(g.rafId);
+      if (g.keyDown) { stopTone(); g.keyDown = false; }
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // INIT
+  // ════════════════════════════════════════════════════════════
+  $('profileLabel').textContent = getProfileName();
+  setupSpeedSlider();
+  buildTrackList();
+  showScreen('select');
+</script>
+</body>
+</html>
