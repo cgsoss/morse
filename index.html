@@ -1946,7 +1946,7 @@
     if (!isPressed) return;
     isPressed = false;
     stopTone();
-    const dur = performance.now() - trueDownTime;
+    const dur = performance.now() - trueDownTime + PULSE_GAP_MS;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     inputBuf += symbol;
     refreshInputDisplay();
@@ -2429,7 +2429,7 @@
     if (!treePressed) return;
     treePressed = false;
     stopTone();
-    const dur = performance.now() - treeTrueDownTime;
+    const dur = performance.now() - treeTrueDownTime + PULSE_GAP_MS;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     treeInputBuf += symbol;
     treeLetterCommitted = false;
@@ -3116,7 +3116,7 @@
     if (!chIsPressed) return;
     chIsPressed = false;
     stopTone();
-    const dur = performance.now() - chTrueDownTime;
+    const dur = performance.now() - chTrueDownTime + PULSE_GAP_MS;
     const symbol = dur < ditDahThreshold() ? '.' : '-';
     ch.inputBuf += symbol;
     chInputDisplay.textContent = ch.inputBuf;

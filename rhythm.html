@@ -1497,9 +1497,11 @@
       finalJudge: n.finalJudge
     };
 
+    // 모듈 펄스의 마지막 keyup은 실제 뗌보다 일찍 올 수 있으므로 PULSE_GAP_MS 만큼 보정
+    const adjustedGameTime = g.gameTime + PULSE_GAP_MS;
     const expectedEndMs = n.startMs + n.durationMs;
-    const offset = g.gameTime - expectedEndMs;
-    n.upAt = g.gameTime;
+    const offset = adjustedGameTime - expectedEndMs;
+    n.upAt = adjustedGameTime;
     n.upJudge = judgeOffset(offset);
     n.el.classList.remove('holding');
 
