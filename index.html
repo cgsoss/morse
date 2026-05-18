@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_45.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_52.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -268,6 +268,296 @@
     color: var(--red); text-shadow: 0 0 30px var(--red-glow);
   }
   .target-code { font-size: 24px; color: var(--ink-dim); letter-spacing: 0.3em; }
+
+  /* ─── 단어 모드 타겟 (레슨 2/3) ─── */
+  .target-char.word-mode {
+    font-size: 56px;
+    letter-spacing: 0.08em;
+  }
+  /* 프로사인 모드: 막대(overline) 표시 */
+  .target-char.prosign-mode .prosign-overbar {
+    position: relative;
+    display: inline-block;
+    padding-top: 6px;
+  }
+  .target-char.prosign-mode .prosign-overbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber-glow);
+    border-radius: 1px;
+  }
+  /* 프로사인 모드: 부호 글자 사이를 좁게 (한 신호임을 시각화) */
+  .target-char.prosign-mode + .target-code {
+    letter-spacing: 0.18em;
+    color: var(--amber-dim);
+    font-weight: 500;
+  }
+
+  /* 프로사인 안내 배지 */
+  .prosign-notice {
+    background: rgba(255, 179, 71, 0.06);
+    border: 1px solid var(--amber-darker);
+    border-radius: 2px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 10px;
+    line-height: 1.6;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .prosign-notice .pn-icon {
+    color: var(--amber);
+    font-size: 14px;
+    flex-shrink: 0;
+    text-shadow: 0 0 6px var(--amber-glow);
+  }
+  .prosign-notice .pn-text {
+    flex: 1;
+  }
+  .prosign-notice b {
+    color: var(--amber);
+    font-weight: 500;
+  }
+  .prosign-notice code {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink-dim);
+    background: var(--bg);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+  }
+  .target-meaning {
+    font-size: 12px;
+    color: var(--amber-dim);
+    letter-spacing: 0.05em;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+    font-style: italic;
+    text-align: center;
+    max-width: 90%;
+    line-height: 1.5;
+  }
+  .target-progress {
+    display: flex; justify-content: center; gap: 8px;
+    margin-top: 12px;
+  }
+  .progress-dot {
+    width: 22px; height: 3px;
+    background: var(--ink-faint);
+    border-radius: 1px;
+    transition: all 0.2s;
+  }
+  .progress-dot.done {
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green-glow);
+  }
+  .progress-dot.current {
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+
+  /* ─── 레슨 3 내 단어 슬롯 ─── */
+  .custom-words {
+    margin-top: 6px;
+  }
+  .cw-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 10px;
+  }
+  .cw-count {
+    color: var(--amber-dim);
+    letter-spacing: 0.18em;
+  }
+  .cw-slots {
+    display: flex; flex-direction: column; gap: 5px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .cw-slots::-webkit-scrollbar { width: 4px; }
+  .cw-slots::-webkit-scrollbar-track { background: var(--bg-2); }
+  .cw-slots::-webkit-scrollbar-thumb { background: var(--ink-faint); border-radius: 2px; }
+  .word-slot {
+    display: flex; align-items: stretch;
+    border: 1px solid var(--ink-faint);
+    border-radius: 2px;
+    transition: all 0.15s;
+    overflow: hidden;
+    min-height: 38px;
+  }
+  .word-slot.filled {
+    border-color: var(--amber-darker);
+    background: rgba(255,179,71,0.04);
+    cursor: pointer;
+  }
+  .word-slot.filled:hover {
+    border-color: var(--amber-dim);
+  }
+  .word-slot.empty {
+    border-style: dashed;
+    border-color: var(--ink-faint);
+    cursor: text;
+  }
+  .word-slot.empty:hover {
+    border-color: var(--amber-dim);
+    background: rgba(255,179,71,0.03);
+  }
+  .word-slot.active {
+    border-style: solid;
+    border-color: var(--amber);
+    background: rgba(255,179,71,0.06);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+  .word-slot.current-target {
+    border-color: var(--green);
+    background: rgba(95,220,138,0.05);
+    box-shadow: inset 0 0 6px rgba(95,220,138,0.1);
+  }
+  .word-slot .ws-plus {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px;
+    color: var(--amber-dim);
+    font-size: 14px;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .word-slot.empty:hover .ws-plus { opacity: 1; color: var(--amber); }
+  .word-slot.active .ws-plus { display: none; }
+  .word-slot .ws-word {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    padding: 9px 12px;
+    outline: none;
+  }
+  .word-slot.filled .ws-word {
+    color: var(--amber);
+    font-weight: 500;
+    font-family: 'Space Grotesk', sans-serif;
+    pointer-events: none;
+  }
+  .word-slot.current-target .ws-word {
+    color: var(--green);
+  }
+  .word-slot .ws-word::placeholder {
+    color: var(--ink-dim);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+    font-size: 11px;
+  }
+  .word-slot .ws-del {
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    cursor: pointer;
+    padding: 0 12px;
+    font-size: 12px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .word-slot .ws-del:hover {
+    color: var(--red);
+    background: rgba(226,107,90,0.08);
+  }
+  .word-slot.active .ws-del {
+    display: none;
+  }
+  .cw-hint {
+    margin-top: 10px;
+    font-size: 9px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0.65;
+  }
+  .glossary {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+  }
+  .glossary-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 12px;
+  }
+  .glossary-cat {
+    color: var(--amber-dim);
+    letter-spacing: 0.18em;
+  }
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  @media (max-width: 560px) {
+    .glossary-grid { grid-template-columns: 1fr; }
+  }
+  .g-item {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    align-items: baseline;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.15s;
+  }
+  .g-item:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+  @media (max-width: 560px) {
+    .g-item:nth-child(odd) { border-right: none; }
+  }
+  .g-item.current {
+    background: rgba(255,179,71,0.08);
+    box-shadow: inset 0 0 6px rgba(255,179,71,0.1);
+  }
+  .g-item.current .g-word { color: var(--amber); }
+  .g-word {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .g-word .g-prosign-bar {
+    position: relative;
+    display: inline-block;
+    padding-top: 2px;
+  }
+  .g-word .g-prosign-bar::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 1.5px;
+    background: var(--amber-dim);
+    border-radius: 1px;
+  }
+  .g-meaning {
+    font-size: 10px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
   .input-row { display: flex; flex-direction: column; align-items: center; }
   .input-row .input-label {
     font-size: 10px; letter-spacing: 0.3em;
@@ -473,6 +763,69 @@
   .lesson-btn .num {
     font-family: 'Space Grotesk', sans-serif; font-style: normal;
     margin-right: 8px; opacity: 0.6; font-size: 13px;
+  }
+  .lesson-btn .done-mark {
+    float: right; color: var(--green);
+    font-size: 11px; opacity: 0.85;
+    text-shadow: 0 0 6px var(--green-glow);
+  }
+
+  /* ─── 레슨 그룹 토글 (레슨 1/2/3) ─── */
+  .lesson-group-toggle {
+    display: flex; gap: 6px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 2px; padding: 5px;
+    background: rgba(20,16,10,0.5);
+    margin-bottom: 14px;
+  }
+  .lesson-group-toggle .lg-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 11px;
+    padding: 9px 8px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+  .lesson-group-toggle .lg-btn:hover {
+    border-color: var(--amber); color: var(--amber);
+  }
+  .lesson-group-toggle .lg-btn.active {
+    border-color: var(--amber-dim); color: var(--amber);
+    background: rgba(255,179,71,0.05);
+  }
+  .lesson-group-toggle .lg-btn .lg-num {
+    font-family: 'Space Grotesk', sans-serif;
+    margin-right: 6px; opacity: 0.6; font-size: 13px;
+  }
+
+  /* ─── 레슨 그룹 placeholder (레슨 2, 3 임시 안내) ─── */
+  .lesson-placeholder {
+    text-align: center;
+    padding: 32px 16px;
+    border: 1px dashed var(--ink-faint);
+    border-radius: 2px;
+    color: var(--ink-dim);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-top: 6px;
+  }
+  .lesson-placeholder .ph-icon {
+    font-size: 24px; opacity: 0.4; margin-bottom: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .lesson-placeholder .ph-title {
+    color: var(--amber-dim); font-size: 12px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .lesson-placeholder .ph-desc {
+    font-size: 10px; opacity: 0.7; line-height: 1.6;
   }
 
   footer {
@@ -1204,19 +1557,19 @@
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-mode="free"><span class="num">i.</span>자유 송신</button>
-    <button class="tab" data-mode="practice"><span class="num">ii.</span>연습 모드</button>
-    <button class="tab" data-mode="challenge"><span class="num">iii.</span>도전</button>
+    <button class="tab active" data-mode="practice"><span class="num">i.</span>연습 모드</button>
+    <button class="tab" data-mode="challenge"><span class="num">ii.</span>도전</button>
+    <button class="tab" data-mode="free"><span class="num">iii.</span>자유 송신</button>
     <button class="tab" data-mode="ranking"><span class="num">iv.</span>랭킹</button>
   </div>
 
   <!-- 연습 모드 서브 토글: 연습 모드일 때만 표시 -->
-  <div class="practice-sub-toggle hidden" id="practiceSubToggle">
+  <div class="practice-sub-toggle" id="practiceSubToggle">
     <button data-sub="lesson" class="">레슨 연습 / Lesson</button>
     <button data-sub="tree" class="active">트리 연습 / Tree</button>
   </div>
 
-  <section id="mode-main" class="mode">
+  <section id="mode-main" class="mode hidden">
     <div class="grid">
 
       <div class="panel">
@@ -1224,11 +1577,11 @@
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
         <div class="panel-label">
-          <span id="modeTitle">자유 송신 / Free Transmission</span>
-          <span class="badge" id="modeSubtitle">no target · just send</span>
+          <span id="modeTitle">연습 모드 / Practice</span>
+          <span class="badge" id="modeSubtitle">기초 1 — E·T·A·N</span>
         </div>
 
-        <div class="stats-bar hidden" id="statsBar">
+        <div class="stats-bar" id="statsBar">
           <div class="stat"><div class="v green" id="statCorrect">0</div><div class="l">맞춤</div></div>
           <div class="stat"><div class="v red" id="statWrong">0</div><div class="l">틀림</div></div>
           <div class="stat"><div class="v" id="statStreak">0</div><div class="l">연속</div></div>
@@ -1236,15 +1589,17 @@
         </div>
 
         <div class="display-stack" id="displayStack">
-          <div class="target-row hidden" id="targetRow">
-            <div class="target-label">다음 문자</div>
+          <div class="target-row" id="targetRow">
+            <div class="target-label" id="targetLabel">다음 문자</div>
             <div class="target-char" id="targetChar">T</div>
             <div class="target-code" id="targetCode">-</div>
+            <div class="target-meaning hidden" id="targetMeaning"></div>
+            <div class="target-progress hidden" id="targetProgress"></div>
           </div>
           <div class="input-row">
-            <div class="input-label" id="inputLabel">현재 입력 / Current Signal</div>
+            <div class="input-label" id="inputLabel">입력한 부호 / Your Input</div>
             <div class="input-display empty" id="inputDisplay">—</div>
-            <div class="input-display text empty" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
+            <div class="input-display text empty hidden" id="decodedDisplay" style="font-size:18px;margin-top:8px;">—</div>
           </div>
         </div>
 
@@ -1256,12 +1611,12 @@
           </div>
         </div>
 
-        <div class="controls" id="freeControls">
+        <div class="controls hidden" id="freeControls">
           <button class="btn" id="clearBtn">CLEAR</button>
           <button class="btn" id="spaceBtn">단어 공백</button>
           <button class="btn primary" id="playbackBtn">▷ 재생</button>
         </div>
-        <div class="controls hidden" id="practiceControls">
+        <div class="controls" id="practiceControls">
           <button class="btn" id="practiceSkip">SKIP →</button>
           <button class="btn" id="practiceHint">▷ 힌트 듣기</button>
           <button class="btn" id="practiceReset">RESET</button>
@@ -1272,25 +1627,62 @@
         <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
         <span class="panel-corner bl"></span><span class="panel-corner br"></span>
 
-        <div id="lessonSection" class="hidden">
+        <div id="lessonSection" class="">
           <div class="panel-label">
             <span>레슨 / Lessons</span>
             <span class="badge">curriculum</span>
           </div>
-          <div class="lesson-list" id="lessonList"><button class="lesson-btn active"><span class="num">1.</span>기초 1 — E·T·A·N</button><button class="lesson-btn"><span class="num">2.</span>기초 2 — I·M·S·O</button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>SOS / 비상 신호</button></div>
+          <!-- 레슨 그룹 토글 (1/2/3) -->
+          <div class="lesson-group-toggle" id="lessonGroupToggle">
+            <button class="lg-btn active" data-group="g1"><span class="lg-num">1.</span>글자</button>
+            <button class="lg-btn" data-group="g2"><span class="lg-num">2.</span>기본 단어</button>
+            <button class="lg-btn" data-group="g3"><span class="lg-num">3.</span>내 단어</button>
+          </div>
+          <!-- 프로사인 안내 배지 (프로사인 카테고리 선택 시만 표시) -->
+          <div class="prosign-notice hidden" id="prosignNotice">
+            <span class="pn-icon">⚠</span>
+            <span class="pn-text"><b>프로사인</b>은 글자 사이 간격 없이 <b>한 신호</b>로 송신합니다.<br>예: AR̄ → <code>·-·-·</code> (A의 ·- 와 R의 ·-· 를 붙임)</span>
+          </div>
+          <!-- 하위 레슨 리스트 (그룹별로 동적 빌드) -->
+          <div class="lesson-list" id="lessonList"><button class="lesson-btn active"><span class="num">1.</span>기초 1 — E·T·A·N</button><button class="lesson-btn"><span class="num">2.</span>기초 2 — I·M·S·O</button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>S·O·S·H·E·L·P 통합 연습</button></div>
+          <!-- 레슨 3: 내 단어 슬롯 영역 -->
+          <div class="custom-words hidden" id="customWordsSection">
+            <div class="cw-head">
+              <span>내 단어 / MY WORDS</span>
+              <span class="cw-count" id="cwCount">0 / 50</span>
+            </div>
+            <div class="cw-slots" id="cwSlots"></div>
+            <div class="cw-hint">
+              영문 대문자와 숫자만 사용. 슬롯을 클릭하면 그 단어로 점프합니다.
+            </div>
+          </div>
+          <!-- 용어 사전 (레슨 2 카테고리 선택 시) -->
+          <div class="glossary hidden" id="glossarySection">
+            <div class="glossary-head">
+              <span>용어 사전 / GLOSSARY</span>
+              <span class="glossary-cat" id="glossaryCat"></span>
+            </div>
+            <div class="glossary-grid" id="glossaryGrid"></div>
+          </div>
+          <!-- 레슨 2/3 임시 placeholder -->
+          <div class="lesson-placeholder hidden" id="lessonPlaceholder">
+            <div class="ph-icon">··—</div>
+            <div class="ph-title" id="phTitle">준비 중</div>
+            <div class="ph-desc" id="phDesc">이 기능은 곧 추가됩니다.</div>
+          </div>
         </div>
 
         <div class="section-divider">— 부호표 / Code Reference —</div>
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
-          클릭=소리 재생 · <span id="refHint">전체 글자</span>
+          클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item in-lesson" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item in-lesson" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item in-lesson" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item in-lesson" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item in-lesson" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item in-lesson" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item in-lesson" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item in-lesson" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item in-lesson" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item in-lesson" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item in-lesson" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item in-lesson" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item in-lesson" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item in-lesson" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item in-lesson" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item in-lesson" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item in-lesson" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item in-lesson" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item in-lesson" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item in-lesson" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item in-lesson" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item in-lesson" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item in-lesson" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item in-lesson" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item in-lesson" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item in-lesson" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item in-lesson" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item in-lesson" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item in-lesson" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item in-lesson" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item in-lesson" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item in-lesson" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson current" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
 
   <!-- ═══ TREE PRACTICE MODE ═══ -->
-  <section id="mode-tree-practice" class="mode hidden">
+  <section id="mode-tree-practice" class="mode">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -1476,22 +1868,22 @@
 
         <!-- progress + stats -->
         <div class="stats-bar">
-          <div class="stat"><div class="v" id="chProgress">2/4</div><div class="l">진행</div></div>
-          <div class="stat"><div class="v" id="chScore">100</div><div class="l">점수</div></div>
-          <div class="stat"><div class="v" id="chStreak">1</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="chProgress">1/4</div><div class="l">진행</div></div>
+          <div class="stat"><div class="v" id="chScore">0</div><div class="l">점수</div></div>
+          <div class="stat"><div class="v" id="chStreak">0</div><div class="l">연속</div></div>
           <div class="stat"><div class="v" id="chMult">×1.0</div><div class="l">배수</div></div>
         </div>
 
         <!-- progress bar -->
         <div style="height:4px;background:var(--bg-2);border:1px solid var(--line);border-radius:2px;margin-bottom:18px;overflow:hidden;">
-          <div id="chProgressBar" style="height: 100%; width: 25%; background: linear-gradient(90deg,var(--amber-dim),var(--amber)); box-shadow: 0 0 8px var(--amber-glow); transition: width 250ms;"></div>
+          <div id="chProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg,var(--amber-dim),var(--amber)); box-shadow: 0 0 8px var(--amber-glow); transition: width 250ms;"></div>
         </div>
 
         <div class="display-stack" id="chDisplayStack">
           <div class="target-row">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="chTargetChar">N</div>
-            <div class="target-code" id="chTargetCode">-.</div>
+            <div class="target-char" id="chTargetChar">T</div>
+            <div class="target-code" id="chTargetCode">-</div>
           </div>
           <div class="input-row">
             <div class="input-label">입력한 부호 / Your Input</div>
@@ -1531,7 +1923,7 @@
           <span>레슨 선택 / Lessons</span>
           <span class="badge">curriculum</span>
         </div>
-        <div class="lesson-list" id="challengeLessonList"><button class="lesson-btn cleared"><span class="num">1.</span>기초 1 — E·T·A·N<span class="lesson-meta">최고 475점 · 100%</span></button><button class="lesson-btn cleared"><span class="num">2.</span>기초 2 — I·M·S·O<span class="lesson-meta">최고 445점 · 100%</span></button><button class="lesson-btn"><span class="num">3.</span>기초 통합<span class="lesson-meta">최고 835점 · 88%</span></button><button class="lesson-btn locked" disabled=""><span class="num">4.</span>중급 — 자주 쓰는 글자<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">5.</span>알파벳 전체<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">6.</span>숫자<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">7.</span>혼합 (영문+숫자)<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">8.</span>SOS / 비상 신호<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button></div>
+        <div class="lesson-list" id="challengeLessonList"><button class="lesson-btn cleared"><span class="num">1.</span>기초 1 — E·T·A·N<span class="lesson-meta">최고 475점 · 100%</span></button><button class="lesson-btn cleared"><span class="num">2.</span>기초 2 — I·M·S·O<span class="lesson-meta">최고 445점 · 100%</span></button><button class="lesson-btn"><span class="num">3.</span>기초 통합<span class="lesson-meta">최고 835점 · 88%</span></button><button class="lesson-btn locked" disabled=""><span class="num">4.</span>중급 — 자주 쓰는 글자<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">5.</span>알파벳 전체<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">6.</span>숫자<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">7.</span>혼합 (영문+숫자)<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button><button class="lesson-btn locked" disabled=""><span class="num">8.</span>S·O·S·H·E·L·P 통합 연습<span class="lesson-meta">이전 레슨 90% 통과 시 해제</span></button></div>
 
         <div class="section-divider">— 점수 룰 / Scoring —</div>
         <div style="font-size:11px; line-height:1.7; color:var(--ink-dim);">
@@ -1625,7 +2017,7 @@
   <footer>
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
-      <span id="versionLabel">v2026.05.02.24</span> ·
+      <span id="versionLabel">v2026.05.18.01</span> ·
       <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
     </div>
   </footer>
@@ -1731,6 +2123,17 @@
     "'":'.----.','"':'.-..-.',':':'---...',';':'-.-.-.','!':'-.-.--'
   };
   const REVERSE_MORSE = Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
+
+  // 프로사인 (글자 간 letter gap 없이 통째로 송신되는 운영 신호)
+  // 예: AR은 A의 ·- 와 R의 ·-· 를 붙여서 ·-·-· 로 송신
+  const PROSIGN = {
+    'AR':  '.-.-.',     // 송신 끝
+    'SK':  '...-.-',    // 교신 종료
+    'BT':  '-...-',     // 새 단락 / 구분
+    'KN':  '-.--.',     // 특정국 응답
+    'AS':  '.-...',     // 잠깐 대기
+    'SOS': '...---...'  // 조난 신호
+  };
 
   let audioCtx = null, oscNode = null, gainNode = null;
   let soundOn = true, frequency = 600, volume = 0.4;
@@ -1868,7 +2271,7 @@
   function letterGapMs() { return ditMs() * 3; }
   function wordGapMs() { return ditMs() * 7; }
 
-  let activeMode = 'free';
+  let activeMode = 'practice';
   let isPressed = false, pressStart = 0;
   let inputBuf = '', decodedBuf = '';
   let letterTimer = null, wordTimer = null, practiceTimer = null;
@@ -1882,9 +2285,88 @@
     { id:'full', name:'알파벳 전체', chars:'ABCDEFGHIJKLMNOPQRSTUVWXYZ' },
     { id:'num', name:'숫자', chars:'0123456789' },
     { id:'mix', name:'혼합 (영문+숫자)', chars:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' },
-    { id:'sos', name:'SOS / 비상 신호', chars:'SOSHELP' }
+    { id:'sos', name:'S·O·S·H·E·L·P 통합 연습', chars:'SOSHELP' }
   ];
+
+  // ─── 레슨 그룹 ───
+  const LESSON_GROUPS = [
+    {
+      id: 'g1', name: '글자', type: 'char',
+      items: lessons   // 기존 8개 그대로
+    },
+    {
+      id: 'g2', name: '기본 단어', type: 'word',
+      items: [
+        {
+          id: 'qcodes', name: 'Q부호', type: 'word',
+          words: [
+            { w:'CQ',  m:'일반 호출 — 누구든 응답 바람' },
+            { w:'QTH', m:'위치 — 당신의 위치는?' },
+            { w:'QSL', m:'수신 확인 — 잘 받았음' },
+            { w:'QSO', m:'교신 — 통신할 수 있나?' },
+            { w:'QRZ', m:'호출자 확인 — 누가 부른 거죠?' },
+            { w:'QRM', m:'혼신 — 다른 신호 간섭됨' },
+            { w:'QRT', m:'송신 중단 — 운용 종료함' },
+            { w:'QSY', m:'주파수 변경 — 주파수 옮길까?' }
+          ]
+        },
+        {
+          id: 'abbr', name: '운영 약어', type: 'word',
+          words: [
+            { w:'DE',  m:'~로부터 (From) — 호출 시 송신자 표시' },
+            { w:'TNX', m:'감사 (Thanks)' },
+            { w:'OM',  m:'친구·동료 (Old Man) — 남성 운영자 호칭' },
+            { w:'YL',  m:'여성 운영자 (Young Lady)' },
+            { w:'FB',  m:'훌륭함 (Fine Business) — 좋은 신호' },
+            { w:'73',  m:'안녕히 (Best Regards) — 교신 종료 인사' },
+            { w:'88',  m:'사랑을 담아 (Love and Kisses)' }
+          ]
+        },
+        {
+          id: 'greet', name: '인사', type: 'word',
+          words: [
+            { w:'HELLO', m:'안녕하세요 — 일반적 인사' },
+            { w:'HI',    m:'안녕 — 짧은 인사' },
+            { w:'GM',    m:'좋은 아침 (Good Morning)' },
+            { w:'GE',    m:'좋은 저녁 (Good Evening)' },
+            { w:'GA',    m:'좋은 오후 (Good Afternoon)' },
+            { w:'TEST',  m:'시험 송신 — 신호 확인용' }
+          ]
+        },
+        {
+          id: 'common', name: '기본 통신', type: 'word',
+          words: [
+            { w:'OK',  m:'알았음 — 확인·동의' },
+            { w:'RST', m:'신호 보고 (Readability·Strength·Tone)' }
+          ]
+        },
+        {
+          id: 'prosign', name: '프로사인', type: 'prosign',
+          words: [
+            { w:'AR',  m:'송신 끝 (End of Message) — 메시지 종료 표시' },
+            { w:'SK',  m:'교신 종료 (End of Contact) — 통신 완전히 끝' },
+            { w:'BT',  m:'새 단락 / 구분 (Break) — 내용 구분자' },
+            { w:'KN',  m:'특정국 응답 (Go ahead, named) — 호출한 국만 응답' },
+            { w:'AS',  m:'잠깐 대기 (Wait) — 잠시 기다려달라' },
+            { w:'SOS', m:'조난 신호 (Distress) — 비상 구조 요청' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'g3', name: '내 단어', type: 'word', custom: true,
+      items: [
+        { id:'mywords', name:'내 단어', type:'word', words:[] }   // words는 동적으로 갱신
+      ]
+    }
+  ];
+  let currentLessonGroup = LESSON_GROUPS[0];
   let currentLesson = lessons[0];
+  // 단어 연습용 상태 (레슨 2/3에서 사용)
+  let currentWordCategory = null;   // 현재 선택된 단어 카테고리 객체
+  let currentWord = null;            // 현재 출제된 단어 객체 { w, m }
+  let wordCharIdx = 0;               // 단어 안에서 현재 입력 중인 글자 인덱스
+  let wordQueue = [];                // 단어 큐
   let practiceQueue = [];
   let currentTarget = '';
   let stats = { correct:0, wrong:0, streak:0, total:0 };
@@ -1959,11 +2441,49 @@
         }
       }, wordGapMs());
     } else if (activeMode === 'practice') {
-      // 즉시 채점: buf가 정답과 정확히 일치하면 letterGap 대기 없이 바로 판정
-      if (currentTarget && inputBuf === MORSE[currentTarget]) {
-        checkPracticeAnswer();
-      } else {
-        practiceTimer = setTimeout(checkPracticeAnswer, letterGapMs());
+      // 그룹 1 (글자): 기존 로직
+      if (currentLessonGroup.id === 'g1') {
+        // 즉시 채점: buf가 정답과 정확히 일치하면 letterGap 대기 없이 바로 판정
+        if (currentTarget && inputBuf === MORSE[currentTarget]) {
+          checkPracticeAnswer();
+        } else {
+          practiceTimer = setTimeout(checkPracticeAnswer, letterGapMs());
+        }
+      }
+      // 그룹 2 - 프로사인: 통째 매칭 (letter gap 없이 한 신호)
+      else if (currentLessonGroup.id === 'g2' && currentWordCategory && currentWordCategory.type === 'prosign' && currentWord) {
+        const expectedCode = PROSIGN[currentTarget];
+        if (!expectedCode) return;
+        if (inputBuf === expectedCode) {
+          // 정답: 즉시 채점
+          checkProsignAnswer(true);
+        } else if (inputBuf.length >= expectedCode.length) {
+          // 길이 초과 또는 같은데 다른 경우 → 오답
+          checkProsignAnswer(false);
+        }
+        // 길이가 짧으면 아직 입력 중, 대기
+      }
+      // 그룹 2 - 일반 단어: 글자별 진행
+      else if (currentLessonGroup.id === 'g2' && currentWord) {
+        const expectedChar = currentTarget[wordCharIdx];
+        const expectedCode = expectedChar ? MORSE[expectedChar] : null;
+        // 즉시 매칭: 현재 글자와 정확히 일치 → 즉시 채점
+        if (expectedCode && inputBuf === expectedCode) {
+          checkWordAnswer();
+        } else {
+          // letter gap 대기 후 채점 (틀린 글자 감지)
+          practiceTimer = setTimeout(checkWordAnswer, letterGapMs());
+        }
+      }
+      // 그룹 3 (내 단어): 일반 단어와 동일하게 글자별 진행
+      else if (currentLessonGroup.id === 'g3' && currentWord) {
+        const expectedChar = currentTarget[wordCharIdx];
+        const expectedCode = expectedChar ? MORSE[expectedChar] : null;
+        if (expectedCode && inputBuf === expectedCode) {
+          checkWordAnswer();
+        } else {
+          practiceTimer = setTimeout(checkWordAnswer, letterGapMs());
+        }
       }
     }
   }
@@ -2028,6 +2548,410 @@
         unlockInput();
       }, 900);
     }
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── WORD PRACTICE (레슨 2/3 단어 연습) ───────
+  // ════════════════════════════════════════════════════════════
+  function startWordPractice(category) {
+    if (!category || !category.words || category.words.length === 0) return;
+    currentWordCategory = category;
+    stats = { correct:0, wrong:0, streak:0, total:0 };
+    wordQueue = [];
+    inputBuf = '';
+    wordCharIdx = 0;
+    updateStats();
+    // 프로사인 안내 배지 토글
+    if (category.type === 'prosign') {
+      $('prosignNotice').classList.remove('hidden');
+    } else {
+      $('prosignNotice').classList.add('hidden');
+    }
+    nextWordTarget();
+    renderGlossary();
+  }
+
+  function nextWordTarget() {
+    inputBuf = '';
+    wordCharIdx = 0;
+    refreshInputDisplay();
+    if (wordQueue.length === 0) {
+      // 단어 큐 셔플
+      wordQueue = currentWordCategory.words.slice().sort(() => Math.random() - 0.5);
+    }
+    currentWord = wordQueue.shift();
+    currentTarget = currentWord.w;
+    renderWordTarget();
+    updateGlossaryHighlight();
+    // 레슨 3 (내 단어): 슬롯에서 현재 출제 단어 강조
+    if (currentLessonGroup.id === 'g3') {
+      buildCustomWordSlots();
+    }
+  }
+
+  // 단어 채점: 글자별 진행
+  // 호출 시점: letter gap 경과 후, 또는 첫 글자가 즉시 매칭됐을 때
+  function checkWordAnswer() {
+    if (!inputBuf) return;
+    const expectedChar = currentTarget[wordCharIdx];
+    const expectedCode = MORSE[expectedChar];
+
+    if (inputBuf === expectedCode) {
+      // 현재 글자 정답
+      wordCharIdx++;
+      inputBuf = '';
+      refreshInputDisplay();
+      renderWordTarget();   // 진행 도트 갱신
+      updateMiniRefHighlight();   // 미니 부호표 현재 글자 갱신
+
+      if (wordCharIdx >= currentTarget.length) {
+        // 단어 전체 완료
+        stats.total++;
+        stats.correct++; stats.streak++;
+        flashDisplay('correct');
+        lockInput();
+        updateStats();
+        setTimeout(() => {
+          clearFlash();
+          nextWordTarget();
+          unlockInput();
+        }, 700);
+      }
+      // 아직 남은 글자가 있으면 사용자가 계속 입력하도록 대기
+    } else {
+      // 글자 오답 → 단어 전체 오답, 같은 단어 재출제
+      stats.total++;
+      stats.wrong++; stats.streak = 0;
+      flashDisplay('wrong');
+      lockInput();
+      updateStats();
+      setTimeout(() => {
+        clearFlash();
+        // 같은 단어 큐 앞에 다시 넣고 출제
+        wordQueue.unshift(currentWord);
+        nextWordTarget();
+        unlockInput();
+      }, 900);
+    }
+  }
+
+  // 프로사인 채점: 통째 매칭
+  function checkProsignAnswer(isCorrect) {
+    stats.total++;
+    if (isCorrect) {
+      stats.correct++; stats.streak++;
+      flashDisplay('correct');
+      lockInput();
+      updateStats();
+      setTimeout(() => {
+        clearFlash();
+        nextWordTarget();
+        unlockInput();
+      }, 700);
+    } else {
+      stats.wrong++; stats.streak = 0;
+      flashDisplay('wrong');
+      lockInput();
+      updateStats();
+      setTimeout(() => {
+        clearFlash();
+        // 같은 프로사인 다시 출제
+        wordQueue.unshift(currentWord);
+        nextWordTarget();
+        unlockInput();
+      }, 900);
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── CUSTOM WORDS (레슨 3 내 단어) ───────
+  // ════════════════════════════════════════════════════════════
+  const MAX_CUSTOM_WORDS = 50;
+
+  // 입력 정제: 소문자→대문자, MORSE에 정의된 글자만 남김
+  function sanitizeCustomWord(raw) {
+    if (!raw) return '';
+    return raw.toUpperCase().split('').filter(c => MORSE[c]).join('');
+  }
+
+  // store.customWords ↔ g3 카테고리 동기화
+  function syncCustomWordsToGroup() {
+    const cat = LESSON_GROUPS.find(g => g.id === 'g3').items[0];
+    cat.words = (store.customWords || []).map(w => ({ w: w, m: '' }));
+  }
+
+  // 슬롯 클릭 시: 그 단어로 즉시 점프, 다음부터는 자동 순환 계속
+  function jumpToCustomWord(word) {
+    syncCustomWordsToGroup();
+    const cat = LESSON_GROUPS.find(g => g.id === 'g3').items[0];
+    if (cat.words.length === 0) return;
+
+    // 카테고리 미초기화 상태면 초기화
+    if (!currentWordCategory || currentWordCategory.id !== 'g3' || currentLessonGroup.id !== 'g3') {
+      // (그룹 토글에서 이미 g3로 들어왔을 때 호출되므로 보통은 정상 상태)
+      currentWordCategory = cat;
+    }
+
+    // 기존 진행 상태 정리
+    stopTone();
+    isPressed = false;
+    inputBuf = '';
+    wordCharIdx = 0;
+    clearTimeout(practiceTimer);
+    clearTimeout(letterTimer);
+    refreshInputDisplay();
+    if (typeof clearFlash === 'function') clearFlash();
+
+    // 큐를 재구성: 클릭한 단어 제외한 나머지 셔플
+    const targetWordObj = cat.words.find(wo => wo.w === word);
+    if (!targetWordObj) return;
+    const rest = cat.words.filter(wo => wo.w !== word).sort(() => Math.random() - 0.5);
+    wordQueue = rest;
+    currentWord = targetWordObj;
+    currentTarget = currentWord.w;
+    renderWordTarget();
+    updateGlossaryHighlight();
+    buildCustomWordSlots();
+    updateMiniRefHighlight();
+  }
+
+  // 슬롯 UI 빌드
+  function buildCustomWordSlots() {
+    const container = $('cwSlots');
+    container.innerHTML = '';
+    const words = store.customWords || [];
+
+    // 채워진 슬롯들
+    words.forEach((w, idx) => {
+      const slot = document.createElement('div');
+      slot.className = 'word-slot filled';
+      // 현재 출제 중인 단어면 강조
+      if (currentLessonGroup.id === 'g3' && currentWord && currentWord.w === w) {
+        slot.classList.add('current-target');
+      }
+      slot.innerHTML = `
+        <input class="ws-word" type="text" value="${w}" readonly>
+        <button class="ws-del" data-idx="${idx}" title="삭제">✕</button>
+      `;
+      // 슬롯 본체 클릭 시 그 단어로 점프
+      slot.addEventListener('click', (e) => {
+        // 삭제 버튼 클릭은 제외
+        if (e.target.classList.contains('ws-del')) return;
+        jumpToCustomWord(w);
+      });
+      // 삭제 버튼
+      slot.querySelector('.ws-del').addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteCustomWord(idx);
+      });
+      container.appendChild(slot);
+    });
+
+    // 마지막에 빈 슬롯 (최대치 도달하지 않은 경우만)
+    if (words.length < MAX_CUSTOM_WORDS) {
+      const empty = document.createElement('div');
+      empty.className = 'word-slot empty';
+      empty.innerHTML = `
+        <span class="ws-plus">+</span>
+        <input class="ws-word" type="text" placeholder="글자입력" maxlength="12">
+      `;
+      const input = empty.querySelector('.ws-word');
+      // 빈 슬롯 어디든 클릭하면 input 활성화
+      empty.addEventListener('click', () => {
+        empty.classList.add('active');
+        input.focus();
+      });
+      // 입력 중에는 실시간으로 정제 표시
+      input.addEventListener('input', (e) => {
+        const cleaned = sanitizeCustomWord(e.target.value);
+        if (cleaned !== e.target.value) {
+          e.target.value = cleaned;
+        }
+      });
+      // 엔터 또는 포커스 아웃 시 저장
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          input.blur();
+        } else if (e.key === 'Escape') {
+          input.value = '';
+          input.blur();
+        }
+      });
+      input.addEventListener('blur', () => {
+        const v = sanitizeCustomWord(input.value);
+        if (v) {
+          addCustomWord(v);
+        } else {
+          // 빈 채로 빠져나가면 활성 상태 해제만
+          empty.classList.remove('active');
+        }
+      });
+      container.appendChild(empty);
+    }
+
+    // 카운트 갱신
+    $('cwCount').textContent = `${words.length} / ${MAX_CUSTOM_WORDS}`;
+  }
+
+  // 단어 추가
+  function addCustomWord(word) {
+    const clean = sanitizeCustomWord(word);
+    if (!clean) return;
+    if (!store.customWords) store.customWords = [];
+    if (store.customWords.length >= MAX_CUSTOM_WORDS) return;
+    // 중복은 허용 (사용자가 같은 단어 두 번 등록하고 싶을 수도)
+    store.customWords.push(clean);
+    saveStore(store);
+    syncCustomWordsToGroup();
+    buildCustomWordSlots();
+    // 단어가 추가됐는데 아직 출제 중인 단어 없으면 자동 시작
+    if (currentLessonGroup.id === 'g3' && !currentWord) {
+      startCustomWordPractice();
+    }
+  }
+
+  // 단어 삭제
+  function deleteCustomWord(idx) {
+    if (!store.customWords) return;
+    const deleted = store.customWords[idx];
+    store.customWords.splice(idx, 1);
+    saveStore(store);
+    syncCustomWordsToGroup();
+    // 현재 출제 중인 단어가 삭제됐으면 다음으로
+    const wasCurrentTarget = currentLessonGroup.id === 'g3' && currentWord && currentWord.w === deleted;
+    buildCustomWordSlots();
+    if (currentLessonGroup.id === 'g3') {
+      if (store.customWords.length === 0) {
+        // 모두 비었음
+        currentWord = null;
+        currentWordCategory = null;
+        targetCharEl.classList.add('word-mode');
+        targetCharEl.textContent = '—';
+        targetCodeEl.textContent = '단어를 추가하세요';
+        $('targetMeaning').classList.add('hidden');
+        $('targetProgress').classList.add('hidden');
+      } else if (wasCurrentTarget) {
+        // 큐도 재구성
+        startCustomWordPractice();
+      } else {
+        // 큐에서도 제거하고 진행 유지
+        wordQueue = wordQueue.filter(w => w.w !== deleted);
+      }
+    }
+  }
+
+  // 내 단어 연습 시작
+  function startCustomWordPractice() {
+    syncCustomWordsToGroup();
+    const cat = LESSON_GROUPS.find(g => g.id === 'g3').items[0];
+    if (cat.words.length === 0) {
+      // 단어 없음 → 안내 화면
+      currentWordCategory = cat;
+      currentWord = null;
+      targetCharEl.classList.add('word-mode');
+      targetCharEl.classList.remove('prosign-mode');
+      targetCharEl.textContent = '—';
+      targetCodeEl.textContent = '단어를 추가하세요';
+      $('targetMeaning').classList.add('hidden');
+      $('targetProgress').classList.add('hidden');
+      $('targetLabel').textContent = '다음 단어 / TARGET WORD';
+      return;
+    }
+    startWordPractice(cat);
+    buildCustomWordSlots();  // current-target 표시 갱신
+  }
+
+  // 단어 타겟 영역 렌더링
+  function renderWordTarget() {
+    if (!currentWord) {
+      targetCharEl.textContent = '—';
+      targetCodeEl.textContent = '—';
+      $('targetMeaning').classList.add('hidden');
+      $('targetProgress').classList.add('hidden');
+      targetCharEl.classList.remove('word-mode', 'prosign-mode');
+      return;
+    }
+    targetCharEl.classList.add('word-mode');
+    const isProsign = currentWordCategory && currentWordCategory.type === 'prosign';
+
+    if (isProsign) {
+      // 프로사인: 막대 표시 (PROSIGN 부호 통째)
+      targetCharEl.classList.add('prosign-mode');
+      // 글자 위에 막대 — 시각적으로 한 덩어리임을 표시
+      targetCharEl.innerHTML = `<span class="prosign-overbar">${currentTarget}</span>`;
+      targetCodeEl.textContent = PROSIGN[currentTarget] || '?';
+      $('targetLabel').textContent = '프로사인 / PROSIGN';
+      $('targetProgress').classList.add('hidden');
+    } else {
+      targetCharEl.classList.remove('prosign-mode');
+      targetCharEl.textContent = currentTarget;
+      // 각 글자의 모스 부호를 띄어쓰기로 구분 표시
+      targetCodeEl.textContent = currentTarget.split('').map(c => MORSE[c] || '?').join('  ');
+      $('targetLabel').textContent = '다음 단어 / TARGET WORD';
+      // 진행 도트
+      const pEl = $('targetProgress');
+      pEl.innerHTML = '';
+      for (let i = 0; i < currentTarget.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot';
+        if (i < wordCharIdx) dot.classList.add('done');
+        else if (i === wordCharIdx) dot.classList.add('current');
+        pEl.appendChild(dot);
+      }
+      pEl.classList.remove('hidden');
+    }
+    // 의미 표시
+    const mEl = $('targetMeaning');
+    if (currentWord.m) {
+      mEl.textContent = currentWord.m;
+      mEl.classList.remove('hidden');
+    } else {
+      mEl.classList.add('hidden');
+    }
+  }
+
+  // 글자 모드 타겟 (기존)으로 복귀
+  function resetTargetToCharMode() {
+    targetCharEl.classList.remove('word-mode', 'prosign-mode');
+    $('targetMeaning').classList.add('hidden');
+    $('targetProgress').classList.add('hidden');
+    $('targetLabel').textContent = '다음 문자';
+  }
+
+  // 용어 사전 렌더링
+  function renderGlossary() {
+    if (!currentWordCategory) {
+      $('glossarySection').classList.add('hidden');
+      return;
+    }
+    const grid = $('glossaryGrid');
+    grid.innerHTML = '';
+    const isProsign = currentWordCategory.type === 'prosign';
+    currentWordCategory.words.forEach(wObj => {
+      const item = document.createElement('div');
+      item.className = 'g-item';
+      item.dataset.word = wObj.w;
+      const wordHtml = isProsign
+        ? `<span class="g-prosign-bar">${wObj.w}</span>`
+        : wObj.w;
+      item.innerHTML = `<div class="g-word">${wordHtml}</div><div class="g-meaning">${wObj.m || ''}</div>`;
+      grid.appendChild(item);
+    });
+    const unit = isProsign ? '신호' : '단어';
+    $('glossaryCat').textContent = `${currentWordCategory.name} · ${currentWordCategory.words.length}${unit}`;
+    $('glossarySection').classList.remove('hidden');
+    updateGlossaryHighlight();
+  }
+
+  function updateGlossaryHighlight() {
+    document.querySelectorAll('#glossaryGrid .g-item').forEach(el => {
+      el.classList.toggle('current', currentWord && el.dataset.word === currentWord.w);
+    });
+  }
+
+  function hideGlossary() {
+    $('glossarySection').classList.add('hidden');
   }
   function lockInput() {
     inputLocked = true;
@@ -2118,15 +3042,57 @@
     }
   }
 
-  $('practiceSkip').addEventListener('click', () => { inputBuf = ''; nextTarget(); });
-  $('practiceHint').addEventListener('click', async () => {
-    const code = MORSE[currentTarget];
-    for (let i = 0; i < code.length; i++) {
-      await playBeep(code[i] === '.' ? ditMs() : dahMs());
-      if (i < code.length - 1) await sleep(ditMs());
+  $('practiceSkip').addEventListener('click', () => {
+    if (currentLessonGroup.id === 'g1') {
+      inputBuf = ''; nextTarget();
+    } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+      inputBuf = ''; nextWordTarget();
+    } else if (currentLessonGroup.id === 'g3' && currentWord) {
+      inputBuf = ''; nextWordTarget();
     }
   });
-  $('practiceReset').addEventListener('click', startPractice);
+  $('practiceHint').addEventListener('click', async () => {
+    if (currentLessonGroup.id === 'g1') {
+      const code = MORSE[currentTarget];
+      if (!code) return;
+      for (let i = 0; i < code.length; i++) {
+        await playBeep(code[i] === '.' ? ditMs() : dahMs());
+        if (i < code.length - 1) await sleep(ditMs());
+      }
+    } else if ((currentLessonGroup.id === 'g2' || currentLessonGroup.id === 'g3') && currentWord) {
+      const isProsign = currentWordCategory && currentWordCategory.type === 'prosign';
+      if (isProsign) {
+        // 프로사인: 통째 재생, letter gap 없음
+        const code = PROSIGN[currentTarget];
+        if (!code) return;
+        for (let i = 0; i < code.length; i++) {
+          await playBeep(code[i] === '.' ? ditMs() : dahMs());
+          if (i < code.length - 1) await sleep(ditMs());
+        }
+      } else {
+        // 일반 단어 (g2 일반 카테고리 또는 g3 내 단어): 글자 사이 letter gap
+        const word = currentTarget;
+        for (let wi = 0; wi < word.length; wi++) {
+          const code = MORSE[word[wi]];
+          if (!code) continue;
+          for (let i = 0; i < code.length; i++) {
+            await playBeep(code[i] === '.' ? ditMs() : dahMs());
+            if (i < code.length - 1) await sleep(ditMs());
+          }
+          if (wi < word.length - 1) await sleep(letterGapMs());
+        }
+      }
+    }
+  });
+  $('practiceReset').addEventListener('click', () => {
+    if (currentLessonGroup.id === 'g1') {
+      startPractice();
+    } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+      startWordPractice(currentWordCategory);
+    } else if (currentLessonGroup.id === 'g3') {
+      startCustomWordPractice();
+    }
+  });
 
   const soundToggle = $('soundToggle');
   const waveIndicator = $('waveIndicator');
@@ -2207,7 +3173,14 @@
       refHintEl.textContent = '전체 글자';
     } else if (mode === 'practice') {
       modeTitle.textContent = '연습 모드 / Practice';
-      modeSubtitle.textContent = currentLesson.name;
+      // 그룹별 부제목
+      if (currentLessonGroup.id === 'g1') {
+        modeSubtitle.textContent = currentLesson.name;
+      } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+        modeSubtitle.textContent = `${currentLessonGroup.name} — ${currentWordCategory.name}`;
+      } else {
+        modeSubtitle.textContent = currentLessonGroup.name;
+      }
       targetRow.classList.remove('hidden');
       statsBar.classList.remove('hidden');
       lessonSection.classList.remove('hidden');
@@ -2222,8 +3195,41 @@
       if (typeof applyPracticeSubMode === 'function') {
         applyPracticeSubMode(typeof practiceSubMode !== 'undefined' ? practiceSubMode : 'lesson');
       }
+      // 그룹별 연습 시작
       if (typeof practiceSubMode === 'undefined' || practiceSubMode === 'lesson') {
-        startPractice();
+        if (currentLessonGroup.id === 'g1') {
+          resetTargetToCharMode();
+          $('prosignNotice').classList.add('hidden');
+          startPractice();
+        } else if (currentLessonGroup.id === 'g2') {
+          if (currentWordCategory) {
+            // 이미 선택된 카테고리 있으면 그 카테고리로 재시작
+            startWordPractice(currentWordCategory);
+          } else {
+            // 카테고리 미선택: 안내 표시
+            targetCharEl.classList.add('word-mode');
+            targetCharEl.textContent = '—';
+            targetCodeEl.textContent = '카테고리를 선택하세요';
+            $('targetMeaning').classList.add('hidden');
+            $('targetProgress').classList.add('hidden');
+            $('targetLabel').textContent = '다음 단어 / TARGET WORD';
+            $('prosignNotice').classList.add('hidden');
+          }
+        } else {
+          // 그룹 3: 슬롯 UI 표시 + 단어 있으면 자동 연습 시작
+          targetCharEl.classList.add('word-mode');
+          targetCharEl.classList.remove('prosign-mode');
+          $('targetMeaning').classList.add('hidden');
+          $('targetProgress').classList.add('hidden');
+          $('targetLabel').textContent = '다음 단어 / TARGET WORD';
+          $('prosignNotice').classList.add('hidden');
+          if (store.customWords && store.customWords.length > 0) {
+            startCustomWordPractice();
+          } else {
+            targetCharEl.textContent = '—';
+            targetCodeEl.textContent = '단어를 추가하세요';
+          }
+        }
       }
     }
     refreshInputDisplay();
@@ -2558,7 +3564,13 @@
       treeResetState();
       // 레슨 연습 재시작 (명시적 요청 시만)
       if (restartLesson && activeMode === 'practice') {
-        startPractice();
+        if (currentLessonGroup.id === 'g1') {
+          startPractice();
+        } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+          startWordPractice(currentWordCategory);
+        } else if (currentLessonGroup.id === 'g3') {
+          startCustomWordPractice();
+        }
       }
     }
   }
@@ -2689,7 +3701,8 @@
     unlocked: { [lessons[0].id]: true }, // first lesson always unlocked
     bestByLesson: {},   // lessonId -> { score, accuracy, time, date, name }
     history: [],        // all rounds: { name, lessonId, score, accuracy, time, streak, date }
-    hof: []             // hall of fame top 10 ever
+    hof: [],            // hall of fame top 10 ever
+    customWords: []     // 사용자가 직접 등록한 단어들 (string 배열)
   });
 
   function loadStore() {
@@ -3417,21 +4430,151 @@
 
   function buildLessonList() {
     const list = $('lessonList');
+    const placeholder = $('lessonPlaceholder');
     list.innerHTML = '';
-    lessons.forEach((l, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'lesson-btn' + (l.id === currentLesson.id ? ' active' : '');
-      btn.innerHTML = `<span class="num">${i+1}.</span>${l.name}`;
-      btn.addEventListener('click', () => {
-        currentLesson = l;
-        modeSubtitle.textContent = l.name;
-        buildLessonList();
-        startPractice();
-        updateMiniRefHighlight();
-      });
-      list.appendChild(btn);
+
+    // 그룹 토글 active 상태 갱신
+    document.querySelectorAll('#lessonGroupToggle .lg-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.group === currentLessonGroup.id);
     });
+
+    // 레슨 1 (글자): 기존 동작 그대로
+    if (currentLessonGroup.id === 'g1') {
+      placeholder.classList.add('hidden');
+      list.classList.remove('hidden');
+      hideGlossary();
+      $('customWordsSection').classList.add('hidden');
+      lessons.forEach((l, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'lesson-btn' + (l.id === currentLesson.id ? ' active' : '');
+        btn.innerHTML = `<span class="num">${i+1}.</span>${l.name}`;
+        btn.addEventListener('click', () => {
+          currentLesson = l;
+          modeSubtitle.textContent = l.name;
+          buildLessonList();
+          startPractice();
+          updateMiniRefHighlight();
+        });
+        list.appendChild(btn);
+      });
+      return;
+    }
+
+    // 레슨 2 (기본 단어): 카테고리 버튼 빌드
+    if (currentLessonGroup.id === 'g2') {
+      placeholder.classList.add('hidden');
+      list.classList.remove('hidden');
+      $('customWordsSection').classList.add('hidden');
+      const cats = currentLessonGroup.items;
+      cats.forEach((cat, i) => {
+        const btn = document.createElement('button');
+        const isActive = currentWordCategory && currentWordCategory.id === cat.id;
+        btn.className = 'lesson-btn' + (isActive ? ' active' : '');
+        const preview = cat.words.slice(0, 3).map(w => w.w).join(', ');
+        const prosignMark = cat.type === 'prosign' ? ' <span style="color:var(--amber);font-size:10px;">⚠</span>' : '';
+        btn.innerHTML = `<span class="num">${i+1}.</span>${cat.name}${prosignMark} (${preview}...) <span style="float:right;font-size:9px;color:var(--ink-dim);letter-spacing:0.15em;opacity:0.6;">${cat.words.length} ${cat.type === 'prosign' ? '신호' : '단어'}</span>`;
+        btn.addEventListener('click', () => {
+          currentWordCategory = cat;
+          modeSubtitle.textContent = `${currentLessonGroup.name} — ${cat.name}`;
+          buildLessonList();
+          startWordPractice(cat);
+        });
+        list.appendChild(btn);
+      });
+      // 이미 선택된 카테고리가 있으면 사전도 같이 보임
+      if (currentWordCategory) {
+        renderGlossary();
+      } else {
+        hideGlossary();
+      }
+      return;
+    }
+
+    // 레슨 3 (내 단어): 슬롯 영역 표시
+    if (currentLessonGroup.id === 'g3') {
+      placeholder.classList.add('hidden');
+      list.classList.add('hidden');
+      hideGlossary();
+      $('customWordsSection').classList.remove('hidden');
+      syncCustomWordsToGroup();
+      buildCustomWordSlots();
+      return;
+    }
+
+    // (도달 안 함, 안전장치)
+    list.classList.add('hidden');
+    hideGlossary();
+    placeholder.classList.remove('hidden');
   }
+
+  // 그룹 토글 클릭 핸들러
+  document.querySelectorAll('#lessonGroupToggle .lg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const groupId = btn.dataset.group;
+      const group = LESSON_GROUPS.find(g => g.id === groupId);
+      if (!group) return;
+      // 같은 그룹 다시 클릭 시 아무것도 안 함
+      if (group.id === currentLessonGroup.id) return;
+      currentLessonGroup = group;
+
+      // 진행 중인 연습 멈춤
+      stopTone();
+      isPressed = false;
+      inputBuf = '';
+      clearTimeout(practiceTimer);
+      clearTimeout(letterTimer);
+      clearTimeout(wordTimer);
+      refreshInputDisplay();
+      // 프로사인 안내 배지는 모든 전환 시 일단 숨김 (필요시 다시 표시)
+      $('prosignNotice').classList.add('hidden');
+
+      if (group.id === 'g1') {
+        // 글자 그룹으로 복귀: 단어 상태 정리, 글자 타겟 복구
+        currentWordCategory = null;
+        currentWord = null;
+        resetTargetToCharMode();
+        hideGlossary();
+        modeSubtitle.textContent = currentLesson.name;
+        buildLessonList();
+        if (activeMode === 'practice') startPractice();
+        updateMiniRefHighlight();
+      } else if (group.id === 'g2') {
+        // 단어 그룹 진입: 카테고리 미선택 상태
+        currentWordCategory = null;
+        currentWord = null;
+        // 타겟 영역은 단어 모드 placeholder
+        targetCharEl.classList.add('word-mode');
+        targetCharEl.textContent = '—';
+        targetCodeEl.textContent = '카테고리를 선택하세요';
+        $('targetMeaning').classList.add('hidden');
+        $('targetProgress').classList.add('hidden');
+        $('targetLabel').textContent = '다음 단어 / TARGET WORD';
+        modeSubtitle.textContent = group.name;
+        buildLessonList();
+        updateMiniRefHighlight();
+      } else {
+        // 레슨 3: 슬롯 UI 표시 + 단어 있으면 자동 연습 시작
+        currentWordCategory = null;
+        currentWord = null;
+        targetCharEl.classList.add('word-mode');
+        targetCharEl.classList.remove('prosign-mode');
+        $('targetMeaning').classList.add('hidden');
+        $('targetProgress').classList.add('hidden');
+        $('targetLabel').textContent = '다음 단어 / TARGET WORD';
+        modeSubtitle.textContent = group.name;
+        buildLessonList();   // 슬롯 UI 표시
+        // 등록된 단어가 있으면 자동으로 연습 시작
+        if (store.customWords && store.customWords.length > 0) {
+          startCustomWordPractice();
+        } else {
+          // 단어 없음
+          targetCharEl.textContent = '—';
+          targetCodeEl.textContent = '단어를 추가하세요';
+        }
+        updateMiniRefHighlight();
+      }
+    });
+  });
 
   // play one character's morse, with visual highlight on the source element
   async function playCharWithHighlight(ch, el) {
@@ -3461,15 +4604,43 @@
     });
   }
   function updateMiniRefHighlight() {
-    const lessonChars = activeMode === 'practice' ? new Set(currentLesson.chars.split('')) : null;
+    // 연습 모드일 때만 현재 컨텍스트의 글자 highlight
+    let lessonChars = null;
+    let curCh = null;
+    if (activeMode === 'practice') {
+      if (currentLessonGroup.id === 'g1') {
+        lessonChars = new Set(currentLesson.chars.split(''));
+        curCh = currentTarget;
+      } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+        // 카테고리 전체 단어들에 쓰이는 글자 모음
+        const chars = new Set();
+        currentWordCategory.words.forEach(w => {
+          w.w.split('').forEach(c => chars.add(c));
+        });
+        lessonChars = chars;
+        // 프로사인은 글자 진행 개념 없음 — 현재 글자 강조 안 함
+        if (currentWordCategory.type !== 'prosign' && currentWord && wordCharIdx < currentTarget.length) {
+          curCh = currentTarget[wordCharIdx];
+        }
+      } else if (currentLessonGroup.id === 'g3' && store.customWords && store.customWords.length > 0) {
+        // 내 단어들에 쓰이는 글자 모음
+        const chars = new Set();
+        store.customWords.forEach(w => {
+          w.split('').forEach(c => chars.add(c));
+        });
+        lessonChars = chars;
+        if (currentWord && wordCharIdx < currentTarget.length) {
+          curCh = currentTarget[wordCharIdx];
+        }
+      }
+    }
     document.querySelectorAll('#miniRefGrid .mini-ref-item').forEach(el => {
       if (lessonChars) {
         el.classList.toggle('in-lesson', lessonChars.has(el.dataset.ch));
       } else {
         el.classList.add('in-lesson');
       }
-      el.classList.toggle('current',
-        activeMode === 'practice' && el.dataset.ch === currentTarget);
+      el.classList.toggle('current', !!curCh && el.dataset.ch === curCh);
     });
   }
 
@@ -3494,12 +4665,12 @@
   buildLessonList();
   buildReference();
   buildMiniRef();
-  setMode('free');
+  setMode('practice');
 
   // ─────── VERSION / CACHE MANAGEMENT ───────
   // App version — bump this whenever you update the file.
   // The PWA will detect the change and force-reload.
-  const APP_VERSION = '2026.05.02.24';
+  const APP_VERSION = '2026.05.18.01';
   document.getElementById('versionLabel').textContent = 'v' + APP_VERSION;
 
   // On startup: check if running an outdated version (cached PWA shell).
