@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_52.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_58.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -769,6 +769,83 @@
     font-size: 11px; opacity: 0.85;
     text-shadow: 0 0 6px var(--green-glow);
   }
+  .lesson-btn .progress-tag {
+    float: right;
+    font-size: 9px;
+    color: var(--ink-dim);
+    letter-spacing: 0.12em;
+    opacity: 0.7;
+  }
+  .lesson-btn.cleared-perfect {
+    border-color: rgba(95,220,138,0.5);
+  }
+
+  /* 연습 완료 오버레이: displayStack 위에 떠서 표시 */
+  .display-stack { position: relative; }
+  .lesson-complete-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(14,11,7,0.85) 30%, rgba(14,11,7,0.4) 100%);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 2px;
+  }
+  .lesson-complete-overlay.show {
+    opacity: 1;
+  }
+  .lesson-complete-overlay .lco-inner {
+    text-align: center;
+    transform: scale(0.92);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .lesson-complete-overlay.show .lco-inner {
+    transform: scale(1);
+  }
+  .lesson-complete-overlay .lco-icon {
+    font-size: 56px;
+    color: var(--green);
+    text-shadow: 0 0 20px var(--green-glow), 0 0 40px rgba(95,220,138,0.3);
+    line-height: 1;
+    margin-bottom: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+  }
+  .lesson-complete-overlay .lco-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .lesson-complete-overlay .lco-title b {
+    color: var(--green);
+    font-weight: 600;
+  }
+  .lesson-complete-overlay .lco-sub {
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .lesson-complete-overlay .lco-sub b {
+    color: var(--amber);
+  }
+  /* 그룹 완료(마지막) 변형 */
+  .lesson-complete-overlay.group-end .lco-icon {
+    color: var(--amber);
+    text-shadow: 0 0 20px var(--amber-glow), 0 0 40px rgba(255,179,71,0.3);
+  }
+  .lesson-complete-overlay.group-end .lco-title b {
+    color: var(--amber);
+  }
 
   /* ─── 레슨 그룹 토글 (레슨 1/2/3) ─── */
   .lesson-group-toggle {
@@ -1260,8 +1337,8 @@
     }
     header { grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
     .header-btn { padding: 9px 10px; font-size: 10px; letter-spacing: 0.1em; }
-    .header-btn .hb-label { display: none; }
-    .header-btn .hb-icon { font-size: 18px; }
+    .header-btn .hb-icon { font-size: 16px; }
+    /* 모바일에서도 라벨 표시 유지 (한글 텍스트라 명확하게) */
     .status-strip { font-size: 8px; letter-spacing: 0.18em; }
     .brand h1 { font-size: 42px; }
     .tabs { padding: 4px; gap: 4px; }
@@ -1534,16 +1611,13 @@
     </div>
     <div class="header-actions">
       <button class="header-btn" data-mode="reference" id="hdrReference" aria-label="부호표">
-        <span class="hb-icon">📖</span>
         <span class="hb-label">부호표</span>
       </button>
       <button class="header-btn" id="hdrRhythm" aria-label="리듬 모드">
-        <span class="hb-icon">🎮</span>
         <span class="hb-label">리듬</span>
       </button>
       <button class="header-btn" id="hdrOptions" aria-label="옵션">
         <span class="hb-icon">⚙</span>
-        <span class="hb-label">옵션</span>
       </button>
     </div>
   </header>
@@ -1565,11 +1639,11 @@
 
   <!-- 연습 모드 서브 토글: 연습 모드일 때만 표시 -->
   <div class="practice-sub-toggle" id="practiceSubToggle">
-    <button data-sub="lesson" class="">레슨 연습 / Lesson</button>
-    <button data-sub="tree" class="active">트리 연습 / Tree</button>
+    <button data-sub="lesson" class="active">레슨 연습 / Lesson</button>
+    <button data-sub="tree" class="">트리 연습 / Tree</button>
   </div>
 
-  <section id="mode-main" class="mode hidden">
+  <section id="mode-main" class="mode">
     <div class="grid">
 
       <div class="panel">
@@ -1589,10 +1663,18 @@
         </div>
 
         <div class="display-stack" id="displayStack">
+          <!-- 레슨 완료 오버레이: 큰 글자 영역 위에 떠서 표시 -->
+          <div class="lesson-complete-overlay hidden" id="lessonCompleteOverlay">
+            <div class="lco-inner">
+              <div class="lco-icon" id="lcoIcon">✓</div>
+              <div class="lco-title" id="lcoTitle">레슨 완료</div>
+              <div class="lco-sub" id="lcoSub"></div>
+            </div>
+          </div>
           <div class="target-row" id="targetRow">
             <div class="target-label" id="targetLabel">다음 문자</div>
-            <div class="target-char" id="targetChar">T</div>
-            <div class="target-code" id="targetCode">-</div>
+            <div class="target-char" id="targetChar">N</div>
+            <div class="target-code" id="targetCode">-.</div>
             <div class="target-meaning hidden" id="targetMeaning"></div>
             <div class="target-progress hidden" id="targetProgress"></div>
           </div>
@@ -1644,7 +1726,7 @@
             <span class="pn-text"><b>프로사인</b>은 글자 사이 간격 없이 <b>한 신호</b>로 송신합니다.<br>예: AR̄ → <code>·-·-·</code> (A의 ·- 와 R의 ·-· 를 붙임)</span>
           </div>
           <!-- 하위 레슨 리스트 (그룹별로 동적 빌드) -->
-          <div class="lesson-list" id="lessonList"><button class="lesson-btn active"><span class="num">1.</span>기초 1 — E·T·A·N</button><button class="lesson-btn"><span class="num">2.</span>기초 2 — I·M·S·O</button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>S·O·S·H·E·L·P 통합 연습</button></div>
+          <div class="lesson-list" id="lessonList"><button class="lesson-btn active cleared-perfect"><span class="num">1.</span>기초 1 — E·T·A·N<span class="done-mark">✓ 100%</span></button><button class="lesson-btn cleared-perfect"><span class="num">2.</span>기초 2 — I·M·S·O<span class="done-mark">✓ 100%</span></button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>S·O·S·H·E·L·P 통합 연습</button></div>
           <!-- 레슨 3: 내 단어 슬롯 영역 -->
           <div class="custom-words hidden" id="customWordsSection">
             <div class="cw-head">
@@ -1676,13 +1758,13 @@
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
           클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson current" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson current" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
 
   <!-- ═══ TREE PRACTICE MODE ═══ -->
-  <section id="mode-tree-practice" class="mode">
+  <section id="mode-tree-practice" class="mode hidden">
     <div class="panel">
       <span class="panel-corner tl"></span><span class="panel-corner tr"></span>
       <span class="panel-corner bl"></span><span class="panel-corner br"></span>
@@ -1868,22 +1950,22 @@
 
         <!-- progress + stats -->
         <div class="stats-bar">
-          <div class="stat"><div class="v" id="chProgress">1/4</div><div class="l">진행</div></div>
-          <div class="stat"><div class="v" id="chScore">0</div><div class="l">점수</div></div>
-          <div class="stat"><div class="v" id="chStreak">0</div><div class="l">연속</div></div>
+          <div class="stat"><div class="v" id="chProgress">2/4</div><div class="l">진행</div></div>
+          <div class="stat"><div class="v" id="chScore">100</div><div class="l">점수</div></div>
+          <div class="stat"><div class="v" id="chStreak">1</div><div class="l">연속</div></div>
           <div class="stat"><div class="v" id="chMult">×1.0</div><div class="l">배수</div></div>
         </div>
 
         <!-- progress bar -->
         <div style="height:4px;background:var(--bg-2);border:1px solid var(--line);border-radius:2px;margin-bottom:18px;overflow:hidden;">
-          <div id="chProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg,var(--amber-dim),var(--amber)); box-shadow: 0 0 8px var(--amber-glow); transition: width 250ms;"></div>
+          <div id="chProgressBar" style="height: 100%; width: 25%; background: linear-gradient(90deg,var(--amber-dim),var(--amber)); box-shadow: 0 0 8px var(--amber-glow); transition: width 250ms;"></div>
         </div>
 
         <div class="display-stack" id="chDisplayStack">
           <div class="target-row">
             <div class="target-label">다음 문자</div>
-            <div class="target-char" id="chTargetChar">T</div>
-            <div class="target-code" id="chTargetCode">-</div>
+            <div class="target-char" id="chTargetChar">N</div>
+            <div class="target-code" id="chTargetCode">-.</div>
           </div>
           <div class="input-row">
             <div class="input-label">입력한 부호 / Your Input</div>
@@ -2018,7 +2100,8 @@
     <div>· — · · / — — — / · — · / ··· / ·</div>
     <div>
       <span id="versionLabel">v2026.05.18.01</span> ·
-      <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a>
+      <a href="file:///C:/Users/cg/Downloads/morse_10.html#" id="reloadLink" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dashed var(--ink-faint);">새 버전 확인</a> ·
+      <span style="color:var(--ink-faint);">© 2026 코렐리안 · All Rights Reserved</span>
     </div>
   </footer>
 </div>
@@ -2510,6 +2593,9 @@
     practiceQueue = [];
     inputBuf = '';
     updateStats();
+    // 진행 카운터 초기화 (perfectCount는 보존)
+    resetProgressForCurrent();
+    if (typeof hideLessonOverlay === 'function') hideLessonOverlay();
     nextTarget();
   }
   function nextTarget() {
@@ -2526,21 +2612,32 @@
   function checkPracticeAnswer() {
     if (!inputBuf) return;
     stats.total++;
-    if (inputBuf === MORSE[currentTarget]) {
+    const isCorrect = (inputBuf === MORSE[currentTarget]);
+    if (isCorrect) {
       stats.correct++; stats.streak++;
       flashDisplay('correct');
       lockInput();
       updateStats();
+      // 진행 기록 + 완료 체크
+      const rec = recordAttempt(true);
+      const completion = checkLessonCompletion(rec);
       setTimeout(() => {
         clearFlash();
-        nextTarget();
-        unlockInput();
+        if (completion) {
+          // 완료: 다음 레슨으로 자동 이동 (handleLessonComplete가 setTimeout으로 처리)
+          handleLessonComplete(completion);
+          unlockInput();
+        } else {
+          nextTarget();
+          unlockInput();
+        }
       }, 600);
     } else {
       stats.wrong++; stats.streak = 0;
       flashDisplay('wrong');
       lockInput();
       updateStats();
+      recordAttempt(false);
       setTimeout(() => {
         clearFlash();
         inputBuf = '';
@@ -2561,6 +2658,9 @@
     inputBuf = '';
     wordCharIdx = 0;
     updateStats();
+    // 진행 카운터 초기화 (perfectCount는 보존)
+    resetProgressForCurrent();
+    if (typeof hideLessonOverlay === 'function') hideLessonOverlay();
     // 프로사인 안내 배지 토글
     if (category.type === 'prosign') {
       $('prosignNotice').classList.remove('hidden');
@@ -2611,10 +2711,21 @@
         flashDisplay('correct');
         lockInput();
         updateStats();
+        // 진행 기록 (g2만, g3는 자동 진행 제외)
+        let completion = null;
+        if (currentLessonGroup.id === 'g2') {
+          const rec = recordAttempt(true);
+          completion = checkLessonCompletion(rec);
+        }
         setTimeout(() => {
           clearFlash();
-          nextWordTarget();
-          unlockInput();
+          if (completion) {
+            handleLessonComplete(completion);
+            unlockInput();
+          } else {
+            nextWordTarget();
+            unlockInput();
+          }
         }, 700);
       }
       // 아직 남은 글자가 있으면 사용자가 계속 입력하도록 대기
@@ -2625,6 +2736,10 @@
       flashDisplay('wrong');
       lockInput();
       updateStats();
+      // g2 진행 기록 (오답)
+      if (currentLessonGroup.id === 'g2') {
+        recordAttempt(false);
+      }
       setTimeout(() => {
         clearFlash();
         // 같은 단어 큐 앞에 다시 넣고 출제
@@ -2643,16 +2758,24 @@
       flashDisplay('correct');
       lockInput();
       updateStats();
+      const rec = recordAttempt(true);
+      const completion = checkLessonCompletion(rec);
       setTimeout(() => {
         clearFlash();
-        nextWordTarget();
-        unlockInput();
+        if (completion) {
+          handleLessonComplete(completion);
+          unlockInput();
+        } else {
+          nextWordTarget();
+          unlockInput();
+        }
       }, 700);
     } else {
       stats.wrong++; stats.streak = 0;
       flashDisplay('wrong');
       lockInput();
       updateStats();
+      recordAttempt(false);
       setTimeout(() => {
         clearFlash();
         // 같은 프로사인 다시 출제
@@ -2860,6 +2983,141 @@
     }
     startWordPractice(cat);
     buildCustomWordSlots();  // current-target 표시 갱신
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // ─────── LESSON PROGRESS / AUTO-ADVANCE (5단계) ───────
+  // ════════════════════════════════════════════════════════════
+  const ACCURACY_THRESHOLD = 90;   // 완료 기준 정확도
+  const MIN_ATTEMPTS_FACTOR = 2;   // 최소 시도 횟수 = 항목 수 × 이 값
+
+  // 현재 활성 레슨 키와 항목 수 계산 (g1: 글자, g2: 카테고리 단어, g3: 자동 진행 제외)
+  function getCurrentProgressKey() {
+    if (currentLessonGroup.id === 'g1') {
+      return { id: currentLesson.id, count: currentLesson.chars.length, label: currentLesson.name };
+    } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+      return { id: currentWordCategory.id, count: currentWordCategory.words.length, label: currentWordCategory.name };
+    }
+    return null;
+  }
+
+  // 시도 기록: correct는 boolean (정답이면 true)
+  function recordAttempt(isCorrect) {
+    const key = getCurrentProgressKey();
+    if (!key) return null;
+    if (!store.practiceProgress) store.practiceProgress = {};
+    let p = store.practiceProgress[key.id];
+    if (!p) p = { attempts: 0, correct: 0, accuracy: 0, perfectCount: 0, lastCompletedAt: null };
+    p.attempts++;
+    if (isCorrect) p.correct++;
+    p.accuracy = Math.round((p.correct / p.attempts) * 100);
+    store.practiceProgress[key.id] = p;
+    saveStore(store);
+    return { key, progress: p };
+  }
+
+  // 완료 조건 체크: 최소 시도 횟수 도달 + 정확도 임계치 이상
+  function checkLessonCompletion(record) {
+    if (!record) return null;
+    const { key, progress } = record;
+    const minAttempts = key.count * MIN_ATTEMPTS_FACTOR;
+    if (progress.attempts < minAttempts) return null;
+    if (progress.accuracy < ACCURACY_THRESHOLD) return null;
+    // 완료 → 완벽도 기록 (100%면 perfectCount 증가)
+    progress.lastCompletedAt = new Date().toISOString();
+    if (progress.accuracy === 100) progress.perfectCount = (progress.perfectCount || 0) + 1;
+    saveStore(store);
+    return { key, progress, isPerfect: progress.accuracy === 100 };
+  }
+
+  // 레슨 완료 오버레이 (큰 글자 영역 위에 표시)
+  let overlayTimer = null;
+  function showLessonOverlay({ title, sub, isPerfect, isGroupEnd, durationMs }) {
+    const overlay = $('lessonCompleteOverlay');
+    $('lcoIcon').textContent = isGroupEnd ? '🎉' : '✓';
+    $('lcoTitle').innerHTML = title || '';
+    $('lcoSub').innerHTML = sub || '';
+    overlay.classList.toggle('group-end', !!isGroupEnd);
+    overlay.classList.remove('hidden');
+    requestAnimationFrame(() => overlay.classList.add('show'));
+    if (overlayTimer) clearTimeout(overlayTimer);
+    overlayTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+      setTimeout(() => overlay.classList.add('hidden'), 300);
+    }, durationMs || 1800);
+  }
+  function hideLessonOverlay() {
+    const overlay = $('lessonCompleteOverlay');
+    if (overlayTimer) { clearTimeout(overlayTimer); overlayTimer = null; }
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.classList.add('hidden'), 300);
+  }
+
+  // 다음 레슨/카테고리 찾기
+  function getNextItemInGroup() {
+    if (currentLessonGroup.id === 'g1') {
+      const idx = lessons.findIndex(l => l.id === currentLesson.id);
+      if (idx >= 0 && idx < lessons.length - 1) return lessons[idx + 1];
+      return null;  // 마지막
+    } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+      const items = currentLessonGroup.items;
+      const idx = items.findIndex(c => c.id === currentWordCategory.id);
+      if (idx >= 0 && idx < items.length - 1) return items[idx + 1];
+      return null;
+    }
+    return null;
+  }
+
+  // 완료 처리: 오버레이 → 1.8초 후 다음으로 (마지막 레슨은 머무름)
+  function handleLessonComplete(completion) {
+    const { key, isPerfect } = completion;
+    const next = getNextItemInGroup();
+
+    // 진행도 갱신을 위해 레슨 리스트 다시 빌드 (체크마크 반영)
+    buildLessonList();
+
+    // 일반 완료 메시지 (마지막이든 아니든 동일)
+    showLessonOverlay({
+      title: `<b>${key.label}</b> 완료`,
+      sub: isPerfect ? '<b>100%</b>' + (next ? ' · 다음 레슨 시작' : '') : (next ? '다음 레슨 시작' : ''),
+      isPerfect: isPerfect,
+      isGroupEnd: false,
+      durationMs: 1800
+    });
+
+    if (next) {
+      // 다음 레슨/카테고리로 자동 이동
+      setTimeout(() => {
+        if (currentLessonGroup.id === 'g1') {
+          currentLesson = next;
+          modeSubtitle.textContent = currentLesson.name;
+          startPractice();
+          updateMiniRefHighlight();
+        } else if (currentLessonGroup.id === 'g2') {
+          currentWordCategory = next;
+          modeSubtitle.textContent = `${currentLessonGroup.name} — ${next.name}`;
+          startWordPractice(next);
+        }
+        buildLessonList();   // active 표시 갱신
+      }, 1700);
+    }
+    // 마지막 레슨: 메시지만 띄우고 머무름 (다음 이동 없음)
+  }
+
+  // 진행 카운터 초기화 (perfectCount는 보존 — 한 번 100% 달성한 기록 유지)
+  function resetProgressForCurrent() {
+    const key = getCurrentProgressKey();
+    if (!key) return;
+    if (!store.practiceProgress) store.practiceProgress = {};
+    const prev = store.practiceProgress[key.id] || {};
+    store.practiceProgress[key.id] = {
+      attempts: 0,
+      correct: 0,
+      accuracy: 0,
+      perfectCount: prev.perfectCount || 0,
+      lastCompletedAt: prev.lastCompletedAt || null
+    };
+    saveStore(store);
   }
 
   // 단어 타겟 영역 렌더링
@@ -3139,6 +3397,8 @@
     clearTimeout(letterTimer); clearTimeout(wordTimer); clearTimeout(practiceTimer);
     clearFlash();
     unlockInput();
+    // 오버레이 떠 있으면 즉시 숨김 (다른 탭 갔다가 돌아왔을 때 정리)
+    if (typeof hideLessonOverlay === 'function') hideLessonOverlay();
     // reset tree practice state (safe even if not yet initialized)
     if (typeof treeResetState === 'function') treeResetState();
 
@@ -3702,7 +3962,8 @@
     bestByLesson: {},   // lessonId -> { score, accuracy, time, date, name }
     history: [],        // all rounds: { name, lessonId, score, accuracy, time, streak, date }
     hof: [],            // hall of fame top 10 ever
-    customWords: []     // 사용자가 직접 등록한 단어들 (string 배열)
+    customWords: [],    // 사용자가 직접 등록한 단어들 (string 배열)
+    practiceProgress: {}  // 연습 모드 진행 기록: lessonId/categoryId -> { attempts, correct, accuracy, perfectCount, lastCompletedAt }
   });
 
   function loadStore() {
@@ -4446,8 +4707,15 @@
       $('customWordsSection').classList.add('hidden');
       lessons.forEach((l, i) => {
         const btn = document.createElement('button');
-        btn.className = 'lesson-btn' + (l.id === currentLesson.id ? ' active' : '');
-        btn.innerHTML = `<span class="num">${i+1}.</span>${l.name}`;
+        const isActive = (l.id === currentLesson.id);
+        const prog = (store.practiceProgress && store.practiceProgress[l.id]) || null;
+        const isPerfect = prog && prog.perfectCount > 0;
+        let cls = 'lesson-btn';
+        if (isActive) cls += ' active';
+        if (isPerfect) cls += ' cleared-perfect';
+        btn.className = cls;
+        const doneMark = isPerfect ? '<span class="done-mark">✓ 100%</span>' : '';
+        btn.innerHTML = `<span class="num">${i+1}.</span>${l.name}${doneMark}`;
         btn.addEventListener('click', () => {
           currentLesson = l;
           modeSubtitle.textContent = l.name;
@@ -4469,10 +4737,19 @@
       cats.forEach((cat, i) => {
         const btn = document.createElement('button');
         const isActive = currentWordCategory && currentWordCategory.id === cat.id;
-        btn.className = 'lesson-btn' + (isActive ? ' active' : '');
+        const prog = (store.practiceProgress && store.practiceProgress[cat.id]) || null;
+        const isPerfect = prog && prog.perfectCount > 0;
+        let cls = 'lesson-btn';
+        if (isActive) cls += ' active';
+        if (isPerfect) cls += ' cleared-perfect';
+        btn.className = cls;
         const preview = cat.words.slice(0, 3).map(w => w.w).join(', ');
         const prosignMark = cat.type === 'prosign' ? ' <span style="color:var(--amber);font-size:10px;">⚠</span>' : '';
-        btn.innerHTML = `<span class="num">${i+1}.</span>${cat.name}${prosignMark} (${preview}...) <span style="float:right;font-size:9px;color:var(--ink-dim);letter-spacing:0.15em;opacity:0.6;">${cat.words.length} ${cat.type === 'prosign' ? '신호' : '단어'}</span>`;
+        const unit = cat.type === 'prosign' ? '신호' : '단어';
+        const doneMark = isPerfect
+          ? `<span class="done-mark">✓ 100%</span>`
+          : `<span class="progress-tag">${cat.words.length} ${unit}</span>`;
+        btn.innerHTML = `<span class="num">${i+1}.</span>${cat.name}${prosignMark} (${preview}...) ${doneMark}`;
         btn.addEventListener('click', () => {
           currentWordCategory = cat;
           modeSubtitle.textContent = `${currentLessonGroup.name} — ${cat.name}`;
@@ -4527,6 +4804,8 @@
       refreshInputDisplay();
       // 프로사인 안내 배지는 모든 전환 시 일단 숨김 (필요시 다시 표시)
       $('prosignNotice').classList.add('hidden');
+      // 오버레이 즉시 숨김
+      hideLessonOverlay();
 
       if (group.id === 'g1') {
         // 글자 그룹으로 복귀: 단어 상태 정리, 글자 타겟 복구
