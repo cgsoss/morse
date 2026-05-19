@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_58.html -->
+<!-- saved from url=(0043)file:///C:/Users/cg/Downloads/index_59.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -847,6 +847,93 @@
     color: var(--amber);
   }
 
+  /* 정확도 낮음 안내 모달 */
+  .low-acc-modal {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(14,11,7,0.92) 30%, rgba(14,11,7,0.6) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    border-radius: 2px;
+  }
+  .low-acc-modal.show {
+    opacity: 1;
+  }
+  .low-acc-modal .lam-inner {
+    text-align: center;
+    padding: 0 20px;
+    max-width: 320px;
+    transform: scale(0.94);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .low-acc-modal.show .lam-inner {
+    transform: scale(1);
+  }
+  .low-acc-modal .lam-icon {
+    font-size: 32px;
+    color: var(--amber);
+    text-shadow: 0 0 16px var(--amber-glow);
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .low-acc-modal .lam-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .low-acc-modal .lam-sub {
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .low-acc-modal .lam-sub b {
+    color: var(--amber);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+  }
+  .low-acc-modal .lam-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .low-acc-modal .lam-btn {
+    background: transparent;
+    border: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 9px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .low-acc-modal .lam-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .low-acc-modal .lam-btn.primary {
+    border-color: var(--amber-dim);
+    color: var(--amber);
+    background: rgba(255,179,71,0.06);
+  }
+  .low-acc-modal .lam-btn.primary:hover {
+    border-color: var(--amber);
+    background: rgba(255,179,71,0.12);
+    box-shadow: 0 0 8px var(--amber-glow);
+  }
+
   /* ─── 레슨 그룹 토글 (레슨 1/2/3) ─── */
   .lesson-group-toggle {
     display: flex; gap: 6px;
@@ -1671,10 +1758,22 @@
               <div class="lco-sub" id="lcoSub"></div>
             </div>
           </div>
+          <!-- 정확도 낮음 안내 (버튼 모달) -->
+          <div class="low-acc-modal hidden" id="lowAccModal">
+            <div class="lam-inner">
+              <div class="lam-icon">⚠</div>
+              <div class="lam-title">정확도가 낮습니다</div>
+              <div class="lam-sub" id="lamSub">현재 정확도 <b>0%</b></div>
+              <div class="lam-buttons">
+                <button class="lam-btn" id="lamReset">다시 시작</button>
+                <button class="lam-btn primary" id="lamContinue">계속하기</button>
+              </div>
+            </div>
+          </div>
           <div class="target-row" id="targetRow">
             <div class="target-label" id="targetLabel">다음 문자</div>
-            <div class="target-char" id="targetChar">N</div>
-            <div class="target-code" id="targetCode">-.</div>
+            <div class="target-char" id="targetChar">E</div>
+            <div class="target-code" id="targetCode">.</div>
             <div class="target-meaning hidden" id="targetMeaning"></div>
             <div class="target-progress hidden" id="targetProgress"></div>
           </div>
@@ -1726,7 +1825,7 @@
             <span class="pn-text"><b>프로사인</b>은 글자 사이 간격 없이 <b>한 신호</b>로 송신합니다.<br>예: AR̄ → <code>·-·-·</code> (A의 ·- 와 R의 ·-· 를 붙임)</span>
           </div>
           <!-- 하위 레슨 리스트 (그룹별로 동적 빌드) -->
-          <div class="lesson-list" id="lessonList"><button class="lesson-btn active cleared-perfect"><span class="num">1.</span>기초 1 — E·T·A·N<span class="done-mark">✓ 100%</span></button><button class="lesson-btn cleared-perfect"><span class="num">2.</span>기초 2 — I·M·S·O<span class="done-mark">✓ 100%</span></button><button class="lesson-btn"><span class="num">3.</span>기초 통합</button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>S·O·S·H·E·L·P 통합 연습</button></div>
+          <div class="lesson-list" id="lessonList"><button class="lesson-btn active cleared-perfect"><span class="num">1.</span>기초 1 — E·T·A·N<span class="done-mark">✓ 100%</span></button><button class="lesson-btn cleared-perfect"><span class="num">2.</span>기초 2 — I·M·S·O<span class="done-mark">✓ 100%</span></button><button class="lesson-btn cleared-perfect"><span class="num">3.</span>기초 통합<span class="done-mark">✓ 100%</span></button><button class="lesson-btn"><span class="num">4.</span>중급 — 자주 쓰는 글자</button><button class="lesson-btn"><span class="num">5.</span>알파벳 전체</button><button class="lesson-btn"><span class="num">6.</span>숫자</button><button class="lesson-btn"><span class="num">7.</span>혼합 (영문+숫자)</button><button class="lesson-btn"><span class="num">8.</span>S·O·S·H·E·L·P 통합 연습</button></div>
           <!-- 레슨 3: 내 단어 슬롯 영역 -->
           <div class="custom-words hidden" id="customWordsSection">
             <div class="cw-head">
@@ -1758,7 +1857,7 @@
         <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase;">
           클릭=소리 재생 · <span id="refHint">강조 = 현재 레슨</span>
         </div>
-        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson current" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
+        <div class="mini-ref-grid" id="miniRefGrid"><div class="mini-ref-item in-lesson" data-ch="A"><div class="ch">A</div><div class="code">.-</div></div><div class="mini-ref-item" data-ch="B"><div class="ch">B</div><div class="code">-...</div></div><div class="mini-ref-item" data-ch="C"><div class="ch">C</div><div class="code">-.-.</div></div><div class="mini-ref-item" data-ch="D"><div class="ch">D</div><div class="code">-..</div></div><div class="mini-ref-item in-lesson current" data-ch="E"><div class="ch">E</div><div class="code">.</div></div><div class="mini-ref-item" data-ch="F"><div class="ch">F</div><div class="code">..-.</div></div><div class="mini-ref-item" data-ch="G"><div class="ch">G</div><div class="code">--.</div></div><div class="mini-ref-item" data-ch="H"><div class="ch">H</div><div class="code">....</div></div><div class="mini-ref-item" data-ch="I"><div class="ch">I</div><div class="code">..</div></div><div class="mini-ref-item" data-ch="J"><div class="ch">J</div><div class="code">.---</div></div><div class="mini-ref-item" data-ch="K"><div class="ch">K</div><div class="code">-.-</div></div><div class="mini-ref-item" data-ch="L"><div class="ch">L</div><div class="code">.-..</div></div><div class="mini-ref-item" data-ch="M"><div class="ch">M</div><div class="code">--</div></div><div class="mini-ref-item in-lesson" data-ch="N"><div class="ch">N</div><div class="code">-.</div></div><div class="mini-ref-item" data-ch="O"><div class="ch">O</div><div class="code">---</div></div><div class="mini-ref-item" data-ch="P"><div class="ch">P</div><div class="code">.--.</div></div><div class="mini-ref-item" data-ch="Q"><div class="ch">Q</div><div class="code">--.-</div></div><div class="mini-ref-item" data-ch="R"><div class="ch">R</div><div class="code">.-.</div></div><div class="mini-ref-item" data-ch="S"><div class="ch">S</div><div class="code">...</div></div><div class="mini-ref-item in-lesson" data-ch="T"><div class="ch">T</div><div class="code">-</div></div><div class="mini-ref-item" data-ch="U"><div class="ch">U</div><div class="code">..-</div></div><div class="mini-ref-item" data-ch="V"><div class="ch">V</div><div class="code">...-</div></div><div class="mini-ref-item" data-ch="W"><div class="ch">W</div><div class="code">.--</div></div><div class="mini-ref-item" data-ch="X"><div class="ch">X</div><div class="code">-..-</div></div><div class="mini-ref-item" data-ch="Y"><div class="ch">Y</div><div class="code">-.--</div></div><div class="mini-ref-item" data-ch="Z"><div class="ch">Z</div><div class="code">--..</div></div><div class="mini-ref-item" data-ch="0"><div class="ch">0</div><div class="code">-----</div></div><div class="mini-ref-item" data-ch="1"><div class="ch">1</div><div class="code">.----</div></div><div class="mini-ref-item" data-ch="2"><div class="ch">2</div><div class="code">..---</div></div><div class="mini-ref-item" data-ch="3"><div class="ch">3</div><div class="code">...--</div></div><div class="mini-ref-item" data-ch="4"><div class="ch">4</div><div class="code">....-</div></div><div class="mini-ref-item" data-ch="5"><div class="ch">5</div><div class="code">.....</div></div><div class="mini-ref-item" data-ch="6"><div class="ch">6</div><div class="code">-....</div></div><div class="mini-ref-item" data-ch="7"><div class="ch">7</div><div class="code">--...</div></div><div class="mini-ref-item" data-ch="8"><div class="ch">8</div><div class="code">---..</div></div><div class="mini-ref-item" data-ch="9"><div class="ch">9</div><div class="code">----.</div></div></div>
       </div>
     </div>
   </section>
@@ -2596,6 +2695,7 @@
     // 진행 카운터 초기화 (perfectCount는 보존)
     resetProgressForCurrent();
     if (typeof hideLessonOverlay === 'function') hideLessonOverlay();
+    if (typeof hideLowAccModal === 'function') hideLowAccModal();
     nextTarget();
   }
   function nextTarget() {
@@ -2637,12 +2737,17 @@
       flashDisplay('wrong');
       lockInput();
       updateStats();
-      recordAttempt(false);
+      const rec = recordAttempt(false);
+      const lowAcc = checkLowAccuracy(rec);
       setTimeout(() => {
         clearFlash();
         inputBuf = '';
         refreshInputDisplay();
         unlockInput();
+        // 정확도 낮음 안내 (오답 처리 후)
+        if (lowAcc) {
+          showLowAccModal(rec.progress.accuracy);
+        }
       }, 900);
     }
   }
@@ -2661,6 +2766,7 @@
     // 진행 카운터 초기화 (perfectCount는 보존)
     resetProgressForCurrent();
     if (typeof hideLessonOverlay === 'function') hideLessonOverlay();
+    if (typeof hideLowAccModal === 'function') hideLowAccModal();
     // 프로사인 안내 배지 토글
     if (category.type === 'prosign') {
       $('prosignNotice').classList.remove('hidden');
@@ -2737,8 +2843,10 @@
       lockInput();
       updateStats();
       // g2 진행 기록 (오답)
+      let lowAcc = false;
       if (currentLessonGroup.id === 'g2') {
-        recordAttempt(false);
+        const rec = recordAttempt(false);
+        lowAcc = checkLowAccuracy(rec);
       }
       setTimeout(() => {
         clearFlash();
@@ -2746,6 +2854,13 @@
         wordQueue.unshift(currentWord);
         nextWordTarget();
         unlockInput();
+        if (lowAcc) {
+          // g2 정확도 안내 — accuracy는 위에서 기록된 직후 값
+          const key = getCurrentProgressKey();
+          if (key && store.practiceProgress && store.practiceProgress[key.id]) {
+            showLowAccModal(store.practiceProgress[key.id].accuracy);
+          }
+        }
       }, 900);
     }
   }
@@ -2775,13 +2890,17 @@
       flashDisplay('wrong');
       lockInput();
       updateStats();
-      recordAttempt(false);
+      const rec = recordAttempt(false);
+      const lowAcc = checkLowAccuracy(rec);
       setTimeout(() => {
         clearFlash();
         // 같은 프로사인 다시 출제
         wordQueue.unshift(currentWord);
         nextWordTarget();
         unlockInput();
+        if (lowAcc) {
+          showLowAccModal(rec.progress.accuracy);
+        }
       }, 900);
     }
   }
@@ -2988,8 +3107,11 @@
   // ════════════════════════════════════════════════════════════
   // ─────── LESSON PROGRESS / AUTO-ADVANCE (5단계) ───────
   // ════════════════════════════════════════════════════════════
-  const ACCURACY_THRESHOLD = 90;   // 완료 기준 정확도
+  const ACCURACY_THRESHOLD = 90;   // 완료 기준 정확도 (이동평균 기준)
   const MIN_ATTEMPTS_FACTOR = 2;   // 최소 시도 횟수 = 항목 수 × 이 값
+  const WINDOW_SIZE = 20;          // 이동평균 윈도우 크기
+  const LOW_ACC_THRESHOLD = 50;    // 정확도 낮음 안내 기준
+  const LOW_ACC_MIN_ATTEMPTS = 20; // 정확도 낮음 안내 최소 시도
 
   // 현재 활성 레슨 키와 항목 수 계산 (g1: 글자, g2: 카테고리 단어, g3: 자동 진행 제외)
   function getCurrentProgressKey() {
@@ -3001,33 +3123,58 @@
     return null;
   }
 
+  // 정확도 계산: 최근 N회 이동평균 (단, 시도가 N회 미만이면 전체 시도 기준)
+  function calcAccuracyFromRecent(recentResults) {
+    if (!recentResults || recentResults.length === 0) return 0;
+    const correct = recentResults.reduce((sum, v) => sum + v, 0);
+    return Math.round((correct / recentResults.length) * 100);
+  }
+
   // 시도 기록: correct는 boolean (정답이면 true)
   function recordAttempt(isCorrect) {
     const key = getCurrentProgressKey();
     if (!key) return null;
     if (!store.practiceProgress) store.practiceProgress = {};
     let p = store.practiceProgress[key.id];
-    if (!p) p = { attempts: 0, correct: 0, accuracy: 0, perfectCount: 0, lastCompletedAt: null };
+    if (!p) p = { attempts: 0, correct: 0, recentResults: [], accuracy: 0, perfectCount: 0, lastCompletedAt: null };
+    if (!Array.isArray(p.recentResults)) p.recentResults = [];
+
     p.attempts++;
     if (isCorrect) p.correct++;
-    p.accuracy = Math.round((p.correct / p.attempts) * 100);
+    // 최근 결과 배열에 추가 (1=정답, 0=오답), 윈도우 크기 초과 시 가장 오래된 것 제거
+    p.recentResults.push(isCorrect ? 1 : 0);
+    if (p.recentResults.length > WINDOW_SIZE) p.recentResults.shift();
+    // 정확도는 이동평균 기준
+    p.accuracy = calcAccuracyFromRecent(p.recentResults);
     store.practiceProgress[key.id] = p;
     saveStore(store);
     return { key, progress: p };
   }
 
-  // 완료 조건 체크: 최소 시도 횟수 도달 + 정확도 임계치 이상
+  // 완료 조건 체크: 최소 시도 횟수 도달 + 이동평균 정확도 임계치 이상
   function checkLessonCompletion(record) {
     if (!record) return null;
     const { key, progress } = record;
     const minAttempts = key.count * MIN_ATTEMPTS_FACTOR;
     if (progress.attempts < minAttempts) return null;
     if (progress.accuracy < ACCURACY_THRESHOLD) return null;
-    // 완료 → 완벽도 기록 (100%면 perfectCount 증가)
+    // 완료 → 완벽도 기록 (이동평균 100%면 perfectCount 증가)
     progress.lastCompletedAt = new Date().toISOString();
     if (progress.accuracy === 100) progress.perfectCount = (progress.perfectCount || 0) + 1;
     saveStore(store);
     return { key, progress, isPerfect: progress.accuracy === 100 };
+  }
+
+  // 정확도 낮음 상태 확인 → 안내 표시 필요한지 (한 번만 표시)
+  let lowAccNoticeShown = {};   // 세션 내 카테고리별로 한 번씩만
+  function checkLowAccuracy(record) {
+    if (!record) return false;
+    const { key, progress } = record;
+    if (lowAccNoticeShown[key.id]) return false;
+    if (progress.attempts < LOW_ACC_MIN_ATTEMPTS) return false;
+    if (progress.accuracy >= LOW_ACC_THRESHOLD) return false;
+    lowAccNoticeShown[key.id] = true;
+    return true;
   }
 
   // 레슨 완료 오버레이 (큰 글자 영역 위에 표시)
@@ -3052,6 +3199,37 @@
     overlay.classList.remove('show');
     setTimeout(() => overlay.classList.add('hidden'), 300);
   }
+
+  // 정확도 낮음 안내 모달 표시
+  function showLowAccModal(accuracy) {
+    const modal = $('lowAccModal');
+    $('lamSub').innerHTML = `현재 정확도 <b>${accuracy}%</b><br>처음부터 다시 시작할까요?`;
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => modal.classList.add('show'));
+    // 진행 중인 연습 잠시 멈춤
+    lockInput();
+  }
+  function hideLowAccModal() {
+    const modal = $('lowAccModal');
+    modal.classList.remove('show');
+    setTimeout(() => modal.classList.add('hidden'), 250);
+    unlockInput();
+  }
+  // 버튼 핸들러
+  $('lamReset').addEventListener('click', () => {
+    hideLowAccModal();
+    // 진행 카운터 리셋 + 재시작
+    if (currentLessonGroup.id === 'g1') {
+      startPractice();
+    } else if (currentLessonGroup.id === 'g2' && currentWordCategory) {
+      startWordPractice(currentWordCategory);
+    }
+    buildLessonList();
+  });
+  $('lamContinue').addEventListener('click', () => {
+    hideLowAccModal();
+    // 그대로 계속 (다음 시도 진행)
+  });
 
   // 다음 레슨/카테고리 찾기
   function getNextItemInGroup() {
@@ -3113,11 +3291,14 @@
     store.practiceProgress[key.id] = {
       attempts: 0,
       correct: 0,
+      recentResults: [],
       accuracy: 0,
       perfectCount: prev.perfectCount || 0,
       lastCompletedAt: prev.lastCompletedAt || null
     };
     saveStore(store);
+    // 안내 모달 플래그도 리셋 (다시 누적되면 다시 안내 가능)
+    lowAccNoticeShown[key.id] = false;
   }
 
   // 단어 타겟 영역 렌더링
@@ -3399,6 +3580,7 @@
     unlockInput();
     // 오버레이 떠 있으면 즉시 숨김 (다른 탭 갔다가 돌아왔을 때 정리)
     if (typeof hideLessonOverlay === 'function') hideLessonOverlay();
+    if (typeof hideLowAccModal === 'function') hideLowAccModal();
     // reset tree practice state (safe even if not yet initialized)
     if (typeof treeResetState === 'function') treeResetState();
 
@@ -4806,6 +4988,7 @@
       $('prosignNotice').classList.add('hidden');
       // 오버레이 즉시 숨김
       hideLessonOverlay();
+      hideLowAccModal();
 
       if (group.id === 'g1') {
         // 글자 그룹으로 복귀: 단어 상태 정리, 글자 타겟 복구
